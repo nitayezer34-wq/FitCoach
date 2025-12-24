@@ -12,12 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FitCoach">
         <activity
-            android:name=".RegisterActivity"
+            android:name=".screens.RegisterActivity"
             android:exported="false"
             android:label="@string/title_activity_register"
             android:theme="@style/Theme.FitCoach" />
         <activity
-            android:name=".MainActivity"
+            android:name=".screens.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
