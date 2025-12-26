@@ -12,12 +12,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FitCoach">
         <activity
+            android:name=".screens.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.LoginActivity"
+            android:exported="false"
+            android:theme="@style/Theme.FitCoach" />
+        <activity
             android:name=".screens.RegisterActivity"
             android:exported="false"
             android:label="@string/title_activity_register"
             android:theme="@style/Theme.FitCoach" />
         <activity
-            android:name=".screens.MainActivity"
+            android:name=".screens.LandingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

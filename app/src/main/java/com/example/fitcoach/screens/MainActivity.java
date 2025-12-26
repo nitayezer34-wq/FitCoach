@@ -13,18 +13,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fitcoach.R;
 import com.example.fitcoach.models.User;
+import com.example.fitcoach.utils.SharedPreferencesUtil;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class MainActivity extends AppCompatActivity {
-
-    private FirebaseAuth auth;
-    private FirebaseFirestore db;
 
     private TextView tvGreeting, tvStepsValue, tvWaterValue, tvStepsTarget, tvWaterTarget;
     private ProgressBar pbSteps, pbWater, progressLoading;
@@ -42,9 +34,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        auth = FirebaseAuth.getInstance();
-        db = FirebaseFirestore.getInstance();
 
         bindViews();
         loadUserAndBindUI();
@@ -78,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadUserAndBindUI() {
-        String uid = auth.getCurrentUser() != null ? auth.getCurrentUser().getUid() : null;
+        String uid = SharedPreferencesUtil.getUserId(MainActivity.this);
 
         if (uid == null) {
             layoutGuest.setVisibility(View.VISIBLE);
@@ -91,46 +80,26 @@ public class MainActivity extends AppCompatActivity {
         layoutLoggedIn.setVisibility(View.VISIBLE);
         progressLoading.setVisibility(View.VISIBLE);
 
-        DocumentReference userRef = db.collection("users").document(uid);
-        userRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(@Nullable DocumentSnapshot snap, @Nullable FirebaseFirestoreException e) {
-                progressLoading.setVisibility(View.GONE);
-                if (e != null) {
-                    Toast.makeText(MainActivity.this, "שגיאה בטעינה: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                    return;
-                }
-                if (snap != null && snap.exists()) {
-                    User u = snap.toObject(User.class);
-                    String name = "מתאמן";
-                    if (u != null) {
-                        if (u.getName() != null && !u.getName().trim().isEmpty()) {
-                            name = u.getName();
-                        }
-                        if (u.getDailyStepTarget() > 0) {
-                            stepTarget = u.getDailyStepTarget();
-                        }
-                        if (u.getDailyWaterTargetMl() > 0) {
-                            waterTarget = u.getDailyWaterTargetMl();
-                        }
-                    }
-                    tvGreeting.setText("שלום, " + name);
-                    pbSteps.setMax(stepTarget);
-                    pbWater.setMax(waterTarget);
-                    tvStepsTarget.setText("יעד: " + stepTarget);
-                    tvWaterTarget.setText("יעד: " + waterTarget);
-                    updateStepsUI();
-                    updateWaterUI();
-                } else {
-                    Toast.makeText(MainActivity.this, "לא נמצא מסמך משתמש ב-Firestore.", Toast.LENGTH_LONG).show();
-                    tvGreeting.setText("שלום, מתאמן");
-                    pbSteps.setMax(stepTarget);
-                    pbWater.setMax(waterTarget);
-                    tvStepsTarget.setText("יעד: " + stepTarget);
-                    tvWaterTarget.setText("יעד: " + waterTarget);
-                }
+        User u = SharedPreferencesUtil.getUser(MainActivity.this);
+        String name = "מתאמן";
+        if (u != null) {
+            if (u.getName() != null && !u.getName().trim().isEmpty()) {
+                name = u.getName();
             }
-        });
+            if (u.getDailyStepTarget() > 0) {
+                stepTarget = u.getDailyStepTarget();
+            }
+            if (u.getDailyWaterTargetMl() > 0) {
+                waterTarget = u.getDailyWaterTargetMl();
+            }
+        }
+        tvGreeting.setText("שלום, " + name);
+        pbSteps.setMax(stepTarget);
+        pbWater.setMax(waterTarget);
+        tvStepsTarget.setText("יעד: " + stepTarget);
+        tvWaterTarget.setText("יעד: " + waterTarget);
+        updateStepsUI();
+        updateWaterUI();
     }
 
     private void setupButtons() {
