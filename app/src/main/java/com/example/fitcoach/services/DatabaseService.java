@@ -36,6 +36,8 @@ public class DatabaseService {
     private static final String USERS_PATH = "users",
             FOODS_PATH = "foods",
             CARTS_PATH = "carts";
+    private static final String DB_URL = "https://fitcoach-55d45-default-rtdb.europe-west1.firebasedatabase.app/";
+
 
     /// callback interface for database operations
     /// @param <T> the type of the object to return
@@ -61,9 +63,10 @@ public class DatabaseService {
     /// use getInstance() to get an instance of this class
     /// @see DatabaseService#getInstance()
     private DatabaseService() {
-        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(DB_URL);
         databaseReference = firebaseDatabase.getReference();
     }
+
 
     /// get an instance of this class
     /// @return an instance of this class
