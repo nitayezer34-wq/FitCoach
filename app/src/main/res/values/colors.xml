@@ -1,5 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="fit_primary">#5E4DB2</color>
+    <color name="fit_primary_dark">#4A3B9A</color>
+    <color name="fit_on_primary">#FFFFFF</color>
+
+    <color name="fit_surface">#FFFFFF</color>
+    <color name="fit_outline">#5E4DB2</color>
 </resources>
