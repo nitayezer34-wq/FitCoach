@@ -20,11 +20,7 @@ import com.example.fitcoach.services.DatabaseService;
 import com.example.fitcoach.utils.SharedPreferencesUtil;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
-
-    private EditText etName, etEmail, etPassword;
-    private EditText etGender, etBirthYear, etHeightCm, etWeightKg;
-    private EditText etActivityLevel, etDailyStepTarget, etDailyWaterTargetMl;
-
+    private EditText etName, etEmail, etPassword, etGender, etBirthYear, etHeightCm, etWeightKg, etActivityLevel, etDailyStepTarget, etDailyWaterTargetMl;
     private Button btnRegisterConfirm, btnGoLogin;
 
     @Override
@@ -32,23 +28,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
-        // שים לב: ב-XML החדש ה-root נקרא registerRoot. אם השארת id="login" תחליף כאן בהתאם.
-        View root = findViewById(R.id.registerRoot);
-        if (root == null) {
-            // אם עדיין נשאר לך id בשם login מה-XML הישן
-            root = findViewById(R.id.login);
-        }
-
-        if (root != null) {
-            ViewCompat.setOnApplyWindowInsetsListener(root, (v, insets) -> {
-                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-                return insets;
-            });
-        }
-
-        // bind views
         etName = findViewById(R.id.etName);
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
@@ -102,10 +87,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         int dailyStepTarget = Integer.parseInt(stepTargetStr);
         int dailyWaterTargetMl = Integer.parseInt(waterTargetStr);
 
-        DatabaseService db = DatabaseService.getInstance();
-
-        // בדיקה אם אימייל קיים (כמו המורה)
-        db.checkIfEmailExists(email, new DatabaseService.DatabaseCallback<Boolean>() {
+        DatabaseService.getInstance().checkIfEmailExists(email, new DatabaseService.DatabaseCallback<Boolean>() {
             @Override
             public void onCompleted(Boolean exists) {
                 if (exists != null && exists) {
@@ -113,7 +95,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                     return;
                 }
 
-                String uid = db.generateUserId();
+                String uid = DatabaseService.getInstance().generateUserId();
 
                 User user = new User(
                         uid,

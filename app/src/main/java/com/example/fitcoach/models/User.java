@@ -1,8 +1,7 @@
 package com.example.fitcoach.models;
 
-import androidx.annotation.NonNull;
-
 import java.io.Serializable;
+import java.util.Objects;
 
 public class User implements Serializable {
     private String id;
@@ -122,7 +121,6 @@ public class User implements Serializable {
         this.dailyWaterTargetMl = dailyWaterTargetMl;
     }
 
-    @NonNull
     @Override
     public String toString() {
         return "User{" +
@@ -138,5 +136,17 @@ public class User implements Serializable {
                 ", dailyStepTarget=" + dailyStepTarget +
                 ", dailyWaterTargetMl=" + dailyWaterTargetMl +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return birthYear == user.birthYear && heightCm == user.heightCm && Float.compare(weightKg, user.weightKg) == 0 && dailyStepTarget == user.dailyStepTarget && dailyWaterTargetMl == user.dailyWaterTargetMl && Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(gender, user.gender) && Objects.equals(activityLevel, user.activityLevel);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, email, password, gender, birthYear, heightCm, weightKg, activityLevel, dailyStepTarget, dailyWaterTargetMl);
     }
 }

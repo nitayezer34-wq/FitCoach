@@ -1,7 +1,5 @@
 package com.example.fitcoach.services;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -20,22 +18,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.UnaryOperator;
 
-
 /// a service to interact with the Firebase Realtime Database.
 /// this class is a singleton, use getInstance() to get an instance of this class
 /// @see #getInstance()
 /// @see FirebaseDatabase
 public class DatabaseService {
-
-    /// tag for logging
-    /// @see Log
-    private static final String TAG = "DatabaseService";
-
     /// paths for different data types in the database
     /// @see DatabaseService#readData(String)
-    private static final String USERS_PATH = "users",
-            FOODS_PATH = "foods",
-            CARTS_PATH = "carts";
+    private static final String USERS_PATH = "users";
     private static final String DB_URL = "https://fitcoach-55d45-default-rtdb.europe-west1.firebasedatabase.app/";
 
 
@@ -134,7 +124,6 @@ public class DatabaseService {
     private <T> void getData(@NotNull final String path, @NotNull final Class<T> clazz, @NotNull final DatabaseCallback<T> callback) {
         readData(path).get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
-                Log.e(TAG, "Error getting data", task.getException());
                 callback.onFailed(task.getException());
                 return;
             }
@@ -150,7 +139,6 @@ public class DatabaseService {
     private <T> void getDataList(@NotNull final String path, @NotNull final Class<T> clazz, @NotNull final DatabaseCallback<List<T>> callback) {
         readData(path).get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
-                Log.e(TAG, "Error getting data", task.getException());
                 callback.onFailed(task.getException());
                 return;
             }
@@ -173,7 +161,6 @@ public class DatabaseService {
     private String generateNewId(@NotNull final String path) {
         return databaseReference.child(path).push().getKey();
     }
-
 
     /// run a transaction on the data at a specific path </br>
     /// good for incrementing a value or modifying an object in the database
@@ -200,7 +187,6 @@ public class DatabaseService {
             @Override
             public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
                 if (error != null) {
-                    Log.e(TAG, "Transaction failed", error.toException());
                     callback.onFailed(error.toException());
                     return;
                 }
@@ -336,5 +322,4 @@ public class DatabaseService {
 
 
     // endregion User Section
-
 }

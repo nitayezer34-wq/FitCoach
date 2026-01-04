@@ -8,8 +8,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.example.fitcoach.R;
 import com.example.fitcoach.models.User;
@@ -17,15 +20,11 @@ import com.example.fitcoach.utils.SharedPreferencesUtil;
 import com.google.android.material.appbar.MaterialToolbar;
 
 public class MainActivity extends AppCompatActivity {
-
     private TextView tvGreeting, tvStepsValue, tvWaterValue, tvStepsTarget, tvWaterTarget;
     private ProgressBar pbSteps, pbWater, progressLoading;
     private Button btnAddWater, btnAddSteps, btnStartWorkout;
 
-    private int stepsToday = 0;
-    private int waterToday = 0;
-    private int stepTarget = 8000;
-    private int waterTarget = 2000;
+    private int stepsToday = 0, waterToday = 0, stepTarget = 8000, waterTarget = 2000;
 
     private View layoutGuest, layoutLoggedIn;
     private Button btnLogin, btnRegister;
@@ -33,7 +32,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
 
         bindViews();
         loadUserAndBindUI();
@@ -67,9 +72,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadUserAndBindUI() {
-        String uid = SharedPreferencesUtil.getUserId(MainActivity.this);
-
-        if (uid == null) {
+        if (SharedPreferencesUtil.isUserLoggedIn(MainActivity.this)) {
             layoutGuest.setVisibility(View.VISIBLE);
             layoutLoggedIn.setVisibility(View.GONE);
             progressLoading.setVisibility(View.GONE);
@@ -80,17 +83,17 @@ public class MainActivity extends AppCompatActivity {
         layoutLoggedIn.setVisibility(View.VISIBLE);
         progressLoading.setVisibility(View.VISIBLE);
 
-        User u = SharedPreferencesUtil.getUser(MainActivity.this);
+        User user = SharedPreferencesUtil.getUser(MainActivity.this);
         String name = "מתאמן";
-        if (u != null) {
-            if (u.getName() != null && !u.getName().trim().isEmpty()) {
-                name = u.getName();
+        if (user != null) {
+            if (user.getName() != null && !user.getName().trim().isEmpty()) {
+                name = user.getName();
             }
-            if (u.getDailyStepTarget() > 0) {
-                stepTarget = u.getDailyStepTarget();
+            if (user.getDailyStepTarget() > 0) {
+                stepTarget = user.getDailyStepTarget();
             }
-            if (u.getDailyWaterTargetMl() > 0) {
-                waterTarget = u.getDailyWaterTargetMl();
+            if (user.getDailyWaterTargetMl() > 0) {
+                waterTarget = user.getDailyWaterTargetMl();
             }
         }
         tvGreeting.setText("שלום, " + name);
@@ -114,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btnStartWorkout.setOnClickListener(v ->
-                Toast.makeText(this, "מסך אימון – בהמשך", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "מסך אימון - בהמשך", Toast.LENGTH_SHORT).show()
         );
 
         btnLogin.setOnClickListener(v ->

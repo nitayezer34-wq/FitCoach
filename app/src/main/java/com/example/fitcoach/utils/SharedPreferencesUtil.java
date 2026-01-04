@@ -13,10 +13,9 @@ import com.google.gson.Gson;
 /// Also contains methods for clearing and removing data from shared preferences
 /// @see SharedPreferences
 public class SharedPreferencesUtil {
-
     /// The name of the shared preferences file
     /// @see Context#getSharedPreferences(String, int)
-    private static final String PREF_NAME = "com.example.testapp.PREFERENCE_FILE_KEY";
+    private static final String PREF_NAME = "com.example.fitcoach.PREFERENCE_FILE_KEY";
 
     /// Save a string to shared preferences
     /// @param context The context to use
@@ -159,6 +158,4 @@ public class SharedPreferencesUtil {
         }
         return null;
     }
-
-
 }
