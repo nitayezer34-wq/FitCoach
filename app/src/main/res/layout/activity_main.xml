@@ -1,239 +1,239 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/main">
-
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/topAppBar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="#673AB7"
-        android:title="FitCoach"
-        android:titleTextColor="@android:color/white"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <ProgressBar
-        android:id="@+id/progressLoading"
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/topAppBar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/layoutGuest"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:orientation="vertical"
-        android:gravity="center_horizontal"
-        android:padding="24dp"
-        app:layout_constraintTop_toBottomOf="@id/topAppBar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <TextView
-            android:id="@+id/tvGuestTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="מתאמן יקר,"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="#222222"
-            android:layout_marginBottom="8dp" />
-
-        <TextView
-            android:id="@+id/tvGuestSubtitle"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="ברוך הבא ל-FitCoach - אפליקציית הכושר המובילה בישראל."
-            android:textSize="16sp"
-            android:textColor="#555555"
-            android:gravity="center"
-            android:layout_marginBottom="32dp" />
+            android:layout_height="match_parent"
+            android:id="@+id/main">
 
-        <Button
-            android:id="@+id/btnLogin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="התחבר"
-            android:backgroundTint="#673AB7"
-            android:textColor="@android:color/white"
-            android:layout_marginBottom="16dp" />
-
-        <Button
-            android:id="@+id/btnRegister"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="הירשם"
-            android:backgroundTint="#B39DDB"
-            android:textColor="@android:color/white" />
-
-    </LinearLayout>
-
-    <ScrollView
-        android:id="@+id/layoutLoggedIn"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/topAppBar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="24dp">
-
-            <TextView
-                android:id="@+id/tvGreeting"
-                android:layout_width="match_parent"
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/topAppBar"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="שלום, מתאמן"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:textColor="#222222"
-                android:layout_marginBottom="16dp" />
+                android:background="#673AB7"
+                android:title="FitCoach"
+                android:titleTextColor="@android:color/white"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="2dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="צעדים היום"
-                        android:textSize="16sp"
-                        android:textColor="#333333" />
-
-                    <TextView
-                        android:id="@+id/tvStepsValue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textSize="24sp"
-                        android:textStyle="bold"
-                        android:layout_marginTop="8dp" />
-
-                    <ProgressBar
-                        android:id="@+id/pbSteps"
-                        style="?android:attr/progressBarStyleHorizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp" />
-
-                    <TextView
-                        android:id="@+id/tvStepsTarget"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="יעד: 8000"
-                        android:textSize="12sp"
-                        android:textColor="#666666"
-                        android:layout_marginTop="4dp" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="2dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="16dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="מים (מ״ל)"
-                        android:textSize="16sp"
-                        android:textColor="#333333" />
-
-                    <TextView
-                        android:id="@+id/tvWaterValue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0"
-                        android:textSize="24sp"
-                        android:textStyle="bold"
-                        android:layout_marginTop="8dp" />
-
-                    <ProgressBar
-                        android:id="@+id/pbWater"
-                        style="?android:attr/progressBarStyleHorizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp" />
-
-                    <TextView
-                        android:id="@+id/tvWaterTarget"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="יעד: 2000"
-                        android:textSize="12sp"
-                        android:textColor="#666666"
-                        android:layout_marginTop="4dp" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <TextView
+            <ProgressBar
+                android:id="@+id/progressLoading"
+                style="?android:attr/progressBarStyleLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="פעולות מהירות"
-                android:textSize="16sp"
-                android:textColor="#333333"
-                android:layout_marginBottom="12dp" />
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/topAppBar"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
 
-            <Button
-                android:id="@+id/btnAddSteps"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="הוסף 100 צעדים"
-                android:layout_marginBottom="8dp"
-                android:backgroundTint="#673AB7"
-                android:textColor="@android:color/white" />
+            <LinearLayout
+                android:id="@+id/layoutGuest"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:padding="24dp"
+                app:layout_constraintTop_toBottomOf="@id/topAppBar"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
 
-            <Button
-                android:id="@+id/btnAddWater"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="הוסף 250 מ״ל מים"
-                android:layout_marginBottom="8dp"
-                android:backgroundTint="#673AB7"
-                android:textColor="@android:color/white" />
+                <TextView
+                    android:id="@+id/tvGuestTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="מתאמן יקר,"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="#222222"
+                    android:layout_marginBottom="8dp" />
 
-            <Button
-                android:id="@+id/btnStartWorkout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="התחל אימון"
-                android:backgroundTint="#9575CD"
-                android:textColor="@android:color/white" />
+                <TextView
+                    android:id="@+id/tvGuestSubtitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="ברוך הבא ל-FitCoach - אפליקציית הכושר המובילה בישראל."
+                    android:textSize="16sp"
+                    android:textColor="#555555"
+                    android:gravity="center"
+                    android:layout_marginBottom="32dp" />
 
-        </LinearLayout>
-    </ScrollView>
+                <Button
+                    android:id="@+id/btnLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="התחבר"
+                    android:backgroundTint="#673AB7"
+                    android:textColor="@android:color/white"
+                    android:layout_marginBottom="16dp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+                <Button
+                    android:id="@+id/btnRegister"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="הירשם"
+                    android:backgroundTint="#B39DDB"
+                    android:textColor="@android:color/white" />
+
+            </LinearLayout>
+
+            <ScrollView
+                android:id="@+id/layoutLoggedIn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@id/topAppBar"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="24dp">
+
+                    <TextView
+                        android:id="@+id/tvGreeting"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="שלום, מתאמן"
+                        android:textSize="22sp"
+                        android:textStyle="bold"
+                        android:textColor="#222222"
+                        android:layout_marginBottom="16dp" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="2dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="צעדים היום"
+                                android:textSize="16sp"
+                                android:textColor="#333333" />
+
+                            <TextView
+                                android:id="@+id/tvStepsValue"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textSize="24sp"
+                                android:textStyle="bold"
+                                android:layout_marginTop="8dp" />
+
+                            <ProgressBar
+                                android:id="@+id/pbSteps"
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp" />
+
+                            <TextView
+                                android:id="@+id/tvStepsTarget"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="יעד: 8000"
+                                android:textSize="12sp"
+                                android:textColor="#666666"
+                                android:layout_marginTop="4dp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="24dp"
+                        app:cardCornerRadius="12dp"
+                        app:cardElevation="2dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="מים (מ״ל)"
+                                android:textSize="16sp"
+                                android:textColor="#333333" />
+
+                            <TextView
+                                android:id="@+id/tvWaterValue"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0"
+                                android:textSize="24sp"
+                                android:textStyle="bold"
+                                android:layout_marginTop="8dp" />
+
+                            <ProgressBar
+                                android:id="@+id/pbWater"
+                                style="?android:attr/progressBarStyleHorizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp" />
+
+                            <TextView
+                                android:id="@+id/tvWaterTarget"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="יעד: 2000"
+                                android:textSize="12sp"
+                                android:textColor="#666666"
+                                android:layout_marginTop="4dp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="פעולות מהירות"
+                        android:textSize="16sp"
+                        android:textColor="#333333"
+                        android:layout_marginBottom="12dp" />
+
+                    <Button
+                        android:id="@+id/btnAddSteps"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="הוסף 100 צעדים"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="#673AB7"
+                        android:textColor="@android:color/white" />
+
+                    <Button
+                        android:id="@+id/btnAddWater"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="הוסף 250 מ״ל מים"
+                        android:layout_marginBottom="8dp"
+                        android:backgroundTint="#673AB7"
+                        android:textColor="@android:color/white" />
+
+                    <Button
+                        android:id="@+id/btnStartWorkout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="התחל אימון"
+                        android:backgroundTint="#9575CD"
+                        android:textColor="@android:color/white" />
+
+                </LinearLayout>
+            </ScrollView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>

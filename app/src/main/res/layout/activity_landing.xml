@@ -5,45 +5,88 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/main"
-    android:padding="24dp">
+    android:background="#FFFFFF"
+    android:padding="32dp">
 
-    <!-- לוגו: תופס את השטח שנשאר מעל הכפתורים -->
+    <!-- Logo at the top with plenty of space -->
     <ImageView
         android:id="@+id/logoImage"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:src="@drawable/fitcoach_logo"
+        android:layout_height="200dp"
         android:contentDescription="FitCoach Logo"
         android:scaleType="fitCenter"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/buttonsGroup"
+        android:src="@drawable/fitcoach_logo"
+        android:layout_marginTop="80dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.6" />
 
-    <!-- קבוצת כפתורים "נעולה" בתחתית -->
+    <!-- Welcome heading -->
+    <TextView
+        android:id="@+id/welcomeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Get Started"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        android:textColor="#000000"
+        android:layout_marginTop="48dp"
+        app:layout_constraintTop_toBottomOf="@id/logoImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/subtitleText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Create an account or sign in to continue"
+        android:textSize="16sp"
+        android:textColor="#666666"
+        android:gravity="center"
+        android:layout_marginTop="12dp"
+        app:layout_constraintTop_toBottomOf="@id/welcomeText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintWidth_percent="0.85" />
+
+    <!-- Buttons at bottom -->
     <LinearLayout
         android:id="@+id/buttonsGroup"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintStart_toStartOf="parent">
 
+        <!-- Sign Up Button - Bold and prominent -->
         <Button
             android:id="@+id/btnSignUp"
-            style="@style/FitCoachButtonPrimary"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Sign Up"/>
+            android:layout_height="56dp"
+            android:text="Sign Up"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:textAllCaps="false"
+            android:background="#000000"
+            android:layout_marginBottom="14dp"
+            android:elevation="4dp" />
 
+        <!-- Sign In Button - Subtle outline -->
         <Button
             android:id="@+id/btnSignIn"
-            style="@style/FitCoachButtonOutlined"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="56dp"
             android:text="Sign In"
-            android:layout_marginTop="12dp"/>
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:textAllCaps="false"
+            android:background="#F5F5F5"
+            android:elevation="0dp" />
 
     </LinearLayout>
 
