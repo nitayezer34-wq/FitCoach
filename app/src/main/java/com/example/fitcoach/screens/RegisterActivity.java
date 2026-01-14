@@ -29,7 +29,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.register), (v, insets) -> {
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
@@ -38,7 +38,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         etName = findViewById(R.id.etName);
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
-        btnRegister = findViewById(R.id.btnDoRegister);
+        btnRegister = findViewById(R.id.btnRegisterConfirm); // תואם ל-ID ב-XML
 
         btnRegister.setOnClickListener(this);
     }
@@ -51,10 +51,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         if (!checkInput(name, email, password)) return;
 
-        User user = new User(name, email, password);
-        DatabaseService.getInstance().registerUser(user, new DatabaseService.DatabaseCallback<User>() {
+        String userId = DatabaseService.getInstance().generateUserId();
+
+        User user = new User(userId, name, email, password, "", 0, 0, 0f, "", 0, 0);
+
+        DatabaseService.getInstance().createNewUser(user, new DatabaseService.DatabaseCallback<Void>() {
             @Override
-            public void onCompleted(User result) {
+            public void onCompleted(Void result) {
                 Toast.makeText(RegisterActivity.this, "נרשמת בהצלחה!", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
                 finish();
