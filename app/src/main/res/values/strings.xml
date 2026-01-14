@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">FitCoach</string>
     <string name="title_activity_register">RegisterActivity</string>
+
+    <string-array name="activity_levels">
+        <item>Low</item>
+        <item>Medium</item>
+        <item>High</item>
+    </string-array>
 </resources>

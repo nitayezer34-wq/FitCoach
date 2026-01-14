@@ -1,42 +1,66 @@
 package com.example.fitcoach.utils;
 
-import android.util.Patterns;
-
-import androidx.annotation.Nullable;
-
-/// Validator class to validate user input.
-/// This class contains static methods to validate user input,
-/// like email, password, phone, name etc.
 public class Validator {
 
-    /// Check if the email is valid
-    /// @param email email to validate
-    /// @return true if the email is valid, false otherwise
-    /// @see Patterns#EMAIL_ADDRESS
-    public static boolean isEmailValid(@Nullable String email) {
-        return email != null && Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    public static boolean isNameValid(String name) {
+        return name != null && name.trim().length() >= 3;
     }
 
-    /// Check if the password is valid
-    /// @param password password to validate
-    /// @return true if the password is valid, false otherwise
-    public static boolean isPasswordValid(@Nullable String password) {
+    public static boolean isEmailValid(String email) {
+        if (email == null) return false;
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
+    public static boolean isPasswordValid(String password) {
         return password != null && password.length() >= 6;
     }
 
-
-    /// Check if the phone number is valid
-    /// @param phone phone number to validate
-    /// @return true if the phone number is valid, false otherwise
-    /// @see Patterns#PHONE
-    public static boolean isPhoneValid(@Nullable String phone) {
-        return phone != null && phone.length() >= 10 && Patterns.PHONE.matcher(phone).matches();
+    public static boolean isGenderValid(String gender) {
+        return gender != null && !gender.trim().isEmpty();
     }
 
-    /// Check if the name is valid
-    /// @param name name to validate
-    /// @return true if the name is valid, false otherwise
-    public static boolean isNameValid(@Nullable String name) {
-        return name != null && name.length() >= 3;
+    // Parsing with safe checks
+    public static Integer parseBirthYear(String birthYearStr) {
+        try {
+            int year = Integer.parseInt(birthYearStr);
+            if (year > 1900 && year <= 2026) return year;
+        } catch (Exception ignored) {}
+        return null;
+    }
+
+    public static Integer parseHeightCm(String heightStr) {
+        try {
+            int height = Integer.parseInt(heightStr);
+            if (height > 50 && height < 300) return height;
+        } catch (Exception ignored) {}
+        return null;
+    }
+
+    public static Float parseWeightKg(String weightStr) {
+        try {
+            float weight = Float.parseFloat(weightStr);
+            if (weight > 20 && weight < 500) return weight;
+        } catch (Exception ignored) {}
+        return null;
+    }
+
+    public static Integer parseDailySteps(String stepStr) {
+        try {
+            int steps = Integer.parseInt(stepStr);
+            if (steps >= 0 && steps <= 200000) return steps;
+        } catch (Exception ignored) {}
+        return null;
+    }
+
+    public static Integer parseDailyWaterMl(String waterStr) {
+        try {
+            int water = Integer.parseInt(waterStr);
+            if (water >= 0 && water <= 10000) return water;
+        } catch (Exception ignored) {}
+        return null;
+    }
+
+    public static boolean isActivityLevelValid(String level) {
+        return level != null && (level.equals("Low") || level.equals("Medium") || level.equals("High"));
     }
 }
