@@ -1,37 +1,78 @@
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/login"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="24dp">
+    android:background="#F5F5F5"
+    android:fillViewport="true">
 
-    <EditText
-        android:id="@+id/etEmail"
-        android:hint="אימייל"
-        android:inputType="textEmailAddress"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <EditText
-        android:id="@+id/etPassword"
-        android:hint="סיסמה"
-        android:inputType="textPassword"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"/>
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:padding="32dp">
 
-    <Button
-        android:id="@+id/btnDoLogin"
-        android:text="התחבר"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"/>
+        <ImageView
+            android:id="@+id/ivLogo"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="24dp"
+            android:src="@drawable/fitcoach_logo"
+            android:scaleType="centerInside" />
 
-    <TextView
-        android:id="@+id/btnDoRegister"
-        android:text="אין חשבון? הירשם"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"/>
-</LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ברוכים הבאים ל-FitCoach"
+            android:textSize="22sp"
+            android:textColor="#333333"
+            android:textStyle="bold"
+            android:layout_marginBottom="32dp"/>
+
+        <EditText
+            android:id="@+id/etEmail"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:hint="אימייל"
+            android:inputType="textEmailAddress"
+            android:background="@android:drawable/editbox_background"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"/>
+
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="16dp"
+            android:hint="סיסמה"
+            android:inputType="textPassword"
+            android:background="@android:drawable/editbox_background"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"/>
+
+        <Button
+            android:id="@+id/btnDoLogin"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="32dp"
+            android:text="התחבר"
+            android:textSize="18sp"
+            android:textAllCaps="false"
+            android:backgroundTint="#2196F3"
+            android:textColor="@android:color/white"/>
+
+        <TextView
+            android:id="@+id/btnDoRegister"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="אין לך חשבון? הירשם עכשיו"
+            android:textColor="#2196F3"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:padding="8dp"/>
+
+    </LinearLayout>
+</ScrollView>

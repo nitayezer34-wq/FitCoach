@@ -1,8 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="fit_primary">#5E4DB2</color>
-    <color name="fit_primary_dark">#4A3B9A</color>
+    <color name="fit_primary">#2196F3</color>
+    <color name="fit_primary_dark">#1976D2</color>
+    <color name="fit_accent">#BBDEFB</color>
+    <color name="fit_background">#F5F7FA</color>
+    <color name="white">#FFFFFF</color>
+    <color name="error_red">#E53935</color>
     <color name="fit_on_primary">#FFFFFF</color>
-
+    <color name="fit_outline">#2196F3</color>
     <color name="fit_surface">#FFFFFF</color>
-    <color name="fit_outline">#5E4DB2</color>
 </resources>

@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void bindViews() {
+        /*
         MaterialToolbar toolbar = findViewById(R.id.topAppBar);
         setSupportActionBar(toolbar);
 
@@ -69,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         btnAddWater = findViewById(R.id.btnAddWater);
         btnAddSteps = findViewById(R.id.btnAddSteps);
         btnStartWorkout = findViewById(R.id.btnStartWorkout);
+         */
     }
 
     private void loadUserAndBindUI() {
