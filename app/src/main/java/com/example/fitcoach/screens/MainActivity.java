@@ -3,10 +3,12 @@ package com.example.fitcoach.screens;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,17 +19,17 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.fitcoach.R;
 import com.example.fitcoach.models.User;
 import com.example.fitcoach.utils.SharedPreferencesUtil;
-import com.google.android.material.appbar.MaterialToolbar;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView tvGreeting, tvStepsValue, tvWaterValue, tvStepsTarget, tvWaterTarget;
-    private ProgressBar pbSteps, pbWater, progressLoading;
-    private Button btnAddWater, btnAddSteps, btnStartWorkout;
-    private View layoutGuest, layoutLoggedIn;
-    private Button btnLogin, btnRegister;
+    private TextView tvGreeting, tvStepsValue, tvWaterValue, tvBmiStatusText;
+    private ProgressBar pbSteps, pbWater, pbWaterJug;
+    private ImageButton btnSettingsGear, btnAddWater, btnRemoveWater;
+    private ImageView ivBmiNeedle;
+    private Button btnStartWorkout;
 
-    private int stepsToday = 0, waterToday = 0, stepTarget = 8000, waterTarget = 2000;
+    private int waterToday = 0, waterTarget = 2000;
+    private final int GLASS_SIZE = 250;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,88 +44,83 @@ public class MainActivity extends AppCompatActivity {
         });
 
         bindViews();
-        loadUserAndBindUI();
+        loadUserData();
         setupButtons();
     }
 
     private void bindViews() {
-        /*
-        MaterialToolbar toolbar = findViewById(R.id.topAppBar);
-        setSupportActionBar(toolbar);
+        tvGreeting = findViewById(R.id.tv_main_welcome);
+        btnSettingsGear = findViewById(R.id.btn_settings_gear);
+        pbSteps = findViewById(R.id.pb_main_steps);
+        tvStepsValue = findViewById(R.id.tv_main_steps_val);
+        pbWater = findViewById(R.id.pb_main_water);
+        tvWaterValue = findViewById(R.id.tv_main_water_val);
+        ivBmiNeedle = findViewById(R.id.iv_bmi_needle);
+        tvBmiStatusText = findViewById(R.id.tv_bmi_status_text);
 
-        progressLoading = findViewById(R.id.progressLoading);
-        layoutGuest = findViewById(R.id.layoutGuest);
-        layoutLoggedIn = findViewById(R.id.layoutLoggedIn);
-
-        btnLogin = findViewById(R.id.btnLogin);
-        btnRegister = findViewById(R.id.btnRegister);
-
-        tvGreeting = findViewById(R.id.tvGreeting);
-        tvStepsValue = findViewById(R.id.tvStepsValue);
-        tvStepsTarget = findViewById(R.id.tvStepsTarget);
-        pbSteps = findViewById(R.id.pbSteps);
-
-        tvWaterValue = findViewById(R.id.tvWaterValue);
-        tvWaterTarget = findViewById(R.id.tvWaterTarget);
-        pbWater = findViewById(R.id.pbWater);
-
-        btnAddWater = findViewById(R.id.btnAddWater);
-        btnAddSteps = findViewById(R.id.btnAddSteps);
-        btnStartWorkout = findViewById(R.id.btnStartWorkout);
-         */
+        pbWaterJug = findViewById(R.id.pb_water_jug);
+        btnAddWater = findViewById(R.id.btn_add_water);
+        btnRemoveWater = findViewById(R.id.btn_remove_water);
     }
 
-    private void loadUserAndBindUI() {
-        if (!SharedPreferencesUtil.isUserLoggedIn(MainActivity.this)) {
-            layoutGuest.setVisibility(View.VISIBLE);
-            layoutLoggedIn.setVisibility(View.GONE);
-            progressLoading.setVisibility(View.GONE);
-            return;
-        }
-
-        layoutGuest.setVisibility(View.GONE);
-        layoutLoggedIn.setVisibility(View.VISIBLE);
-        progressLoading.setVisibility(View.GONE);
-
-        User user = SharedPreferencesUtil.getUser(MainActivity.this);
-        String name = "מתאמן";
+    private void loadUserData() {
+        User user = SharedPreferencesUtil.getUser(this);
         if (user != null) {
-            if (user.getName() != null && !user.getName().trim().isEmpty()) name = user.getName();
-            if (user.getDailyStepTarget() > 0) stepTarget = user.getDailyStepTarget();
-            if (user.getDailyWaterTargetMl() > 0) waterTarget = user.getDailyWaterTargetMl();
+            tvGreeting.setText("שלום, " + (user.getName() != null ? user.getName() : "מתאמן"));
+            waterTarget = user.getDailyWaterTargetMl() > 0 ? user.getDailyWaterTargetMl() : 2000;
+            updateBMIGauge(user);
         }
-        tvGreeting.setText("שלום, " + name);
-        pbSteps.setMax(stepTarget);
+
         pbWater.setMax(waterTarget);
-        tvStepsTarget.setText("יעד: " + stepTarget);
-        tvWaterTarget.setText("יעד: " + waterTarget);
-        updateStepsUI();
+        pbWaterJug.setMax(waterTarget);
         updateWaterUI();
     }
 
     private void setupButtons() {
+        btnSettingsGear.setOnClickListener(v -> showSettingsMenu(v));
+
         btnAddWater.setOnClickListener(v -> {
-            waterToday += 250;
+            waterToday += GLASS_SIZE;
             updateWaterUI();
         });
-        btnAddSteps.setOnClickListener(v -> {
-            stepsToday += 100;
-            updateStepsUI();
-        });
-        btnStartWorkout.setOnClickListener(v ->
-                Toast.makeText(this, "מסך אימון - בהמשך", Toast.LENGTH_SHORT).show()
-        );
-        btnLogin.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, LoginActivity.class)));
-        btnRegister.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, RegisterActivity.class)));
-    }
 
-    private void updateStepsUI() {
-        tvStepsValue.setText(String.valueOf(stepsToday));
-        pbSteps.setProgress(Math.min(stepsToday, stepTarget));
+        btnRemoveWater.setOnClickListener(v -> {
+            if (waterToday >= GLASS_SIZE) {
+                waterToday -= GLASS_SIZE;
+                updateWaterUI();
+            }
+        });
     }
 
     private void updateWaterUI() {
-        tvWaterValue.setText(String.valueOf(waterToday));
+        tvWaterValue.setText(waterToday + "\nמ\"ל");
         pbWater.setProgress(Math.min(waterToday, waterTarget));
+        pbWaterJug.setProgress(Math.min(waterToday, waterTarget));
+    }
+
+    private void updateBMIGauge(User user) {
+        if (user.getHeightCm() > 0 && user.getWeightKg() > 0) {
+            float heightM = user.getHeightCm() / 100f;
+            float bmi = user.getWeightKg() / (heightM * heightM);
+            float rotation = (bmi < 18.5) ? -65f : (bmi < 25) ? 0f : 65f;
+            ivBmiNeedle.setRotation(rotation);
+            tvBmiStatusText.setText(bmi < 18.5 ? "תת משקל" : bmi < 25 ? "משקל תקין" : "משקל עודף");
+        }
+    }
+
+    private void showSettingsMenu(View view) {
+        PopupMenu popup = new PopupMenu(this, view);
+        popup.getMenu().add("עריכת פרופיל");
+        popup.getMenu().add("התנתקות");
+        popup.setOnMenuItemClickListener(item -> {
+            if (item.getTitle().equals("עריכת פרופיל")) {
+                startActivity(new Intent(this, UserProfileActivity.class));
+            } else {
+                SharedPreferencesUtil.clearUser(this);
+                finish();
+            }
+            return true;
+        });
+        popup.show();
     }
 }
