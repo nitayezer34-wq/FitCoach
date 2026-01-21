@@ -1,5 +1,9 @@
 package com.example.fitcoach.models;
 
+import androidx.annotation.NonNull;
+
+import com.google.firebase.database.PropertyName;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -15,11 +19,12 @@ public class User implements Serializable {
     private String activityLevel;
     private int dailyStepTarget;
     private int dailyWaterTargetMl;
+    private boolean admin;
 
     public User() {}
 
     public User(String id, String name, String email, String password, String gender, int birthYear,
-                int heightCm, float weightKg, String activityLevel, int dailyStepTarget, int dailyWaterTargetMl) {
+                int heightCm, float weightKg, String activityLevel, int dailyStepTarget, int dailyWaterTargetMl, boolean admin) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -31,6 +36,7 @@ public class User implements Serializable {
         this.activityLevel = activityLevel;
         this.dailyStepTarget = dailyStepTarget;
         this.dailyWaterTargetMl = dailyWaterTargetMl;
+        this.admin = admin;
     }
 
     public String getId() {
@@ -121,6 +127,17 @@ public class User implements Serializable {
         this.dailyWaterTargetMl = dailyWaterTargetMl;
     }
 
+    @PropertyName("admin")
+    public boolean isAdmin() {
+        return admin;
+    }
+
+    @PropertyName("admin")
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
+    }
+
+    @NonNull
     @Override
     public String toString() {
         return "User{" +
@@ -135,6 +152,7 @@ public class User implements Serializable {
                 ", activityLevel='" + activityLevel + '\'' +
                 ", dailyStepTarget=" + dailyStepTarget +
                 ", dailyWaterTargetMl=" + dailyWaterTargetMl +
+                ", admin=" + admin +
                 '}';
     }
 
@@ -142,11 +160,22 @@ public class User implements Serializable {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return birthYear == user.birthYear && heightCm == user.heightCm && Float.compare(weightKg, user.weightKg) == 0 && dailyStepTarget == user.dailyStepTarget && dailyWaterTargetMl == user.dailyWaterTargetMl && Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(gender, user.gender) && Objects.equals(activityLevel, user.activityLevel);
+        return birthYear == user.birthYear && heightCm == user.heightCm && Float.compare(weightKg, user.weightKg) == 0 && dailyStepTarget == user.dailyStepTarget && dailyWaterTargetMl == user.dailyWaterTargetMl && admin == user.admin && Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(gender, user.gender) && Objects.equals(activityLevel, user.activityLevel);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email, password, gender, birthYear, heightCm, weightKg, activityLevel, dailyStepTarget, dailyWaterTargetMl);
+        return Objects.hash(id, name, email, password, gender, birthYear, heightCm, weightKg, activityLevel, dailyStepTarget, dailyWaterTargetMl, admin);
+    }
+
+
+    /**
+     * Calculates the User's BMI (Body Mass Index)</br>
+     * Formula: weight(kg) / height(m)^2
+     */
+    public double calcBMI() {
+        if (this.heightCm <= 0) return 0;
+        double heightInMeters = this.heightCm / 100.0;
+        return this.weightKg / (heightInMeters * heightInMeters);
     }
 }

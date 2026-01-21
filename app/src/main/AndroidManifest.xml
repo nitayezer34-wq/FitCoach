@@ -11,6 +11,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FitCoach">
         <activity
+            android:name=".screens.WorkoutCreationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.AdminActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.UserProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.WorkoutActivity"
+            android:exported="false" />
+        <activity
             android:name=".screens.MainActivity"
             android:exported="false" />
         <activity

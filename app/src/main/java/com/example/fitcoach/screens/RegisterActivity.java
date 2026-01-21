@@ -15,6 +15,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.example.fitcoach.R;
 import com.example.fitcoach.models.User;
 import com.example.fitcoach.services.DatabaseService;
+import com.example.fitcoach.utils.SharedPreferencesUtil;
 import com.example.fitcoach.utils.Validator;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
@@ -95,11 +96,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 Float.parseFloat(etWeight.getText().toString()),
                 etActivityLevel.getText().toString(),
                 Integer.parseInt(etStepTarget.getText().toString()),
-                Integer.parseInt(etWaterTarget.getText().toString()));
+                Integer.parseInt(etWaterTarget.getText().toString()),
+                false);
 
         DatabaseService.getInstance().createNewUser(user, new DatabaseService.DatabaseCallback<Void>() {
             @Override
             public void onCompleted(Void result) {
+                SharedPreferencesUtil.saveUser(RegisterActivity.this, user);
                 Toast.makeText(RegisterActivity.this, "חשבון נוצר בהצלחה!", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
                 startActivity(intent);

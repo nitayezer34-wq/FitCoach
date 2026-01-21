@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.fitcoach.models.User;
+import com.example.fitcoach.models.WorkoutTraining;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -25,7 +26,9 @@ import java.util.function.UnaryOperator;
 public class DatabaseService {
     /// paths for different data types in the database
     /// @see DatabaseService#readData(String)
-    private static final String USERS_PATH = "users";
+    private static final String USERS_PATH = "users",
+                                WORKOUT_PATH = "workouts";
+
     private static final String DB_URL = "https://fitcoach-55d45-default-rtdb.europe-west1.firebasedatabase.app/";
 
 
@@ -320,6 +323,60 @@ public class DatabaseService {
         });
     }
 
+
+    // endregion User Section
+
+
+
+    // region User Section
+
+    /// generate a new id for a new user in the database
+    /// @return a new id for the user
+    /// @see #generateNewId(String)
+    /// @see User
+    public String generateWorkoutId() {
+        return generateNewId(WORKOUT_PATH);
+    }
+
+    /// create a new workoutTraining in the database
+    /// @param workoutTraining the workoutTraining object to create
+    /// @param callback the callback to call when the operation is completed
+    ///              the callback will receive void.
+    ///            if the operation fails, the callback will receive an exception
+    /// @see DatabaseCallback
+    /// @see WorkoutTraining
+    public void createNewWorkoutTraining(@NotNull final WorkoutTraining workoutTraining, @Nullable final DatabaseCallback<Void> callback) {
+        writeData(WORKOUT_PATH + "/" + workoutTraining.getId(), workoutTraining, callback);
+    }
+
+    /// get a user from the database
+    /// @param id the id of the WorkoutTraining to get
+    /// @param callback the callback to call when the operation is completed
+    ///               the callback will receive the user object.
+    ///             if the operation fails, the callback will receive an exception
+    /// @see DatabaseCallback
+    /// @see WorkoutTraining
+    public void getWorkoutTraining(@NotNull final String id, @NotNull final DatabaseCallback<WorkoutTraining> callback) {
+        getData(WORKOUT_PATH + "/" + id, WorkoutTraining.class, callback);
+    }
+
+    /// get all the workouts from the database
+    /// @param callback the callback to call when the operation is completed
+    ///              the callback will receive a list of user objects
+    ///            if the operation fails, the callback will receive an exception
+    /// @see DatabaseCallback
+    /// @see List
+    /// @see WorkoutTraining
+    public void getWorkoutTrainingList(@NotNull final DatabaseCallback<List<WorkoutTraining>> callback) {
+        getDataList(WORKOUT_PATH, WorkoutTraining.class, callback);
+    }
+
+    /// delete a user from the database
+    /// @param id the id of the WorkoutTraining to delete
+    /// @param callback the callback to call when the operation is completed
+    public void deleteWorkoutTraining(@NotNull final String id, @Nullable final DatabaseCallback<Void> callback) {
+        deleteData(WORKOUT_PATH + "/" + id, callback);
+    }
 
     // endregion User Section
 }
