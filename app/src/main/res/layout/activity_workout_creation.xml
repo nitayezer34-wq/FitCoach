@@ -1,10 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".screens.WorkoutCreationActivity">
+    android:background="#F5F5F5"
+    android:layoutDirection="rtl">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/btn_add_workout"
+        android:padding="16dp"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="יצירת אימון חדש"
+                android:textColor="#2196F3"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="3dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="פרטי התרגיל"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="#2196F3"
+                        android:layout_marginBottom="12dp"/>
+
+                    <EditText android:id="@+id/et_name" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="שם התרגיל" android:backgroundTint="#2196F3" android:layout_marginBottom="12dp"/>
+                    <EditText android:id="@+id/et_desc" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="תיאור הפעולה" android:backgroundTint="#2196F3" android:layout_marginBottom="12dp"/>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+                        <EditText android:id="@+id/et_cal" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:hint="קלוריות" android:inputType="number" android:backgroundTint="#2196F3"/>
+                        <EditText android:id="@+id/et_sets" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:hint="סטים" android:inputType="number" android:backgroundTint="#2196F3"/>
+                    </LinearLayout>
+
+                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp">
+                        <EditText android:id="@+id/et_reps" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:hint="חזרות" android:inputType="number" android:backgroundTint="#2196F3"/>
+                        <EditText android:id="@+id/et_rest" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:hint="מנוחה (דקות)" android:inputType="numberDecimal" android:backgroundTint="#2196F3"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_marginTop="12dp"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="3dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="שיוך לתוכנית BMI"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="#2196F3"
+                        android:layout_marginBottom="8dp"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+                        <CheckBox android:id="@+id/cb_under" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="תת משקל" android:buttonTint="#2196F3"/>
+                        <CheckBox android:id="@+id/cb_normal" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="תקין" android:buttonTint="#2196F3"/>
+                        <CheckBox android:id="@+id/cb_over" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="עודף" android:buttonTint="#2196F3"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btn_add_workout"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:text="הוסף אימון"
+        android:backgroundTint="#2196F3"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        app:cornerRadius="15dp"/>
+
+</RelativeLayout>

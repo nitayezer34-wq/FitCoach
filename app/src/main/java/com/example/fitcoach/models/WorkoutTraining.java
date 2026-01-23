@@ -1,10 +1,8 @@
 package com.example.fitcoach.models;
 
 import androidx.annotation.NonNull;
-
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
-
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -12,36 +10,29 @@ import java.util.Objects;
 public class WorkoutTraining implements Serializable {
 
     private String id;
-    private String name;              // שם התרגיל (למשל: בנץ' פרס)
-    private String description;       // תיאור מפורט של אופן הביצוע
-    private int caloriesPerSet;       // כמה קלוריות נשרפות בכל סט בודד
-    private int sets;                 // כמות הסטים הנדרשת
-    private int reps;                 // כמות החזרות בכל סט
-    private int restTimeSeconds;      // זמן מנוחה בין הסטים (בשניות)
+    private String name;
+    private String description;
+    private int caloriesPerSet;
+    private int sets;
+    private int reps;
+    private double restTimeMinutes; // Changed to double for minutes (e.g. 3.5)
+    private String targetAudience;  // Categories: Underweight, Normal, Overweight
 
-    public WorkoutTraining() {
-    }
+    public WorkoutTraining() {}
 
-    public WorkoutTraining(String id, String name, String description, int caloriesPerSet, int sets, int reps, int restTimeSeconds) {
+    public WorkoutTraining(String id, String name, String description, int caloriesPerSet, int sets, int reps, double restTimeMinutes, String targetAudience) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.caloriesPerSet = caloriesPerSet;
         this.sets = sets;
         this.reps = reps;
-        this.restTimeSeconds = restTimeSeconds;
+        this.restTimeMinutes = restTimeMinutes;
+        this.targetAudience = targetAudience;
     }
 
-    // --- Getters & Setters (מאפשרים גישה לנתונים ועדכון שלהם) ---
-
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
+    public String getId() { return id; }
+    public void setId(String id) { this.id = id; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
@@ -58,12 +49,12 @@ public class WorkoutTraining implements Serializable {
     public int getReps() { return reps; }
     public void setReps(int reps) { this.reps = reps; }
 
-    public int getRestTimeSeconds() { return restTimeSeconds; }
-    public void setRestTimeSeconds(int restTimeSeconds) { this.restTimeSeconds = restTimeSeconds; }
+    public double getRestTimeMinutes() { return restTimeMinutes; }
+    public void setRestTimeMinutes(double restTimeMinutes) { this.restTimeMinutes = restTimeMinutes; }
 
-    /**
-     * פונקציה לחישוב סך הקלוריות של התרגיל המלא
-     */
+    public String getTargetAudience() { return targetAudience; }
+    public void setTargetAudience(String targetAudience) { this.targetAudience = targetAudience; }
+
     @Exclude
     public int getTotalExerciseCalories() {
         return this.sets * this.caloriesPerSet;
@@ -71,27 +62,25 @@ public class WorkoutTraining implements Serializable {
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         WorkoutTraining that = (WorkoutTraining) o;
-        return caloriesPerSet == that.caloriesPerSet && sets == that.sets && reps == that.reps && restTimeSeconds == that.restTimeSeconds && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(description, that.description);
+        return caloriesPerSet == that.caloriesPerSet && sets == that.sets && reps == that.reps && Double.compare(that.restTimeMinutes, restTimeMinutes) == 0 && Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(description, that.description) && Objects.equals(targetAudience, that.targetAudience);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, caloriesPerSet, sets, reps, restTimeSeconds);
+        return Objects.hash(id, name, description, caloriesPerSet, sets, reps, restTimeMinutes, targetAudience);
     }
 
     @NonNull
     @Override
     public String toString() {
-        return "TrainingProgram{" +
+        return "WorkoutTraining{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", caloriesPerSet=" + caloriesPerSet +
-                ", sets=" + sets +
-                ", reps=" + reps +
-                ", restTimeSeconds=" + restTimeSeconds +
+                ", targetAudience='" + targetAudience + '\'' +
+                ", restMinutes=" + restTimeMinutes +
                 '}';
     }
 }

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import androidx.annotation.Nullable;
 
+import com.example.fitcoach.models.Stats;
 import com.example.fitcoach.models.User;
 import com.google.gson.Gson;
 
@@ -157,5 +158,32 @@ public class SharedPreferencesUtil {
             return user.getId();
         }
         return null;
+    }
+
+
+    /// Save a user object to shared preferences
+    /// @param context The context to use
+    /// @param stats The stats object to save
+    /// @see Stats
+    public static void saveStats(Context context, Stats stats) {
+        saveObject(context, "stats", stats);
+    }
+
+    /// Get the user object from shared preferences
+    /// @param context The context to use
+    /// @return The user object stored in shared preferences
+    /// @see Stats
+    /// @see #isUserLoggedIn(Context)
+    public static Stats getStats(Context context) {
+        if (!isUserLoggedIn(context)) {
+            return null;
+        }
+        return getObject(context, "stats", Stats.class);
+    }
+
+    /// Sign out the user by removing user data from shared preferences
+    /// @param context The context to use
+    public static void clearStats(Context context) {
+        remove(context, "stats");
     }
 }

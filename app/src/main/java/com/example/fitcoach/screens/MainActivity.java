@@ -18,6 +18,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.example.fitcoach.R;
 import com.example.fitcoach.models.User;
+import com.example.fitcoach.services.DatabaseService;
 import com.example.fitcoach.utils.SharedPreferencesUtil;
 
 import java.util.Objects;
@@ -87,18 +88,25 @@ public class MainActivity extends AppCompatActivity {
         // שליפת אובייקט המשתמש מהזיכרון
         User user = SharedPreferencesUtil.getUser(this);
 
-        // תיקון הצגת השם: בודק אם המשתמש קיים ואם השם לא ריק
-        if (user != null && user.getName() != null && !user.getName().isEmpty()) {
+        DatabaseService.getInstance().getUser(user.getId(), new DatabaseService.DatabaseCallback<User>() {
+            @Override
+            public void onCompleted(User updatedUser) {
+                SharedPreferencesUtil.saveUser(MainActivity.this, updatedUser);
+
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+
+            }
+        });
+
+        if (user.getName() != null && !user.getName().isEmpty()) {
             tvGreeting.setText("שלום, " + user.getName());
         } else {
             tvGreeting.setText(user.getName() + "שלום, ");
         }
 
-        // טעינת התקדמות יומית מקובץ Stats (צעדים וקלוריות שנשמרו)
-        SharedPreferences stats = getSharedPreferences("Stats", MODE_PRIVATE);
-        caloriesToday = stats.getInt("burned_today", 0);
-        stepsToday = stats.getInt("steps_today", 0);
-        waterToday = stats.getInt("water_today", 0);
 
         if (user != null) {
             waterTarget = user.getDailyWaterTargetMl() > 0 ? user.getDailyWaterTargetMl() : 2000;
@@ -155,15 +163,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateUI() {
         // עדכון קנקן המים (כחול-לבן)
-        pbWaterJug.setProgress(Math.min(waterToday, waterTarget));
+        pbWaterJug.setProgress(Math.min(waterToday, waterTarget), true);
 
         // עדכון עיגול קלוריות (ימין)
         tvCaloriesValue.setText(caloriesToday + "\nקלוריות");
-        pbCalories.setProgress(Math.min(caloriesToday, caloriesTarget));
+        pbCalories.setProgress(Math.min(caloriesToday, caloriesTarget), true);
 
         // עדכון עיגול צעדים (שמאל)
         tvStepsValue.setText(stepsToday + "\nצעדים");
-        pbSteps.setProgress(Math.min(stepsToday, stepsTarget));
+        pbSteps.setProgress(Math.min(stepsToday, stepsTarget), true);
     }
 
     private void updateBMIGauge(User user) {

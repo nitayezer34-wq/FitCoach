@@ -17,6 +17,8 @@ import com.example.fitcoach.models.User;
 import com.example.fitcoach.services.DatabaseService;
 import com.example.fitcoach.utils.SharedPreferencesUtil;
 
+import java.util.function.UnaryOperator;
+
 public class UserProfileActivity extends BaseActivity {
 
     // הגדרת רכיבי המסך
@@ -101,25 +103,32 @@ public class UserProfileActivity extends BaseActivity {
     private void saveUserChanges() {
         if (selectedUser == null) return;
 
-        try {
-            // עדכון האובייקט מהשדות במסך
-            selectedUser.setName(etName.getText().toString());
-            selectedUser.setHeightCm(Integer.parseInt(etHeight.getText().toString()));
-            selectedUser.setWeightKg(Float.parseFloat(etWeight.getText().toString()));
+        // עדכון האובייקט מהשדות במסך
+        selectedUser.setName(etName.getText().toString());
+        selectedUser.setHeightCm(Integer.parseInt(etHeight.getText().toString()));
+        selectedUser.setWeightKg(Float.parseFloat(etWeight.getText().toString()));
 
-            databaseService.updateUser(selectedUser, new DatabaseService.DatabaseCallback<Void>() {
-                @Override
-                public void onCompleted(Void result) {
-                    Toast.makeText(UserProfileActivity.this, "Saved Successfully", Toast.LENGTH_SHORT).show();
-                    finish(); // סגירת הדף וחזרה אחורה
-                }
+        databaseService.updateUser(selectedUser.getId(), new UnaryOperator<User>() {
+            @Override
+            public User apply(User user) {
+                if (user == null) return user;
+                user.setName(selectedUser.getName());
+                user.setHeightCm(selectedUser.getHeightCm());
+                user.setWeightKg(selectedUser.getWeightKg());
+                return user;
+            }
+        }, new DatabaseService.DatabaseCallback<Void>() {
+            @Override
+            public void onCompleted(Void result) {
+                Toast.makeText(UserProfileActivity.this, "Saved Successfully", Toast.LENGTH_SHORT).show();
+                finish(); // סגירת הדף וחזרה אחורה
+            }
 
-                @Override
-                public void onFailed(Exception e) {
-                    Toast.makeText(UserProfileActivity.this,"Save Failed", Toast.LENGTH_SHORT).show();                }
-            });
-        } catch (Exception e) {
-            Toast.makeText(this, "Check your inputs", Toast.LENGTH_SHORT).show();
-        }
+            @Override
+            public void onFailed(Exception e) {
+                Toast.makeText(UserProfileActivity.this, "Save Failed", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 }
