@@ -44,22 +44,30 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         User user = userList.get(position);
 
-        // אם המשתמש הוא אדמין - נצבע בכחול ונוסיף טקסט
-        if (user.isAdmin()) {
-            holder.tvName.setText(user.getName() + " (מנהל)");
-            holder.tvName.setTextColor(Color.parseColor("#2196F3"));
-            holder.btnMakeAdmin.setVisibility(View.GONE); // מנהל כבר לא צריך כפתור מינוי
-        } else {
-            holder.tvName.setText(user.getName());
-            holder.tvName.setTextColor(Color.parseColor("#212121"));
-            holder.btnMakeAdmin.setVisibility(View.VISIBLE);
-        }
-
+        // עיצוב שם המשתמש
+        holder.tvName.setText(user.getName());
         holder.tvEmail.setText(user.getEmail());
 
-        holder.itemView.setOnClickListener(v -> listener.onUserClick(user));
+        // לוגיקת המנהל - עיצוב כחול/לבן/אפור
+        if (user.isAdmin()) {
+            // אם הוא מנהל: כוכב כחול מודגש
+            holder.btnMakeAdmin.setImageResource(R.drawable.ic_star_custom); // הכוכב ששלחת
+            holder.btnMakeAdmin.setColorFilter(Color.parseColor("#2196F3")); // כחול
+            holder.tvName.setTextColor(Color.parseColor("#2196F3")); // גם השם בכחול
+        } else {
+            // אם הוא משתמש רגיל: כוכב אפור/חלול
+            holder.btnMakeAdmin.setImageResource(R.drawable.ic_star_custom);
+            holder.btnMakeAdmin.setColorFilter(Color.LTGRAY); // אפור ניטרלי
+            holder.tvName.setTextColor(Color.parseColor("#212121")); // שם בצבע רגיל
+        }
+
+        // מאזינים
+        holder.btnMakeAdmin.setOnClickListener(v -> {
+            // כאן אנחנו קוראים לפונקציה ב-Activity/Fragment
+            listener.onMakeAdminClick(user, position);
+        });
+
         holder.btnDelete.setOnClickListener(v -> listener.onDeleteClick(user));
-        holder.btnMakeAdmin.setOnClickListener(v -> listener.onMakeAdminClick(user, position));
     }
 
     @Override
