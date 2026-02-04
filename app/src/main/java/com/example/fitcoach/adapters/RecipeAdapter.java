@@ -1,12 +1,15 @@
 package com.example.fitcoach.adapters;
 
-import android.graphics.Color;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import com.bumptech.glide.Glide;
 import com.example.fitcoach.R;
 import com.example.fitcoach.models.Recipe;
 import java.util.ArrayList;
@@ -16,13 +19,14 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
     private List<Recipe> recipeList = new ArrayList<>();
     private final OnRecipeClickListener listener;
+    private Context context;
 
-    // ממשק להאזנה ללחיצות (לחיצה רגילה לצפייה בפרטים)
     public interface OnRecipeClickListener {
         void onRecipeClick(Recipe recipe);
     }
 
-    public RecipeAdapter(OnRecipeClickListener listener) {
+    public RecipeAdapter(Context context, OnRecipeClickListener listener) {
+        this.context = context;
         this.listener = listener;
     }
 
@@ -34,7 +38,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     @NonNull
     @Override
     public RecipeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        // שימוש ב-layout שיצרנו קודם לכרטיסיית מתכון
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.activity_item_recipe, parent, false);
         return new RecipeViewHolder(view);
     }
@@ -42,20 +45,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     @Override
     public void onBindViewHolder(@NonNull RecipeViewHolder holder, int position) {
         Recipe recipe = recipeList.get(position);
-
-        // הגדרת נתונים
-        holder.tvTitle.setText(recipe.getTitle());
-        holder.tvScore.setText("מדד בריאות: " + recipe.getHealthScore() + "/10");
-
-        // עיצוב כחול-לבן לפי הקו של האפליקציה
-        holder.tvTitle.setTextColor(Color.parseColor("#003366")); // כחול כהה
-
-        // לחיצה על כל הכרטיסייה תפתח את פרטי המתכון
-        holder.itemView.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onRecipeClick(recipe);
-            }
-        });
+        holder.bind(recipe, listener, context);
     }
 
     @Override
@@ -64,12 +54,70 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     }
 
     static class RecipeViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTitle, tvScore;
+        ImageView ivRecipeImage;
+        TextView tvRecipeTitle, tvPrepTime, tvCalories, tvAllergens;
+        LinearLayout llRecipeRating;
 
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvTitle = itemView.findViewById(R.id.tvRecipeTitle);
-            tvScore = itemView.findViewById(R.id.tvRecipeScore);
+            ivRecipeImage = itemView.findViewById(R.id.ivRecipeImage);
+            tvRecipeTitle = itemView.findViewById(R.id.tvRecipeTitle);
+            tvPrepTime = itemView.findViewById(R.id.tvPrepTime);
+            tvCalories = itemView.findViewById(R.id.tvCalories);
+            tvAllergens = itemView.findViewById(R.id.tvAllergens);
+            llRecipeRating = itemView.findViewById(R.id.llRecipeRating);
+        }
+
+        public void bind(final Recipe recipe, final OnRecipeClickListener listener, Context context) {
+            tvRecipeTitle.setText(recipe.getTitle());
+
+            if (recipe.getImageUrl() != null && !recipe.getImageUrl().isEmpty()) {
+                Glide.with(context)
+                     .load(recipe.getImageUrl())
+                     .placeholder(R.drawable.ic_recipe_placeholder)
+                     .error(R.drawable.ic_recipe_placeholder)
+                     .into(ivRecipeImage);
+            } else {
+                ivRecipeImage.setImageResource(R.drawable.ic_recipe_placeholder);
+            }
+
+            tvPrepTime.setText(formatPrepTime(recipe.getPrepTimeInMinutes()));
+            tvCalories.setText(String.format("%d קלוריות", recipe.getCalories()));
+
+            updateRatingStars(recipe.getRating());
+
+            if (recipe.getAllergens() != null && !recipe.getAllergens().isEmpty()) {
+                tvAllergens.setVisibility(View.VISIBLE);
+                tvAllergens.setText("אלרגנים: " + String.join(", ", recipe.getAllergens()));
+            } else {
+                tvAllergens.setVisibility(View.GONE);
+            }
+
+            itemView.setOnClickListener(v -> listener.onRecipeClick(recipe));
+        }
+
+        private String formatPrepTime(int minutes) {
+            if (minutes < 60) {
+                return minutes + " דקות";
+            }
+            int hours = minutes / 60;
+            int remainingMinutes = minutes % 60;
+            if (remainingMinutes == 0) {
+                return hours + " שעות";
+            }
+            return String.format("%d hr %d min", hours, remainingMinutes);
+        }
+
+        private void updateRatingStars(double rating) {
+            int fullStars = (int) rating;
+            for (int i = 0; i < llRecipeRating.getChildCount(); i++) {
+                ImageView star = (ImageView) llRecipeRating.getChildAt(i);
+                if (i < fullStars) {
+                    star.setColorFilter(0xFFFFC107); // Yellow
+                } else {
+                    star.setColorFilter(0xFFBDBDBD); // Grey
+                }
+            }
         }
     }
 }

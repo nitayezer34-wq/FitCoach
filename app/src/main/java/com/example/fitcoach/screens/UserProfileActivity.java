@@ -1,60 +1,36 @@
 package com.example.fitcoach.screens;
 
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fitcoach.R;
 import com.example.fitcoach.models.User;
 import com.example.fitcoach.services.DatabaseService;
 import com.example.fitcoach.utils.SharedPreferencesUtil;
 
-import java.util.function.UnaryOperator;
+public class UserProfileActivity extends AppCompatActivity {
 
-public class UserProfileActivity extends BaseActivity {
-
-    // הגדרת רכיבי המסך
     private EditText etName, etEmail, etHeight, etWeight;
-    private TextView tvDisplayName, tvUserSubtitle;
+    private EditText etDailyStepsTarget, etDailyCaloriesTarget, etDailyWaterTarget;
     private Button btnSave;
 
-    private User selectedUser;
-    private String userId;
+    private User currentUser;
+    private DatabaseService dbService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_user_profile);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
-
+        dbService = DatabaseService.getInstance();
         initViews();
+        loadUserData();
 
-        // בדיקה האם הגענו מרשימת המשתמשים (אדמין) או מהפרופיל האישי
-        userId = getIntent().getStringExtra("USER_UID");
-        if (userId == null) {
-            // אם לא עבר ID ב-Intent, ניקח את המשתמש המחובר כרגע
-            User currentUser = SharedPreferencesUtil.getUser(this);
-            if (currentUser != null) userId = currentUser.getId();
-        }
-
-        if (userId != null) {
-            fetchUserData();
-        }
+        btnSave.setOnClickListener(v -> saveUserChanges());
     }
 
     private void initViews() {
@@ -62,73 +38,63 @@ public class UserProfileActivity extends BaseActivity {
         etEmail = findViewById(R.id.et_user_email);
         etHeight = findViewById(R.id.et_user_height);
         etWeight = findViewById(R.id.et_user_weight);
-        tvDisplayName = findViewById(R.id.tv_display_name);
-        tvUserSubtitle = findViewById(R.id.tv_user_subtitle);
+        etDailyStepsTarget = findViewById(R.id.et_daily_steps_target);
+        etDailyCaloriesTarget = findViewById(R.id.et_daily_calories_target);
+        etDailyWaterTarget = findViewById(R.id.et_daily_water_target);
         btnSave = findViewById(R.id.btn_save_profile);
+    }
 
-        if (btnSave != null) {
-            btnSave.setOnClickListener(v -> saveUserChanges());
+    private void loadUserData() {
+        currentUser = SharedPreferencesUtil.getUser(this);
+        if (currentUser != null) {
+            etName.setText(currentUser.getName());
+            etEmail.setText(currentUser.getEmail());
+            etHeight.setText(String.valueOf(currentUser.getHeightCm()));
+            etWeight.setText(String.valueOf(currentUser.getWeightKg()));
+            etDailyStepsTarget.setText(String.valueOf(currentUser.getDailyStepsTarget()));
+            etDailyCaloriesTarget.setText(String.valueOf(currentUser.getDailyCaloriesTarget()));
+            etDailyWaterTarget.setText(String.valueOf(currentUser.getDailyWaterTargetMl()));
         }
     }
 
-    private void fetchUserData() {
-        // שימוש ב-databaseService שקיים ב-BaseActivity
-        databaseService.getUser(userId, new DatabaseService.DatabaseCallback<User>() {
-            @Override
-            public void onCompleted(User user) {
-                if (user != null) {
-                    selectedUser = user;
-                    fillFields();
-                }
-            }
-
-            @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(UserProfileActivity.this, "Error loading profile", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void fillFields() {
-        if (selectedUser == null) return;
-
-        etName.setText(selectedUser.getName());
-        etEmail.setText(selectedUser.getEmail());
-        etHeight.setText(String.valueOf(selectedUser.getHeightCm()));
-        etWeight.setText(String.valueOf(selectedUser.getWeightKg()));
-        tvDisplayName.setText(selectedUser.getName());
-        tvUserSubtitle.setText(selectedUser.getEmail());
-    }
-
     private void saveUserChanges() {
-        if (selectedUser == null) return;
+        if (currentUser == null) return;
 
-        // עדכון האובייקט מהשדות במסך
-        selectedUser.setName(etName.getText().toString());
-        selectedUser.setHeightCm(Integer.parseInt(etHeight.getText().toString()));
-        selectedUser.setWeightKg(Float.parseFloat(etWeight.getText().toString()));
+        try {
+            // Update user object from the fields
+            currentUser.setName(etName.getText().toString().trim());
+            currentUser.setHeightCm(Integer.parseInt(etHeight.getText().toString().trim()));
+            currentUser.setWeightKg(Float.parseFloat(etWeight.getText().toString().trim()));
+            currentUser.setDailyStepsTarget(Integer.parseInt(etDailyStepsTarget.getText().toString().trim()));
+            currentUser.setDailyCaloriesTarget(Integer.parseInt(etDailyCaloriesTarget.getText().toString().trim()));
+            currentUser.setDailyWaterTargetMl(Integer.parseInt(etDailyWaterTarget.getText().toString().trim()));
 
-        databaseService.updateUser(selectedUser.getId(), new UnaryOperator<User>() {
-            @Override
-            public User apply(User user) {
-                if (user == null) return user;
-                user.setName(selectedUser.getName());
-                user.setHeightCm(selectedUser.getHeightCm());
-                user.setWeightKg(selectedUser.getWeightKg());
+            // Update user in Database
+            dbService.updateUser(currentUser.getId(), user -> {
+                user.setName(currentUser.getName());
+                user.setHeightCm(currentUser.getHeightCm());
+                user.setWeightKg(currentUser.getWeightKg());
+                user.setDailyStepsTarget(currentUser.getDailyStepsTarget());
+                user.setDailyCaloriesTarget(currentUser.getDailyCaloriesTarget());
+                user.setDailyWaterTargetMl(currentUser.getDailyWaterTargetMl());
                 return user;
-            }
-        }, new DatabaseService.DatabaseCallback<Void>() {
-            @Override
-            public void onCompleted(Void result) {
-                Toast.makeText(UserProfileActivity.this, "Saved Successfully", Toast.LENGTH_SHORT).show();
-                finish(); // סגירת הדף וחזרה אחורה
-            }
+            }, new DatabaseService.DatabaseCallback<Void>() {
+                @Override
+                public void onCompleted(Void object) {
+                    // Also update the user in SharedPreferences
+                    SharedPreferencesUtil.saveUser(UserProfileActivity.this, currentUser);
+                    Toast.makeText(UserProfileActivity.this, "הפרופיל עודכן בהצלחה!", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
 
-            @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(UserProfileActivity.this, "Save Failed", Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onFailed(Exception e) {
+                    Toast.makeText(UserProfileActivity.this, "שגיאה בעדכון הפרופיל", Toast.LENGTH_SHORT).show();
+                }
+            });
 
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "נא למלא ערכים מספריים תקינים ביעדים, גובה ומשקל.", Toast.LENGTH_LONG).show();
+        }
     }
 }

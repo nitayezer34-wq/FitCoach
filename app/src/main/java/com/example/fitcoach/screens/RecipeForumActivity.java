@@ -29,23 +29,19 @@ public class RecipeForumActivity extends AppCompatActivity {
 
         dbService = DatabaseService.getInstance();
 
-        // חיבור ה-IDs
         rvRecipes = findViewById(R.id.rvRecipes);
         fabAddRecipe = findViewById(R.id.fabAddRecipe);
 
-        // הגדרת ה-RecyclerView
         rvRecipes.setLayoutManager(new LinearLayoutManager(this));
 
-        // יצירת ה-Adapter (כרגע בלי לוגיקת לחיצה מורכבת, רק מעבר לפרטים אם תרצה בעתיד)
-        adapter = new RecipeAdapter(recipe -> {
-            // כאן אפשר להוסיף מעבר לדף RecipeDetailsActivity אם תרצה
-            Toast.makeText(this, "בחרת במתכון: " + recipe.getTitle(), Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(RecipeForumActivity.this, RecipeDetailsActivity.class));
+        adapter = new RecipeAdapter(this, recipe -> {
+            Intent intent = new Intent(RecipeForumActivity.this, RecipeDetailsActivity.class);
+            intent.putExtra("RECIPE_ID", recipe.getId());
+            startActivity(intent);
         });
 
         rvRecipes.setAdapter(adapter);
 
-        // מעבר לדף הוספת מתכון
         fabAddRecipe.setOnClickListener(v -> {
             startActivity(new Intent(RecipeForumActivity.this, AddRecipeActivity.class));
         });
@@ -54,7 +50,6 @@ public class RecipeForumActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // קריאה לנתונים בכל פעם שחוזרים למסך (למשל אחרי הוספת מתכון)
         loadRecipes();
     }
 

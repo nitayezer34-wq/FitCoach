@@ -1,56 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/android:colorBackground">
+    android:background="#F5F5F5"
+    android:layoutDirection="rtl">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:title="User Profile" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <androidx.core.widget.NestedScrollView
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_above="@id/btn_save_profile"
+        android:padding="16dp"
+        android:clipToPadding="false">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp">
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tv_display_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="User Name"
-                android:textSize="26sp"
-                android:textStyle="bold" />
+                android:text="עריכת פרופיל"
+                android:textColor="#2196F3"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"/>
 
-            <TextView
-                android:id="@+id/tv_user_subtitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="email@example.com"
-                android:layout_marginBottom="20dp" />
-
-            <com.google.android.material.card.MaterialCardView
+            <!-- Personal Details Card -->
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="4dp">
+                android:layout_margin="4dp"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="3dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -58,45 +42,125 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="פרטים אישיים"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="#2196F3"
+                        android:layout_marginBottom="12dp"/>
+
                     <EditText
                         android:id="@+id/et_user_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Full Name"
-                        android:layout_marginBottom="10dp" />
+                        android:hint="שם מלא"
+                        android:backgroundTint="#2196F3"
+                        android:layout_marginBottom="12dp"/>
 
                     <EditText
                         android:id="@+id/et_user_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Email"
+                        android:hint="אימייל"
                         android:enabled="false"
-                        android:layout_marginBottom="10dp" />
+                        android:backgroundTint="#BDBDBD"
+                        android:layout_marginBottom="12dp"/>
 
-                    <EditText
-                        android:id="@+id/et_user_height"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Height (cm)"
-                        android:inputType="number"
-                        android:layout_marginBottom="10dp" />
+                        android:orientation="horizontal">
 
-                    <EditText
-                        android:id="@+id/et_user_weight"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Weight (kg)"
-                        android:inputType="numberDecimal"
-                        android:layout_marginBottom="20dp" />
+                        <EditText
+                            android:id="@+id/et_user_height"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="גובה (ס״מ)"
+                            android:inputType="number"
+                            android:backgroundTint="#2196F3"
+                            android:layout_marginEnd="8dp"/>
 
-                    <Button
-                        android:id="@+id/btn_save_profile"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Save Changes" />
-
+                        <EditText
+                            android:id="@+id/et_user_weight"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="משקל (ק״ג)"
+                            android:inputType="numberDecimal"
+                            android:backgroundTint="#2196F3"
+                            android:layout_marginStart="8dp"/>
+                    </LinearLayout>
                 </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Daily Goals Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_marginTop="12dp"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="3dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                     <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="יעדים יומיים"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="#2196F3"
+                        android:layout_marginBottom="12dp"/>
+
+                    <EditText
+                        android:id="@+id/et_daily_steps_target"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="יעד צעדים יומי"
+                        android:inputType="number"
+                        android:backgroundTint="#2196F3"
+                        android:layout_marginBottom="12dp"/>
+
+                    <EditText
+                        android:id="@+id/et_daily_calories_target"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="יעד קלוריות יומי"
+                        android:inputType="number"
+                        android:backgroundTint="#2196F3"
+                        android:layout_marginBottom="12dp"/>
+
+                    <EditText
+                        android:id="@+id/et_daily_water_target"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="יעד מים יומי (מ״ל)"
+                        android:inputType="number"
+                        android:backgroundTint="#2196F3"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
         </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btn_save_profile"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="16dp"
+        android:text="שמור שינויים"
+        android:backgroundTint="#2196F3"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        app:cornerRadius="15dp"/>
+
+</RelativeLayout>

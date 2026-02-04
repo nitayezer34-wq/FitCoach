@@ -1,38 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#F5F5F5">
+    android:background="#F5F5F5"
+    android:layoutDirection="rtl"
+    tools:context=".screens.RecipeForumActivity">
 
-    <TextView
-        android:id="@+id/tvTitle"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/header_recipes"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="פורום מתכונים בריאים"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:textColor="#003366"
-        android:textSize="22sp"
-        android:textStyle="bold"/>
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="פורום מתכונים בריאים"
+            android:textColor="#2196F3"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="80dp"
+            android:layout_height="3dp"
+            android:background="#2196F3"
+            android:layout_marginTop="8dp"/>
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRecipes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tvTitle"
-        android:layout_marginTop="10dp"
-        android:padding="8dp" />
+        android:layout_below="@id/header_recipes"
+        android:clipToPadding="false"
+        android:paddingBottom="16dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddRecipe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
         android:layout_margin="24dp"
         android:src="@android:drawable/ic_input_add"
-        app:backgroundTint="#003366"
-        app:tint="#FFFFFF"/>
+        app:backgroundTint="#2196F3"
+        app:tint="@android:color/white" />
 
 </RelativeLayout>
