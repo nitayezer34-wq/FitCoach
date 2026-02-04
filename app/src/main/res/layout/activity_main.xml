@@ -30,7 +30,7 @@
                 android:textStyle="bold" />
 
             <Space
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1" />
 
@@ -39,6 +39,7 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@null"
                 android:src="@android:drawable/ic_menu_preferences" />
 
         </LinearLayout>
@@ -71,7 +72,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:text="0\nצעדים"
+                        android:text="0
+צעדים"
                         android:gravity="center"
                         android:textColor="#2196F3"
                         android:textStyle="bold" />
@@ -100,7 +102,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:text="0\nקלוריות"
+                        android:text="0
+קלוריות"
                         android:gravity="center"
                         android:textColor="#2196F3"
                         android:textStyle="bold" />
@@ -165,12 +168,22 @@
                 android:id="@+id/layout_bmi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:orientation="vertical"
                 android:gravity="center">
                 <RelativeLayout android:layout_width="140dp" android:layout_height="70dp">
-                    <ImageView android:layout_width="match_parent" android:layout_height="match_parent" android:src="@drawable/bmi_gauge_arc_bold" />
-                    <ImageView android:id="@+id/iv_bmi_needle" android:layout_width="match_parent" android:layout_height="match_parent" android:padding="5dp" android:src="@drawable/bmi_needle_bold" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@null"
+                        android:src="@drawable/bmi_gauge_arc_bold" />
+                    <ImageView
+                        android:id="@+id/iv_bmi_needle"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="5dp"
+                        android:contentDescription="@null"
+                        android:src="@drawable/bmi_needle_bold" />
                 </RelativeLayout>
                 <TextView android:id="@+id/tv_bmi_status_text" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="BMI תקין" android:textStyle="bold" />
             </LinearLayout>
@@ -178,12 +191,16 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:orientation="horizontal"
                 android:gravity="bottom">
 
                 <FrameLayout android:layout_width="90dp" android:layout_height="120dp">
-                    <ImageView android:layout_width="match_parent" android:layout_height="match_parent" android:src="@drawable/ic_water_jug" />
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_water_jug" />
                     <ProgressBar
                         android:id="@+id/pb_water_jug"
                         style="?android:attr/progressBarStyleHorizontal"
@@ -195,8 +212,21 @@
                 </FrameLayout>
 
                 <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical">
-                    <ImageButton android:id="@+id/btn_add_water" android:layout_width="55dp" android:layout_height="55dp" android:background="@android:color/transparent" android:src="@drawable/ic_glass_plus" />
-                    <ImageButton android:id="@+id/btn_remove_water" android:layout_width="55dp" android:layout_height="55dp" android:layout_marginTop="10dp" android:background="@android:color/transparent" android:src="@drawable/ic_glass_minus" />
+                    <ImageButton
+                        android:id="@+id/btn_add_water"
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_glass_plus" />
+                    <ImageButton
+                        android:id="@+id/btn_remove_water"
+                        android:layout_width="55dp"
+                        android:layout_height="55dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@android:color/transparent"
+                        android:contentDescription="@null"
+                        android:src="@drawable/ic_glass_minus" />
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>

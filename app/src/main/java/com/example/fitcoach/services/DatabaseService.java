@@ -3,6 +3,7 @@ package com.example.fitcoach.services;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.fitcoach.models.Recipe;
 import com.example.fitcoach.models.User;
 import com.example.fitcoach.models.WorkoutTraining;
 import com.google.firebase.database.DataSnapshot;
@@ -21,49 +22,27 @@ import java.util.function.UnaryOperator;
 
 /// a service to interact with the Firebase Realtime Database.
 /// this class is a singleton, use getInstance() to get an instance of this class
-/// @see #getInstance()
-/// @see FirebaseDatabase
 public class DatabaseService {
     /// paths for different data types in the database
-    /// @see DatabaseService#readData(String)
     private static final String USERS_PATH = "users",
-                                WORKOUT_PATH = "workouts";
+            WORKOUT_PATH = "workouts",
+            RECIPES_PATH = "recipes"; // נתיב חדש למתכונים
 
     private static final String DB_URL = "https://fitcoach-55d45-default-rtdb.europe-west1.firebasedatabase.app/";
 
-
-    /// callback interface for database operations
-    /// @param <T> the type of the object to return
-    /// @see DatabaseCallback#onCompleted(Object)
-    /// @see DatabaseCallback#onFailed(Exception)
     public interface DatabaseCallback<T> {
-        /// called when the operation is completed successfully
         public void onCompleted(T object);
-
-        /// called when the operation fails with an exception
         public void onFailed(Exception e);
     }
 
-    /// the instance of this class
-    /// @see #getInstance()
     private static DatabaseService instance;
-
-    /// the reference to the database
-    /// @see DatabaseReference
-    /// @see FirebaseDatabase#getReference()
     private final DatabaseReference databaseReference;
 
-    /// use getInstance() to get an instance of this class
-    /// @see DatabaseService#getInstance()
     private DatabaseService() {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(DB_URL);
         databaseReference = firebaseDatabase.getReference();
     }
 
-
-    /// get an instance of this class
-    /// @return an instance of this class
-    /// @see DatabaseService
     public static DatabaseService getInstance() {
         if (instance == null) {
             instance = new DatabaseService();
@@ -71,15 +50,8 @@ public class DatabaseService {
         return instance;
     }
 
-
     // region private generic methods
-    // to write and read data from the database
 
-    /// write data to the database at a specific path
-    /// @param path the path to write the data to
-    /// @param data the data to write (can be any object, but must be serializable, i.e. must have a default constructor and all fields must have getters and setters)
-    /// @param callback the callback to call when the operation is completed
-    /// @see DatabaseCallback
     private void writeData(@NotNull final String path, @NotNull final Object data, final @Nullable DatabaseCallback<Void> callback) {
         readData(path).setValue(data, (error, ref) -> {
             if (error != null) {
@@ -92,10 +64,6 @@ public class DatabaseService {
         });
     }
 
-    /// remove data from the database at a specific path
-    /// @param path the path to remove the data from
-    /// @param callback the callback to call when the operation is completed
-    /// @see DatabaseCallback
     private void deleteData(@NotNull final String path, @Nullable final DatabaseCallback<Void> callback) {
         readData(path).removeValue((error, ref) -> {
             if (error != null) {
@@ -108,22 +76,10 @@ public class DatabaseService {
         });
     }
 
-    /// read data from the database at a specific path
-    /// @param path the path to read the data from
-    /// @return a DatabaseReference object to read the data from
-    /// @see DatabaseReference
-
     private DatabaseReference readData(@NotNull final String path) {
         return databaseReference.child(path);
     }
 
-
-    /// get data from the database at a specific path
-    /// @param path the path to get the data from
-    /// @param clazz the class of the object to return
-    /// @param callback the callback to call when the operation is completed
-    /// @see DatabaseCallback
-    /// @see Class
     private <T> void getData(@NotNull final String path, @NotNull final Class<T> clazz, @NotNull final DatabaseCallback<T> callback) {
         readData(path).get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
@@ -135,10 +91,6 @@ public class DatabaseService {
         });
     }
 
-    /// get a list of data from the database at a specific path
-    /// @param path the path to get the data from
-    /// @param clazz the class of the objects to return
-    /// @param callback the callback to call when the operation is completed
     private <T> void getDataList(@NotNull final String path, @NotNull final Class<T> clazz, @NotNull final DatabaseCallback<List<T>> callback) {
         readData(path).get().addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
@@ -150,28 +102,14 @@ public class DatabaseService {
                 T t = dataSnapshot.getValue(clazz);
                 tList.add(t);
             });
-
             callback.onCompleted(tList);
         });
     }
-
-    /// generate a new id for a new object in the database
-    /// @param path the path to generate the id for
-    /// @return a new id for the object
-    /// @see String
-    /// @see DatabaseReference#push()
 
     private String generateNewId(@NotNull final String path) {
         return databaseReference.child(path).push().getKey();
     }
 
-    /// run a transaction on the data at a specific path </br>
-    /// good for incrementing a value or modifying an object in the database
-    /// @param path the path to run the transaction on
-    /// @param clazz the class of the object to return
-    /// @param function the function to apply to the current value of the data
-    /// @param callback the callback to call when the operation is completed
-    /// @see DatabaseReference#runTransaction(Transaction.Handler)
     private <T> void runTransaction(@NotNull final String path, @NotNull final Class<T> clazz, @NotNull UnaryOperator<T> function, @NotNull final DatabaseCallback<T> callback) {
         readData(path).runTransaction(new Transaction.Handler() {
             @NonNull
@@ -197,71 +135,32 @@ public class DatabaseService {
                 callback.onCompleted(result);
             }
         });
-
     }
 
-    // endregion of private methods for reading and writing data
-
-    // public methods to interact with the database
+    // endregion
 
     // region User Section
 
-    /// generate a new id for a new user in the database
-    /// @return a new id for the user
-    /// @see #generateNewId(String)
-    /// @see User
     public String generateUserId() {
         return generateNewId(USERS_PATH);
     }
 
-    /// create a new user in the database
-    /// @param user the user object to create
-    /// @param callback the callback to call when the operation is completed
-    ///              the callback will receive void
-    ///            if the operation fails, the callback will receive an exception
-    /// @see DatabaseCallback
-    /// @see User
     public void createNewUser(@NotNull final User user, @Nullable final DatabaseCallback<Void> callback) {
         writeData(USERS_PATH + "/" + user.getId(), user, callback);
     }
 
-    /// get a user from the database
-    /// @param uid the id of the user to get
-    /// @param callback the callback to call when the operation is completed
-    ///               the callback will receive the user object
-    ///             if the operation fails, the callback will receive an exception
-    /// @see DatabaseCallback
-    /// @see User
     public void getUser(@NotNull final String uid, @NotNull final DatabaseCallback<User> callback) {
         getData(USERS_PATH + "/" + uid, User.class, callback);
     }
 
-    /// get all the users from the database
-    /// @param callback the callback to call when the operation is completed
-    ///              the callback will receive a list of user objects
-    ///            if the operation fails, the callback will receive an exception
-    /// @see DatabaseCallback
-    /// @see List
-    /// @see User
     public void getUserList(@NotNull final DatabaseCallback<List<User>> callback) {
         getDataList(USERS_PATH, User.class, callback);
     }
 
-    /// delete a user from the database
-    /// @param uid the user id to delete
-    /// @param callback the callback to call when the operation is completed
     public void deleteUser(@NotNull final String uid, @Nullable final DatabaseCallback<Void> callback) {
         deleteData(USERS_PATH + "/" + uid, callback);
     }
 
-    /// get a user by email and password
-    /// @param email the email of the user
-    /// @param password the password of the user
-    /// @param callback the callback to call when the operation is completed
-    /// the callback will receive the user object
-    /// if the operation fails, the callback will receive an exception
-    /// @see DatabaseCallback
-    /// @see User
     public void getUserByEmailAndPassword(@NotNull final String email, @NotNull final String password, @NotNull final DatabaseCallback<User> callback) {
         getUserList(new DatabaseCallback<List<User>>() {
             @Override
@@ -282,9 +181,6 @@ public class DatabaseService {
         });
     }
 
-    /// check if an email already exists in the database
-    /// @param email the email to check
-    /// @param callback the callback to call when the operation is completed
     public void checkIfEmailExists(@NotNull final String email, @NotNull final DatabaseCallback<Boolean> callback) {
         getUserList(new DatabaseCallback<List<User>>() {
             @Override
@@ -309,74 +205,62 @@ public class DatabaseService {
         runTransaction(USERS_PATH + "/" + uid, User.class, function, new DatabaseCallback<User>() {
             @Override
             public void onCompleted(User object) {
-                if (callback != null) {
-                    callback.onCompleted(null);
-                }
+                if (callback != null) callback.onCompleted(null);
             }
-
             @Override
             public void onFailed(Exception e) {
-                if (callback != null) {
-                    callback.onFailed(e);
-                }
+                if (callback != null) callback.onFailed(e);
             }
         });
     }
 
+    // endregion
 
-    // endregion User Section
+    // region Workout Section
 
-
-
-    // region User Section
-
-    /// generate a new id for a new user in the database
-    /// @return a new id for the user
-    /// @see #generateNewId(String)
-    /// @see User
     public String generateWorkoutId() {
         return generateNewId(WORKOUT_PATH);
     }
 
-    /// create a new workoutTraining in the database
-    /// @param workoutTraining the workoutTraining object to create
-    /// @param callback the callback to call when the operation is completed
-    ///              the callback will receive void.
-    ///            if the operation fails, the callback will receive an exception
-    /// @see DatabaseCallback
-    /// @see WorkoutTraining
     public void createNewWorkoutTraining(@NotNull final WorkoutTraining workoutTraining, @Nullable final DatabaseCallback<Void> callback) {
         writeData(WORKOUT_PATH + "/" + workoutTraining.getId(), workoutTraining, callback);
     }
 
-    /// get a user from the database
-    /// @param id the id of the WorkoutTraining to get
-    /// @param callback the callback to call when the operation is completed
-    ///               the callback will receive the user object.
-    ///             if the operation fails, the callback will receive an exception
-    /// @see DatabaseCallback
-    /// @see WorkoutTraining
     public void getWorkoutTraining(@NotNull final String id, @NotNull final DatabaseCallback<WorkoutTraining> callback) {
         getData(WORKOUT_PATH + "/" + id, WorkoutTraining.class, callback);
     }
 
-    /// get all the workouts from the database
-    /// @param callback the callback to call when the operation is completed
-    ///              the callback will receive a list of user objects
-    ///            if the operation fails, the callback will receive an exception
-    /// @see DatabaseCallback
-    /// @see List
-    /// @see WorkoutTraining
     public void getWorkoutTrainingList(@NotNull final DatabaseCallback<List<WorkoutTraining>> callback) {
         getDataList(WORKOUT_PATH, WorkoutTraining.class, callback);
     }
 
-    /// delete a user from the database
-    /// @param id the id of the WorkoutTraining to delete
-    /// @param callback the callback to call when the operation is completed
     public void deleteWorkoutTraining(@NotNull final String id, @Nullable final DatabaseCallback<Void> callback) {
         deleteData(WORKOUT_PATH + "/" + id, callback);
     }
 
-    // endregion User Section
+    // endregion
+
+    // region Recipe Section
+
+    /// מייצר מזהה ייחודי למתכון חדש
+    public String generateRecipeId() {
+        return generateNewId(RECIPES_PATH);
+    }
+
+    /// יוצר מתכון חדש במסד הנתונים
+    public void createNewRecipe(@NotNull final Recipe recipe, @Nullable final DatabaseCallback<Void> callback) {
+        writeData(RECIPES_PATH + "/" + recipe.getId(), recipe, callback);
+    }
+
+    /// מושך את כל רשימת המתכונים לפורום
+    public void getRecipeList(@NotNull final DatabaseCallback<List<Recipe>> callback) {
+        getDataList(RECIPES_PATH, Recipe.class, callback);
+    }
+
+    /// מוחק מתכון לפי ID
+    public void deleteRecipe(@NotNull final String id, @Nullable final DatabaseCallback<Void> callback) {
+        deleteData(RECIPES_PATH + "/" + id, callback);
+    }
+
+    // endregion
 }

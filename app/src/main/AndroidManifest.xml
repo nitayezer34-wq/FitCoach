@@ -10,44 +10,53 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.FitCoach">
+
         <activity
-            android:name=".activity_users_list"
+            android:name=".screens.RecipeForumActivity"
             android:exported="false" />
         <activity
-            android:name=".screens.WorkoutCreationActivity"
+            android:name=".screens.AddRecipeActivity"
             android:exported="false" />
+        <activity
+            android:name=".screens.RecipeDetailsActivity"
+            android:exported="false" />
+
         <activity
             android:name=".screens.AdminActivity"
             android:exported="false" />
         <activity
+            android:name=".screens.UsersListActivity"
+            android:exported="false" />
+        <activity
             android:name=".screens.UserProfileActivity"
             android:exported="false" />
+
         <activity
             android:name=".screens.WorkoutActivity"
             android:exported="false" />
+        <activity
+            android:name=".screens.WorkoutCreationActivity"
+            android:exported="false" />
+
         <activity
             android:name=".screens.MainActivity"
             android:exported="false" />
         <activity
             android:name=".screens.LoginActivity"
-            android:exported="false"
-            android:theme="@style/Theme.FitCoach" />
+            android:exported="false" />
         <activity
             android:name=".screens.RegisterActivity"
             android:exported="false"
-            android:label="@string/title_activity_register"
-            android:theme="@style/Theme.FitCoach" />
+            android:label="@string/title_activity_register" />
+
         <activity
             android:name=".screens.LandingActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".screens.UsersListActivity" />
 
     </application>
 

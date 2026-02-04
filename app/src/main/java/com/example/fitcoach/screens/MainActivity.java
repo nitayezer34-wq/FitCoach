@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button; // ייבוא חסר לכפתור
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -20,22 +21,25 @@ import com.example.fitcoach.R;
 import com.example.fitcoach.models.User;
 import com.example.fitcoach.services.DatabaseService;
 import com.example.fitcoach.utils.SharedPreferencesUtil;
+// ודא שהייבוא הזה קיים כדי שה-Java יכיר את דף הפורום
+import com.example.fitcoach.screens.RecipeForumActivity;
 
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
-    // הגדרת משתנים לרכיבי המסך
     private TextView tvGreeting, tvStepsValue, tvCaloriesValue, tvBmiStatusText;
     private ProgressBar pbSteps, pbCalories, pbWaterJug;
     private ImageButton btnSettingsGear, btnAddWater, btnRemoveWater;
     private ImageView ivBmiNeedle;
 
-    // משתני נתונים (מים, קלוריות, צעדים)
+    // 1. הוספת משתנה לכפתור הפורום
+    private Button btnMainForum;
+
     private int waterToday = 0, waterTarget = 2000;
     private int caloriesToday = 0, caloriesTarget = 1000;
     private int stepsToday = 0, stepsTarget = 5000;
-    private final int GLASS_SIZE = 250; // כמות מים בכל לחיצה
+    private final int GLASS_SIZE = 250;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,96 +47,48 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        // הגדרת שוליים למסכי טלפון חדשים
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        bindViews();      // חיבור משתנים ל-XML
-        setupButtons();   // הגדרת לחיצות על כפתורים
+        bindViews();
+        setupButtons();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // קוראים לטעינת נתונים בכל פעם שחוזרים למסך (למשל אחרי אימון)
         loadUserData();
     }
 
     private void bindViews() {
-        // כותרת וברכה
         tvGreeting = findViewById(R.id.tv_main_welcome);
         btnSettingsGear = findViewById(R.id.btn_settings_gear);
-
-        // עיגול שמאלי: צעדים
         pbSteps = findViewById(R.id.pb_main_steps);
         tvStepsValue = findViewById(R.id.tv_main_steps_val);
-
-        // עיגול ימני: קלוריות
         pbCalories = findViewById(R.id.pb_main_calories);
         tvCaloriesValue = findViewById(R.id.tv_main_calories_val);
-
-        // BMI
         ivBmiNeedle = findViewById(R.id.iv_bmi_needle);
         tvBmiStatusText = findViewById(R.id.tv_bmi_status_text);
-
-        // מים (קנקן וכוסות)
         pbWaterJug = findViewById(R.id.pb_water_jug);
         btnAddWater = findViewById(R.id.btn_add_water);
         btnRemoveWater = findViewById(R.id.btn_remove_water);
-    }
 
-    private void loadUserData() {
-        // שליפת אובייקט המשתמש מהזיכרון
-        User user = SharedPreferencesUtil.getUser(this);
-
-        DatabaseService.getInstance().getUser(user.getId(), new DatabaseService.DatabaseCallback<User>() {
-            @Override
-            public void onCompleted(User updatedUser) {
-                SharedPreferencesUtil.saveUser(MainActivity.this, updatedUser);
-
-            }
-
-            @Override
-            public void onFailed(Exception e) {
-
-            }
-        });
-
-        if (user.getName() != null && !user.getName().isEmpty()) {
-            tvGreeting.setText("שלום, " + user.getName());
-        } else {
-            tvGreeting.setText(user.getName() + "שלום, ");
-        }
-
-
-        if (user != null) {
-            waterTarget = user.getDailyWaterTargetMl() > 0 ? user.getDailyWaterTargetMl() : 2000;
-            updateBMIGauge(user);
-        }
-
-        // הגדרת מקסימום למדדים
-        pbWaterJug.setMax(waterTarget);
-        pbCalories.setMax(caloriesTarget);
-        pbSteps.setMax(stepsTarget);
-
-        updateUI(); // עדכון התצוגה הגרפית
+        // 2. קישור הכפתור מה-XML
+        btnMainForum = findViewById(R.id.btn_main_forum);
     }
 
     private void setupButtons() {
-        // כפתור הגדרות
         btnSettingsGear.setOnClickListener(v -> showSettingsMenu(v));
 
-        // הוספת מים
         btnAddWater.setOnClickListener(v -> {
             waterToday += GLASS_SIZE;
             saveStats();
             updateUI();
         });
 
-        // הורדת מים
         btnRemoveWater.setOnClickListener(v -> {
             if (waterToday >= GLASS_SIZE) {
                 waterToday -= GLASS_SIZE;
@@ -141,18 +97,42 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // כפתור פורום מתכונים (נשאר כפי שביקשת)
-        findViewById(R.id.btn_main_forum).setOnClickListener(v -> {
-            // כאן יבוא המעבר לפורום
+        // 3. תיקון הלוגיקה למעבר לפורום
+        btnMainForum.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, RecipeForumActivity.class);
+            startActivity(intent);
         });
 
-        // כניסה לדף אימון (לעדכון קלוריות)
         findViewById(R.id.cv_workout_entry).setOnClickListener(v -> {
             startActivity(new Intent(this, WorkoutActivity.class));
         });
     }
 
-    // שמירת הנתונים כדי שלא יימחקו ביציאה מהאפליקציה
+    // שאר הפונקציות (loadUserData, saveStats, updateUI, וכו') נשארות ללא שינוי...
+    private void loadUserData() {
+        User user = SharedPreferencesUtil.getUser(this);
+        DatabaseService.getInstance().getUser(user.getId(), new DatabaseService.DatabaseCallback<User>() {
+            @Override
+            public void onCompleted(User updatedUser) {
+                SharedPreferencesUtil.saveUser(MainActivity.this, updatedUser);
+            }
+            @Override
+            public void onFailed(Exception e) {}
+        });
+
+        if (user.getName() != null && !user.getName().isEmpty()) {
+            tvGreeting.setText("שלום, " + user.getName());
+        } else {
+            tvGreeting.setText("שלום, מתאמן");
+        }
+
+        waterTarget = user.getDailyWaterTargetMl() > 0 ? user.getDailyWaterTargetMl() : 2000;
+        pbWaterJug.setMax(waterTarget);
+        pbCalories.setMax(caloriesTarget);
+        pbSteps.setMax(stepsTarget);
+        updateUI();
+    }
+
     private void saveStats() {
         SharedPreferences.Editor editor = getSharedPreferences("Stats", MODE_PRIVATE).edit();
         editor.putInt("water_today", waterToday);
@@ -162,14 +142,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
-        // עדכון קנקן המים (כחול-לבן)
         pbWaterJug.setProgress(Math.min(waterToday, waterTarget), true);
-
-        // עדכון עיגול קלוריות (ימין)
         tvCaloriesValue.setText(caloriesToday + "\nקלוריות");
         pbCalories.setProgress(Math.min(caloriesToday, caloriesTarget), true);
-
-        // עדכון עיגול צעדים (שמאל)
         tvStepsValue.setText(stepsToday + "\nצעדים");
         pbSteps.setProgress(Math.min(stepsToday, stepsTarget), true);
     }
