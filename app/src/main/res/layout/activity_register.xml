@@ -99,6 +99,14 @@
             android:inputType="number" />
 
         <EditText
+            android:id="@+id/etCaloriesTarget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="יעד קלוריות יומי"
+            android:inputType="number" />
+
+        <EditText
             android:id="@+id/etWaterTarget"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

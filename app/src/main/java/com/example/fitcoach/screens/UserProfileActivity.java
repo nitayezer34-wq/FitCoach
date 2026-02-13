@@ -78,9 +78,9 @@ public class UserProfileActivity extends AppCompatActivity {
                 user.setDailyCaloriesTarget(currentUser.getDailyCaloriesTarget());
                 user.setDailyWaterTargetMl(currentUser.getDailyWaterTargetMl());
                 return user;
-            }, new DatabaseService.DatabaseCallback<Void>() {
+            }, new DatabaseService.DatabaseCallback<User>() {
                 @Override
-                public void onCompleted(Void object) {
+                public void onCompleted(User updatedUser) {
                     // Also update the user in SharedPreferences
                     SharedPreferencesUtil.saveUser(UserProfileActivity.this, currentUser);
                     Toast.makeText(UserProfileActivity.this, "הפרופיל עודכן בהצלחה!", Toast.LENGTH_SHORT).show();

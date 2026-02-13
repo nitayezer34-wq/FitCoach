@@ -8,8 +8,8 @@
     </item>
     <!-- Centered Icon -->
     <item
-        android:drawable="@android:drawable/ic_menu_camera"
-        android:gravity="center"
         android:width="48dp"
-        android:height="48dp"/>
+        android:height="48dp"
+        android:drawable="@android:drawable/ic_menu_camera"
+        android:gravity="center" />
 </layer-list>

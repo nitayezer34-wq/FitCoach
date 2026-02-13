@@ -1,8 +1,10 @@
 package com.example.fitcoach.models;
 
 import androidx.annotation.NonNull;
+
 import com.google.firebase.database.Exclude;
 import com.google.firebase.database.IgnoreExtraProperties;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -18,7 +20,8 @@ public class WorkoutTraining implements Serializable {
     private double restTimeMinutes; // Changed to double for minutes (e.g. 3.5)
     private String targetAudience;  // Categories: Underweight, Normal, Overweight
 
-    public WorkoutTraining() {}
+    public WorkoutTraining() {
+    }
 
     public WorkoutTraining(String id, String name, String description, int caloriesPerSet, int sets, int reps, double restTimeMinutes, String targetAudience) {
         this.id = id;
@@ -31,29 +34,69 @@ public class WorkoutTraining implements Serializable {
         this.targetAudience = targetAudience;
     }
 
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public String getId() {
+        return id;
+    }
 
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
+    public String getName() {
+        return name;
+    }
 
-    public int getCaloriesPerSet() { return caloriesPerSet; }
-    public void setCaloriesPerSet(int caloriesPerSet) { this.caloriesPerSet = caloriesPerSet; }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-    public int getSets() { return sets; }
-    public void setSets(int sets) { this.sets = sets; }
+    public String getDescription() {
+        return description;
+    }
 
-    public int getReps() { return reps; }
-    public void setReps(int reps) { this.reps = reps; }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-    public double getRestTimeMinutes() { return restTimeMinutes; }
-    public void setRestTimeMinutes(double restTimeMinutes) { this.restTimeMinutes = restTimeMinutes; }
+    public int getCaloriesPerSet() {
+        return caloriesPerSet;
+    }
 
-    public String getTargetAudience() { return targetAudience; }
-    public void setTargetAudience(String targetAudience) { this.targetAudience = targetAudience; }
+    public void setCaloriesPerSet(int caloriesPerSet) {
+        this.caloriesPerSet = caloriesPerSet;
+    }
+
+    public int getSets() {
+        return sets;
+    }
+
+    public void setSets(int sets) {
+        this.sets = sets;
+    }
+
+    public int getReps() {
+        return reps;
+    }
+
+    public void setReps(int reps) {
+        this.reps = reps;
+    }
+
+    public double getRestTimeMinutes() {
+        return restTimeMinutes;
+    }
+
+    public void setRestTimeMinutes(double restTimeMinutes) {
+        this.restTimeMinutes = restTimeMinutes;
+    }
+
+    public String getTargetAudience() {
+        return targetAudience;
+    }
+
+    public void setTargetAudience(String targetAudience) {
+        this.targetAudience = targetAudience;
+    }
 
     @Exclude
     public int getTotalExerciseCalories() {

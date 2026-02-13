@@ -37,6 +37,9 @@
         <activity
             android:name=".screens.WorkoutCreationActivity"
             android:exported="false" />
+        <activity
+            android:name=".screens.AdminWorkoutManagementActivity"
+            android:exported="false" />
 
         <activity
             android:name=".screens.MainActivity"

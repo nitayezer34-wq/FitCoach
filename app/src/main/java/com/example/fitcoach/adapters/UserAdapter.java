@@ -6,23 +6,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.fitcoach.R;
 import com.example.fitcoach.models.User;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder> {
 
-    private List<User> userList = new ArrayList<>();
     private final OnUserClickListener listener;
-
-    public interface OnUserClickListener {
-        void onUserClick(User user);
-        void onDeleteClick(User user);
-        void onMakeAdminClick(User user, int position);
-    }
+    private List<User> userList = new ArrayList<>();
 
     public UserAdapter(OnUserClickListener listener) {
         this.listener = listener;
@@ -73,6 +70,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     @Override
     public int getItemCount() {
         return userList.size();
+    }
+
+    public interface OnUserClickListener {
+        void onUserClick(User user);
+
+        void onDeleteClick(User user);
+
+        void onMakeAdminClick(User user, int position);
     }
 
     static class UserViewHolder extends RecyclerView.ViewHolder {

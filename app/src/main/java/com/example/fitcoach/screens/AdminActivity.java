@@ -2,6 +2,7 @@ package com.example.fitcoach.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.core.graphics.Insets;
@@ -33,9 +34,10 @@ public class AdminActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // ניהול אימונים (בינתיים נשאיר ריק או תוסיף דף אם יש לך)
+        // ניהול אימונים
         cvManageWorkouts.setOnClickListener(v -> {
-            // Toast.makeText(this, "בקרוב: ניהול אימונים", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(AdminActivity.this, AdminWorkoutManagementActivity.class);
+            startActivity(intent);
         });
 
         // כאן התיקון: מעבר לדף ניהול משתמשים

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fitcoach.R;
@@ -64,7 +65,7 @@ public class AddRecipeActivity extends AppCompatActivity {
         List<String> instructions = textToList(instructionsStr, "\n");
 
         String id = dbService.generateRecipeId();
-        
+
         // Using the new constructor for a new recipe
         Recipe newRecipe = new Recipe(id, title, imageUrl, calories, prepTime, allergens, ingredients, instructions);
 

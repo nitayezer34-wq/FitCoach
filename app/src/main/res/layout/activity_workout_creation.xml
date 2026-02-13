@@ -9,9 +9,9 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/btn_add_workout"
-        android:padding="16dp"
-        android:clipToPadding="false">
+        android:layout_above="@+id/btn_create_workout"
+        android:clipToPadding="false"
+        android:padding="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -21,13 +21,14 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="16dp"
                 android:text="יצירת אימון חדש"
                 android:textColor="#2196F3"
                 android:textSize="24sp"
-                android:textStyle="bold"
-                android:layout_gravity="center"
-                android:layout_marginBottom="16dp"/>
+                android:textStyle="bold" />
 
+            <!-- Details Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -44,27 +45,31 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="פרטי התרגיל"
-                        android:textStyle="bold"
-                        android:textSize="16sp"
+                        android:layout_marginBottom="12dp"
+                        android:text="פרטי האימון"
                         android:textColor="#2196F3"
-                        android:layout_marginBottom="12dp"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-                    <EditText android:id="@+id/et_name" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="שם התרגיל" android:backgroundTint="#2196F3" android:layout_marginBottom="12dp"/>
-                    <EditText android:id="@+id/et_desc" android:layout_width="match_parent" android:layout_height="wrap_content" android:hint="תיאור הפעולה" android:backgroundTint="#2196F3" android:layout_marginBottom="12dp"/>
+                    <EditText
+                        android:id="@+id/et_workout_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:backgroundTint="#2196F3"
+                        android:hint="שם האימון" />
 
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-                        <EditText android:id="@+id/et_cal" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:hint="קלוריות" android:inputType="number" android:backgroundTint="#2196F3"/>
-                        <EditText android:id="@+id/et_sets" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:hint="סטים" android:inputType="number" android:backgroundTint="#2196F3"/>
-                    </LinearLayout>
+                    <EditText
+                        android:id="@+id/et_workout_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="#2196F3"
+                        android:hint="תיאור קצר" />
 
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_marginTop="8dp">
-                        <EditText android:id="@+id/et_reps" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:hint="חזרות" android:inputType="number" android:backgroundTint="#2196F3"/>
-                        <EditText android:id="@+id/et_rest" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:hint="מנוחה (דקות)" android:inputType="numberDecimal" android:backgroundTint="#2196F3"/>
-                    </LinearLayout>
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
+            <!-- Target Audience Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -82,36 +87,129 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="שיוך לתוכנית BMI"
-                        android:textStyle="bold"
-                        android:textSize="16sp"
+                        android:layout_marginBottom="8dp"
+                        android:text="קהל יעד (לפי BMI)"
                         android:textColor="#2196F3"
-                        android:layout_marginBottom="8dp"/>
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <RadioGroup
+                        android:id="@+id/rg_target_audience"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/rb_underweight"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="תת משקל" />
+
+                        <RadioButton
+                            android:id="@+id/rb_normal_weight"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="משקל תקין" />
+
+                        <RadioButton
+                            android:id="@+id/rb_overweight"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="עודף משקל" />
+                    </RadioGroup>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+
+            <!-- Sets & Reps Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_marginTop="12dp"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="3dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:text="מבנה האימון"
+                        android:textColor="#2196F3"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
-                        <CheckBox android:id="@+id/cb_under" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="תת משקל" android:buttonTint="#2196F3"/>
-                        <CheckBox android:id="@+id/cb_normal" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="תקין" android:buttonTint="#2196F3"/>
-                        <CheckBox android:id="@+id/cb_over" android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="עודף" android:buttonTint="#2196F3"/>
+
+                        <EditText
+                            android:id="@+id/et_sets"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="#2196F3"
+                            android:hint="מספר סטים"
+                            android:inputType="number" />
+
+                        <EditText
+                            android:id="@+id/et_reps"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_weight="1"
+                            android:backgroundTint="#2196F3"
+                            android:hint="חזרות לסט"
+                            android:inputType="number" />
                     </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/et_calories_per_set"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:backgroundTint="#2196F3"
+                        android:hint="קלוריות שנשרפות בסט"
+                        android:inputType="number" />
+
+                    <EditText
+                        android:id="@+id/et_rest_time"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:backgroundTint="#2196F3"
+                        android:hint="זמן מנוחה (דקות)"
+                        android:inputType="numberDecimal" />
+
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
         </LinearLayout>
     </ScrollView>
 
     <Button
-        android:id="@+id/btn_add_workout"
+        android:id="@+id/btn_create_workout"
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
-        android:text="הוסף אימון"
         android:backgroundTint="#2196F3"
+        android:text="צור אימון"
         android:textColor="@android:color/white"
-        android:textStyle="bold"
         android:textSize="18sp"
-        app:cornerRadius="15dp"/>
+        android:textStyle="bold"
+        app:cornerRadius="15dp" />
 
 </RelativeLayout>

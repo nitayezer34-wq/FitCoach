@@ -18,7 +18,8 @@ public class Recipe {
     private double totalRatingSum; // The sum of all ratings received
 
     // Empty constructor required for Firebase
-    public Recipe() {}
+    public Recipe() {
+    }
 
     // Full constructor for creating a new recipe
     public Recipe(String id, String title, String imageUrl, int calories, int prepTimeInMinutes, List<String> allergens, List<String> ingredients, List<String> instructions) {
@@ -37,36 +38,91 @@ public class Recipe {
 
     // --- Getters and Setters ---
 
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public String getId() {
+        return id;
+    }
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    public String getImageUrl() { return imageUrl; }
-    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public String getTitle() {
+        return title;
+    }
 
-    public int getCalories() { return calories; }
-    public void setCalories(int calories) { this.calories = calories; }
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
-    public int getPrepTimeInMinutes() { return prepTimeInMinutes; }
-    public void setPrepTimeInMinutes(int prepTimeInMinutes) { this.prepTimeInMinutes = prepTimeInMinutes; }
+    public String getImageUrl() {
+        return imageUrl;
+    }
 
-    public List<String> getAllergens() { return allergens; }
-    public void setAllergens(List<String> allergens) { this.allergens = allergens; }
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
-    public List<String> getIngredients() { return ingredients; }
-    public void setIngredients(List<String> ingredients) { this.ingredients = ingredients; }
+    public int getCalories() {
+        return calories;
+    }
 
-    public List<String> getInstructions() { return instructions; }
-    public void setInstructions(List<String> instructions) { this.instructions = instructions; }
+    public void setCalories(int calories) {
+        this.calories = calories;
+    }
 
-    public double getRating() { return rating; }
-    public void setRating(double rating) { this.rating = rating; }
+    public int getPrepTimeInMinutes() {
+        return prepTimeInMinutes;
+    }
 
-    public int getRatingCount() { return ratingCount; }
-    public void setRatingCount(int ratingCount) { this.ratingCount = ratingCount; }
+    public void setPrepTimeInMinutes(int prepTimeInMinutes) {
+        this.prepTimeInMinutes = prepTimeInMinutes;
+    }
 
-    public double getTotalRatingSum() { return totalRatingSum; }
-    public void setTotalRatingSum(double totalRatingSum) { this.totalRatingSum = totalRatingSum; }
+    public List<String> getAllergens() {
+        return allergens;
+    }
+
+    public void setAllergens(List<String> allergens) {
+        this.allergens = allergens;
+    }
+
+    public List<String> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<String> ingredients) {
+        this.ingredients = ingredients;
+    }
+
+    public List<String> getInstructions() {
+        return instructions;
+    }
+
+    public void setInstructions(List<String> instructions) {
+        this.instructions = instructions;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
+    public void setRating(double rating) {
+        this.rating = rating;
+    }
+
+    public int getRatingCount() {
+        return ratingCount;
+    }
+
+    public void setRatingCount(int ratingCount) {
+        this.ratingCount = ratingCount;
+    }
+
+    public double getTotalRatingSum() {
+        return totalRatingSum;
+    }
+
+    public void setTotalRatingSum(double totalRatingSum) {
+        this.totalRatingSum = totalRatingSum;
+    }
 }

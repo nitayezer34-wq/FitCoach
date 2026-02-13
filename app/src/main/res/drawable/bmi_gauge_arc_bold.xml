@@ -5,15 +5,15 @@
     android:viewportWidth="200"
     android:viewportHeight="100">
     <path
+        android:pathData="M20,90 A80,80 0 0,1 65,25"
         android:strokeWidth="12"
-        android:strokeColor="#1E88E5"
-        android:pathData="M20,90 A80,80 0 0,1 65,25" />
+        android:strokeColor="#1E88E5" />
     <path
+        android:pathData="M65,25 A80,80 0 0,1 135,25"
         android:strokeWidth="12"
-        android:strokeColor="#43A047"
-        android:pathData="M65,25 A80,80 0 0,1 135,25" />
+        android:strokeColor="#43A047" />
     <path
+        android:pathData="M135,25 A80,80 0 0,1 180,90"
         android:strokeWidth="12"
-        android:strokeColor="#E53935"
-        android:pathData="M135,25 A80,80 0 0,1 180,90" />
+        android:strokeColor="#E53935" />
 </vector>

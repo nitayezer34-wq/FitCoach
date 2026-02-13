@@ -9,6 +9,4 @@ public class BaseActivity extends AppCompatActivity {
     protected DatabaseService databaseService = DatabaseService.getInstance();
 
 
-
-
 }

@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button; // ייבוא חסר לכפתור
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -21,25 +21,21 @@ import com.example.fitcoach.R;
 import com.example.fitcoach.models.User;
 import com.example.fitcoach.services.DatabaseService;
 import com.example.fitcoach.utils.SharedPreferencesUtil;
-// ודא שהייבוא הזה קיים כדי שה-Java יכיר את דף הפורום
-import com.example.fitcoach.screens.RecipeForumActivity;
 
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final int GLASS_SIZE = 250;
     private TextView tvGreeting, tvStepsValue, tvCaloriesValue, tvBmiStatusText;
     private ProgressBar pbSteps, pbCalories, pbWaterJug;
     private ImageButton btnSettingsGear, btnAddWater, btnRemoveWater;
     private ImageView ivBmiNeedle;
-
     // 1. הוספת משתנה לכפתור הפורום
     private Button btnMainForum;
-
     private int waterToday = 0, waterTarget = 2000;
     private int caloriesToday = 0, caloriesTarget = 1000;
     private int stepsToday = 0, stepsTarget = 5000;
-    private final int GLASS_SIZE = 250;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,8 +112,10 @@ public class MainActivity extends AppCompatActivity {
             public void onCompleted(User updatedUser) {
                 SharedPreferencesUtil.saveUser(MainActivity.this, updatedUser);
             }
+
             @Override
-            public void onFailed(Exception e) {}
+            public void onFailed(Exception e) {
+            }
         });
 
         if (user.getName() != null && !user.getName().isEmpty()) {

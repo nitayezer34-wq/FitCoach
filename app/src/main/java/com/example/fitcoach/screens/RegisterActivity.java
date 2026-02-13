@@ -20,7 +20,8 @@ import com.example.fitcoach.utils.Validator;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText etName, etEmail, etPassword, etGender, etBirthYear, etHeight, etWeight, etActivityLevel, etStepTarget, etWaterTarget;
+    // Added etCaloriesTarget
+    private EditText etName, etEmail, etPassword, etGender, etBirthYear, etHeight, etWeight, etActivityLevel, etStepTarget, etCaloriesTarget, etWaterTarget;
     private Button btnRegister, btnGoLogin;
 
     @Override
@@ -46,6 +47,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         etWeight = findViewById(R.id.etWeight);
         etActivityLevel = findViewById(R.id.etActivityLevel);
         etStepTarget = findViewById(R.id.etStepTarget);
+        etCaloriesTarget = findViewById(R.id.etCaloriesTarget); // Initialized the new EditText
         etWaterTarget = findViewById(R.id.etWaterTarget);
         btnRegister = findViewById(R.id.btnRegisterConfirm);
         btnGoLogin = findViewById(R.id.btnGoLogin);
@@ -89,34 +91,54 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private void saveNewUser(String name, String email, String password) {
         String userId = DatabaseService.getInstance().generateUserId();
-        User user = new User(userId, name, email, password,
-                etGender.getText().toString(),
-                Integer.parseInt(etBirthYear.getText().toString()),
-                Integer.parseInt(etHeight.getText().toString()),
-                Float.parseFloat(etWeight.getText().toString()),
-                etActivityLevel.getText().toString(),
-                Integer.parseInt(etStepTarget.getText().toString()),
-                Integer.parseInt(etWaterTarget.getText().toString()),
-                false);
+        try {
+            // The User constructor now includes the daily calories target
+            User user = new User(userId, name, email, password,
+                    etGender.getText().toString(),
+                    Integer.parseInt(etBirthYear.getText().toString()),
+                    Integer.parseInt(etHeight.getText().toString()),
+                    Float.parseFloat(etWeight.getText().toString()),
+                    etActivityLevel.getText().toString(),
+                    Integer.parseInt(etStepTarget.getText().toString()),
+                    Integer.parseInt(etCaloriesTarget.getText().toString()), // Added the new value
+                    Integer.parseInt(etWaterTarget.getText().toString()),
+                    false);
 
-        DatabaseService.getInstance().createNewUser(user, new DatabaseService.DatabaseCallback<Void>() {
-            @Override
-            public void onCompleted(Void result) {
-                SharedPreferencesUtil.saveUser(RegisterActivity.this, user);
-                Toast.makeText(RegisterActivity.this, "חשבון נוצר בהצלחה!", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-            @Override
-            public void onFailed(Exception e) { Toast.makeText(RegisterActivity.this, "שגיאה ברישום", Toast.LENGTH_SHORT).show(); }
-        });
+            DatabaseService.getInstance().createNewUser(user, new DatabaseService.DatabaseCallback<Void>() {
+                @Override
+                public void onCompleted(Void result) {
+                    SharedPreferencesUtil.saveUser(RegisterActivity.this, user);
+                    Toast.makeText(RegisterActivity.this, "חשבון נוצר בהצלחה!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(RegisterActivity.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+                }
+
+                @Override
+                public void onFailed(Exception e) {
+                    Toast.makeText(RegisterActivity.this, "שגיאה ברישום", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "נא למלא ערכים מספריים תקינים בשדות הנדרשים.", Toast.LENGTH_LONG).show();
+        }
     }
 
     private boolean validateInput() {
-        if (etName.getText().toString().isEmpty()) return false;
-        if (!Validator.isEmailValid(etEmail.getText().toString())) return false;
-        if (!Validator.isPasswordValid(etPassword.getText().toString())) return false;
-        // ... בדיקות נוספות לשאר השדות במידת הצורך ...
+        // Basic validation, can be expanded
+        if (etName.getText().toString().trim().isEmpty()) {
+            etName.setError("שדה חובה");
+            return false;
+        }
+        if (!Validator.isEmailValid(etEmail.getText().toString())) {
+            etEmail.setError("אימייל לא תקין");
+            return false;
+        }
+        if (!Validator.isPasswordValid(etPassword.getText().toString())) {
+            etPassword.setError("סיסמה חייבת להכיל לפחות 6 תווים");
+            return false;
+        }
         return true;
     }
 }

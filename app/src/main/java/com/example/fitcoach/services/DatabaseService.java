@@ -19,24 +19,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.UnaryOperator;
 
 public class DatabaseService {
-    private static final String USERS_PATH = "users",
+    private static final String
+            USERS_PATH = "users",
             WORKOUT_PATH = "workouts",
             RECIPES_PATH = "recipes";
 
     private static final String DB_URL = "https://fitcoach-55d45-default-rtdb.europe-west1.firebasedatabase.app/";
-
-    public interface DatabaseCallback<T> {
-        void onCompleted(T object);
-        void onFailed(Exception e);
-    }
-
     private static DatabaseService instance;
     private final DatabaseReference databaseReference;
-
     private DatabaseService() {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(DB_URL);
         databaseReference = firebaseDatabase.getReference();
@@ -136,27 +129,96 @@ public class DatabaseService {
     }
 
     // region User Section
-    public String generateUserId() { return generateNewId(USERS_PATH); }
-    public void createNewUser(@NotNull final User user, @Nullable final DatabaseCallback<Void> callback) { writeData(USERS_PATH + "/" + user.getId(), user, callback); }
-    public void getUser(@NotNull final String uid, @NotNull final DatabaseCallback<User> callback) { getData(USERS_PATH + "/" + uid, User.class, callback); }
-    public void getUserList(@NotNull final DatabaseCallback<List<User>> callback) { getDataList(USERS_PATH, User.class, callback); }
-    public void deleteUser(@NotNull final String uid, @Nullable final DatabaseCallback<Void> callback) { deleteData(USERS_PATH + "/" + uid, callback); }
-    public void getUserByEmailAndPassword(@NotNull final String email, @NotNull final String password, @NotNull final DatabaseCallback<User> callback) { /* ... */ }
-    public void checkIfEmailExists(@NotNull final String email, @NotNull final DatabaseCallback<Boolean> callback) { /* ... */ }
-    public void updateUser(@NotNull final String uid, UnaryOperator<User> function, @Nullable final DatabaseCallback<Void> callback) { /* ... */ }
+    public String generateUserId() {
+        return generateNewId(USERS_PATH);
+    }
+
+    public void createNewUser(@NotNull final User user, @Nullable final DatabaseCallback<Void> callback) {
+        writeData(USERS_PATH + "/" + user.getId(), user, callback);
+    }
+
+    public void getUser(@NotNull final String uid, @NotNull final DatabaseCallback<User> callback) {
+        getData(USERS_PATH + "/" + uid, User.class, callback);
+    }
+
+    public void getUserList(@NotNull final DatabaseCallback<List<User>> callback) {
+        getDataList(USERS_PATH, User.class, callback);
+    }
+
+    public void deleteUser(@NotNull final String uid, @Nullable final DatabaseCallback<Void> callback) {
+        deleteData(USERS_PATH + "/" + uid, callback);
+    }
+
+    public void getUserByEmailAndPassword(@NotNull final String email, @NotNull final String password, @NotNull final DatabaseCallback<User> callback) {
+        getUserList(new DatabaseCallback<List<User>>() {
+            @Override
+            public void onCompleted(List<User> users) {
+                for (User user : users) {
+                    if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
+                        callback.onCompleted(user);
+                        return;
+                    }
+                }
+                callback.onCompleted(null);
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                callback.onFailed(e);
+            }
+        });
+    }
+
+    public void checkIfEmailExists(@NotNull final String email, @NotNull final DatabaseCallback<Boolean> callback) {
+        getUserList(new DatabaseCallback<List<User>>() {
+            @Override
+            public void onCompleted(List<User> users) {
+                for (User user : users) {
+                    if (user.getEmail().equals(email)) {
+                        callback.onCompleted(true);
+                        return;
+                    }
+                }
+                callback.onCompleted(false);
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                callback.onFailed(e);
+            }
+        });
+    }
+
+    public void updateUser(@NotNull final String uid, UnaryOperator<User> function, @NotNull final DatabaseCallback<User> callback) {
+        runTransaction(USERS_PATH + "/" + uid, User.class, function, callback);
+    }
 
     // region Workout Section
-    public String generateWorkoutId() { return generateNewId(WORKOUT_PATH); }
-    public void createNewWorkoutTraining(@NotNull final WorkoutTraining workoutTraining, @Nullable final DatabaseCallback<Void> callback) { /* ... */ }
-    public void getWorkoutTraining(@NotNull final String id, @NotNull final DatabaseCallback<WorkoutTraining> callback) { /* ... */ }
-    public void getWorkoutTrainingList(@NotNull final DatabaseCallback<List<WorkoutTraining>> callback) { /* ... */ }
-    public void deleteWorkoutTraining(@NotNull final String id, @Nullable final DatabaseCallback<Void> callback) { /* ... */ }
+    public String generateWorkoutId() {
+        return generateNewId(WORKOUT_PATH);
+    }
 
-    // region Recipe Section
+    public void createNewWorkoutTraining(@NotNull final WorkoutTraining workoutTraining, @Nullable final DatabaseCallback<Void> callback) {
+        writeData(WORKOUT_PATH + "/" + workoutTraining.getId(), workoutTraining, callback);
+    }
+
+    public void getWorkoutTraining(@NotNull final String id, @NotNull final DatabaseCallback<WorkoutTraining> callback) {
+        getData(WORKOUT_PATH + "/" + id, WorkoutTraining.class, callback);
+    }
+
+    public void getWorkoutTrainingList(@NotNull final DatabaseCallback<List<WorkoutTraining>> callback) {
+        getDataList(WORKOUT_PATH, WorkoutTraining.class, callback);
+    }
+
+    public void deleteWorkoutTraining(@NotNull final String id, @Nullable final DatabaseCallback<Void> callback) {
+        deleteData(WORKOUT_PATH + "/" + id, callback);
+    }
 
     public String generateRecipeId() {
         return generateNewId(RECIPES_PATH);
     }
+
+    // region Recipe Section
 
     public void createNewRecipe(@NotNull final Recipe recipe, @Nullable final DatabaseCallback<Void> callback) {
         writeData(RECIPES_PATH + "/" + recipe.getId(), recipe, callback);
@@ -189,6 +251,12 @@ public class DatabaseService {
                 if (callback != null) callback.onCompleted(null);
             }
         });
+    }
+
+    public interface DatabaseCallback<T> {
+        void onCompleted(T object);
+
+        void onFailed(Exception e);
     }
 
     // endregion

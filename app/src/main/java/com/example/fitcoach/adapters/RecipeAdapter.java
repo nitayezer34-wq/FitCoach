@@ -7,23 +7,22 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.example.fitcoach.R;
 import com.example.fitcoach.models.Recipe;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
-    private List<Recipe> recipeList = new ArrayList<>();
     private final OnRecipeClickListener listener;
+    private List<Recipe> recipeList = new ArrayList<>();
     private Context context;
-
-    public interface OnRecipeClickListener {
-        void onRecipeClick(Recipe recipe);
-    }
 
     public RecipeAdapter(Context context, OnRecipeClickListener listener) {
         this.context = context;
@@ -53,6 +52,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
         return recipeList.size();
     }
 
+    public interface OnRecipeClickListener {
+        void onRecipeClick(Recipe recipe);
+    }
+
     static class RecipeViewHolder extends RecyclerView.ViewHolder {
         ImageView ivRecipeImage;
         TextView tvRecipeTitle, tvPrepTime, tvCalories, tvAllergens;
@@ -73,10 +76,10 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
             if (recipe.getImageUrl() != null && !recipe.getImageUrl().isEmpty()) {
                 Glide.with(context)
-                     .load(recipe.getImageUrl())
-                     .placeholder(R.drawable.ic_recipe_placeholder)
-                     .error(R.drawable.ic_recipe_placeholder)
-                     .into(ivRecipeImage);
+                        .load(recipe.getImageUrl())
+                        .placeholder(R.drawable.ic_recipe_placeholder)
+                        .error(R.drawable.ic_recipe_placeholder)
+                        .into(ivRecipeImage);
             } else {
                 ivRecipeImage.setImageResource(R.drawable.ic_recipe_placeholder);
             }

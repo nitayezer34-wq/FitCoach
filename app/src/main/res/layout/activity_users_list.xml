@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/users_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="#F5F5F5"
-    android:id="@+id/users_list"
-    tools:context=".screens.UsersListActivity"
-    android:layoutDirection="rtl">
+    android:layoutDirection="rtl"
+    tools:context=".screens.UsersListActivity">
 
     <LinearLayout
         android:id="@+id/header_users"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="vertical"
-        android:padding="24dp"
-        android:gravity="center">
+        android:padding="24dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -28,8 +27,8 @@
         <View
             android:layout_width="80dp"
             android:layout_height="3dp"
-            android:background="#2196F3"
-            android:layout_marginTop="8dp"/>
+            android:layout_marginTop="8dp"
+            android:background="#2196F3" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -37,7 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/header_users"
-        android:paddingBottom="16dp"
-        android:clipToPadding="false" />
+        android:clipToPadding="false"
+        android:paddingBottom="16dp" />
 
 </RelativeLayout>

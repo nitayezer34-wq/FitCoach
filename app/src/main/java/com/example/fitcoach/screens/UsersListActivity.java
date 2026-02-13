@@ -3,12 +3,14 @@ package com.example.fitcoach.screens;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.fitcoach.R;
 import com.example.fitcoach.adapters.UserAdapter;
 import com.example.fitcoach.models.User;
@@ -80,9 +82,9 @@ public class UsersListActivity extends AppCompatActivity {
                         u.setAdmin(user.isAdmin());
                         return u;
                     }
-                }, new DatabaseService.DatabaseCallback<Void>() {
+                }, new DatabaseService.DatabaseCallback<User>() {
                     @Override
-                    public void onCompleted(Void v) {
+                    public void onCompleted(User updatedUser) {
                         adapter.notifyItemChanged(position);
                     }
 

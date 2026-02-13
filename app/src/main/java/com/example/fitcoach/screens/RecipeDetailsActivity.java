@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -55,7 +56,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     private void loadRecipeDetails() {
         if (recipeId == null) return;
 
-        dbService.getRecipe(recipeId, new DatabaseService.DatabaseCallback<Recipe>() { 
+        dbService.getRecipe(recipeId, new DatabaseService.DatabaseCallback<Recipe>() {
             @Override
             public void onCompleted(Recipe recipe) {
                 currentRecipe = recipe;
@@ -75,10 +76,10 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         tvTitle.setText(currentRecipe.getTitle());
 
         Glide.with(this)
-             .load(currentRecipe.getImageUrl())
-             .placeholder(R.drawable.ic_recipe_placeholder)
-             .error(R.drawable.ic_recipe_placeholder)
-             .into(ivRecipeImage);
+                .load(currentRecipe.getImageUrl())
+                .placeholder(R.drawable.ic_recipe_placeholder)
+                .error(R.drawable.ic_recipe_placeholder)
+                .into(ivRecipeImage);
 
         updateRatingDisplay(currentRecipe.getRating());
 
@@ -86,7 +87,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
             tvAllergens.setVisibility(View.VISIBLE);
             tvAllergens.setText(String.format("אלרגנים: %s", String.join(", ", currentRecipe.getAllergens())));
         } else {
-             tvAllergens.setVisibility(View.GONE);
+            tvAllergens.setVisibility(View.GONE);
         }
 
         llIngredientsContainer.removeAllViews();
@@ -139,7 +140,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
         btnSubmit.setOnClickListener(v -> {
             float newRating = ratingBar.getRating();
-            if(newRating > 0) {
+            if (newRating > 0) {
                 updateRecipeRating(newRating);
                 dialog.dismiss();
             }

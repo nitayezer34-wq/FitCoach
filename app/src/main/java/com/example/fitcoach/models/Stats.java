@@ -15,7 +15,6 @@ public class Stats {
     private List<WorkoutTraining> workoutTrainings;
 
 
-
     public Stats() {
         date = LocalDate.now();
         steps = 0;

@@ -19,10 +19,7 @@ import com.example.fitcoach.services.DatabaseService;
 import com.example.fitcoach.utils.SharedPreferencesUtil;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-
     private EditText etEmail, etPassword;
-    private Button btnLogin;
-    private TextView tvRegister;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +34,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         // קישור השדות מה-XML
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
-        btnLogin = findViewById(R.id.btnDoLogin);
-        tvRegister = findViewById(R.id.btnDoRegister); // זה הקישור למעבר דף
+        Button btnLogin = findViewById(R.id.btnDoLogin);
+        TextView tvRegister = findViewById(R.id.btnDoRegister); // זה הקישור למעבר דף
 
         btnLogin.setOnClickListener(this);
         tvRegister.setOnClickListener(this); // מאזין ללחיצה על "הירשם עכשיו"
@@ -66,18 +63,21 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         DatabaseService.getInstance().getUserByEmailAndPassword(email, password, new DatabaseService.DatabaseCallback<User>() {
             @Override
             public void onCompleted(User user) {
-                if (user != null) {
-                    SharedPreferencesUtil.saveUser(LoginActivity.this, user);
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    finish();
-                } else {
+                if (user == null) {
                     Toast.makeText(LoginActivity.this, "פרטים שגויים", Toast.LENGTH_LONG).show();
+                    return;
                 }
+                SharedPreferencesUtil.saveUser(LoginActivity.this, user);
+                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+                finish();
             }
+
             @Override
-            public void onFailed(Exception e) { Toast.makeText(LoginActivity.this, "שגיאה בחיבור", Toast.LENGTH_SHORT).show(); }
+            public void onFailed(Exception e) {
+                Toast.makeText(LoginActivity.this, "שגיאה בחיבור", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 }

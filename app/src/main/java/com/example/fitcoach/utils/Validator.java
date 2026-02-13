@@ -24,7 +24,8 @@ public class Validator {
         try {
             int year = Integer.parseInt(birthYearStr);
             if (year > 1900 && year <= 2026) return year;
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return null;
     }
 
@@ -32,7 +33,8 @@ public class Validator {
         try {
             int height = Integer.parseInt(heightStr);
             if (height > 50 && height < 300) return height;
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return null;
     }
 
@@ -40,7 +42,8 @@ public class Validator {
         try {
             float weight = Float.parseFloat(weightStr);
             if (weight > 20 && weight < 500) return weight;
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return null;
     }
 
@@ -48,7 +51,8 @@ public class Validator {
         try {
             int steps = Integer.parseInt(stepStr);
             if (steps >= 0 && steps <= 200000) return steps;
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return null;
     }
 
@@ -56,7 +60,8 @@ public class Validator {
         try {
             int water = Integer.parseInt(waterStr);
             if (water >= 0 && water <= 10000) return water;
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
         return null;
     }
 

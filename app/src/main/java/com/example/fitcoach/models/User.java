@@ -17,14 +17,17 @@ public class User implements Serializable {
     private int heightCm;
     private float weightKg;
     private String activityLevel;
-    private int dailyStepTarget;
+    private int dailyStepsTarget;
+    private int dailyCaloriesTarget; // Added field
     private int dailyWaterTargetMl;
     private boolean admin;
 
-    public User() {}
+    public User() {
+    }
 
+    // Constructor updated to include dailyCaloriesTarget
     public User(String id, String name, String email, String password, String gender, int birthYear,
-                int heightCm, float weightKg, String activityLevel, int dailyStepTarget, int dailyWaterTargetMl, boolean admin) {
+                int heightCm, float weightKg, String activityLevel, int dailyStepsTarget, int dailyCaloriesTarget, int dailyWaterTargetMl, boolean admin) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -34,10 +37,13 @@ public class User implements Serializable {
         this.heightCm = heightCm;
         this.weightKg = weightKg;
         this.activityLevel = activityLevel;
-        this.dailyStepTarget = dailyStepTarget;
+        this.dailyStepsTarget = dailyStepsTarget;
+        this.dailyCaloriesTarget = dailyCaloriesTarget;
         this.dailyWaterTargetMl = dailyWaterTargetMl;
         this.admin = admin;
     }
+
+    // Getters and Setters
 
     public String getId() {
         return id;
@@ -111,12 +117,20 @@ public class User implements Serializable {
         this.activityLevel = activityLevel;
     }
 
-    public int getDailyStepTarget() {
-        return dailyStepTarget;
+    public int getDailyStepsTarget() {
+        return dailyStepsTarget;
     }
 
-    public void setDailyStepTarget(int dailyStepTarget) {
-        this.dailyStepTarget = dailyStepTarget;
+    public void setDailyStepsTarget(int dailyStepsTarget) {
+        this.dailyStepsTarget = dailyStepsTarget;
+    }
+
+    public int getDailyCaloriesTarget() {
+        return dailyCaloriesTarget;
+    }
+
+    public void setDailyCaloriesTarget(int dailyCaloriesTarget) {
+        this.dailyCaloriesTarget = dailyCaloriesTarget;
     }
 
     public int getDailyWaterTargetMl() {
@@ -140,39 +154,22 @@ public class User implements Serializable {
     @NonNull
     @Override
     public String toString() {
-        return "User{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", gender='" + gender + '\'' +
-                ", birthYear=" + birthYear +
-                ", heightCm=" + heightCm +
-                ", weightKg=" + weightKg +
-                ", activityLevel='" + activityLevel + '\'' +
-                ", dailyStepTarget=" + dailyStepTarget +
-                ", dailyWaterTargetMl=" + dailyWaterTargetMl +
-                ", admin=" + admin +
-                '}';
+        return "User{" + "id='" + id + '\'' + ", name='" + name + '\'' + '}';
     }
 
     @Override
     public boolean equals(Object o) {
+        if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return birthYear == user.birthYear && heightCm == user.heightCm && Float.compare(weightKg, user.weightKg) == 0 && dailyStepTarget == user.dailyStepTarget && dailyWaterTargetMl == user.dailyWaterTargetMl && admin == user.admin && Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(gender, user.gender) && Objects.equals(activityLevel, user.activityLevel);
+        return Objects.equals(id, user.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, email, password, gender, birthYear, heightCm, weightKg, activityLevel, dailyStepTarget, dailyWaterTargetMl, admin);
+        return Objects.hash(id);
     }
 
-
-    /**
-     * Calculates the User's BMI (Body Mass Index)</br>
-     * Formula: weight(kg) / height(m)^2
-     */
     public double calcBMI() {
         if (this.heightCm <= 0) return 0;
         double heightInMeters = this.heightCm / 100.0;
