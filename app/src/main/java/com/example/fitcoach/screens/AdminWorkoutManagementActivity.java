@@ -2,6 +2,10 @@ package com.example.fitcoach.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,13 +21,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdminWorkoutManagementActivity extends AppCompatActivity {
+public class AdminWorkoutManagementActivity extends AppCompatActivity implements WorkoutAdapter.OnWorkoutListener {
 
-    private RecyclerView underweightRecyclerView, normalRecyclerView, overweightRecyclerView;
-    private WorkoutAdapter underweightAdapter, normalAdapter, overweightAdapter;
-    private final List<WorkoutTraining> underweightWorkouts = new ArrayList<>();
-    private final List<WorkoutTraining> normalWorkouts = new ArrayList<>();
-    private final List<WorkoutTraining> overweightWorkouts = new ArrayList<>();
+    private RecyclerView workoutsRecyclerView;
+    private WorkoutAdapter workoutAdapter;
+    private Spinner filterSpinner;
+    private final List<WorkoutTraining> allWorkouts = new ArrayList<>();
+    private final List<WorkoutTraining> filteredWorkouts = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +35,8 @@ public class AdminWorkoutManagementActivity extends AppCompatActivity {
         setContentView(R.layout.activity_admin_workout_management);
 
         initViews();
-        setupRecyclerViews();
+        setupSpinner();
+        setupRecyclerView();
         loadWorkouts();
 
         FloatingActionButton fabAddWorkout = findViewById(R.id.fab_add_workout);
@@ -42,23 +47,32 @@ public class AdminWorkoutManagementActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        underweightRecyclerView = findViewById(R.id.rv_underweight_workouts);
-        normalRecyclerView = findViewById(R.id.rv_normal_workouts);
-        overweightRecyclerView = findViewById(R.id.rv_overweight_workouts);
+        workoutsRecyclerView = findViewById(R.id.rv_workouts);
+        filterSpinner = findViewById(R.id.spinner_filter);
     }
 
-    private void setupRecyclerViews() {
-        underweightAdapter = new WorkoutAdapter(underweightWorkouts);
-        normalAdapter = new WorkoutAdapter(normalWorkouts);
-        overweightAdapter = new WorkoutAdapter(overweightWorkouts);
+    private void setupSpinner() {
+        String[] filterOptions = {"כל האימונים", "תת משקל", "משקל תקין", "עודף משקל"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, filterOptions);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        filterSpinner.setAdapter(adapter);
 
-        underweightRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        normalRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        overweightRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                filterWorkouts(parent.getItemAtPosition(position).toString());
+            }
 
-        underweightRecyclerView.setAdapter(underweightAdapter);
-        normalRecyclerView.setAdapter(normalAdapter);
-        overweightRecyclerView.setAdapter(overweightAdapter);
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
+    }
+
+    private void setupRecyclerView() {
+        workoutAdapter = new WorkoutAdapter(filteredWorkouts, this);
+        workoutsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        workoutsRecyclerView.setAdapter(workoutAdapter);
     }
 
     private void loadWorkouts() {
@@ -66,10 +80,9 @@ public class AdminWorkoutManagementActivity extends AppCompatActivity {
             @Override
             public void onCompleted(List<WorkoutTraining> workouts) {
                 if (workouts != null) {
-                    categorizeWorkouts(workouts);
-                    underweightAdapter.notifyDataSetChanged();
-                    normalAdapter.notifyDataSetChanged();
-                    overweightAdapter.notifyDataSetChanged();
+                    allWorkouts.clear();
+                    allWorkouts.addAll(workouts);
+                    filterWorkouts(filterSpinner.getSelectedItem().toString());
                 }
             }
 
@@ -80,24 +93,41 @@ public class AdminWorkoutManagementActivity extends AppCompatActivity {
         });
     }
 
-    private void categorizeWorkouts(List<WorkoutTraining> workouts) {
-        underweightWorkouts.clear();
-        normalWorkouts.clear();
-        overweightWorkouts.clear();
-
-        for (WorkoutTraining workout : workouts) {
-            if(workout.getTargetAudience().contains("תת משקל")) {
-                underweightWorkouts.add(workout);
-                continue;
-            }
-            if (workout.getTargetAudience().contains("משקל תקין")) {
-                normalWorkouts.add(workout);
-                continue;
-            }
-            if (workout.getTargetAudience().contains("עודף משקל")) {
-                overweightWorkouts.add(workout);
-                continue;
+    private void filterWorkouts(String category) {
+        filteredWorkouts.clear();
+        if (category.equals("כל האימונים")) {
+            filteredWorkouts.addAll(allWorkouts);
+        } else {
+            for (WorkoutTraining workout : allWorkouts) {
+                if (workout.getTargetAudience().contains(category)) {
+                    filteredWorkouts.add(workout);
+                }
             }
         }
+        workoutAdapter.notifyDataSetChanged();
+    }
+
+
+    @Override
+    public void onEdit(WorkoutTraining workout) {
+        Intent intent = new Intent(this, WorkoutEditActivity.class);
+        intent.putExtra("WORKOUT_ID", workout.getId());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onDelete(WorkoutTraining workout) {
+        DatabaseService.getInstance().deleteWorkout(workout.getId(), new DatabaseService.DatabaseCallback<Void>() {
+            @Override
+            public void onCompleted(Void result) {
+                Toast.makeText(AdminWorkoutManagementActivity.this, "אימון נמחק בהצלחה", Toast.LENGTH_SHORT).show();
+                loadWorkouts(); // Refresh the list
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                Toast.makeText(AdminWorkoutManagementActivity.this, "מחיקת האימון נכשלה", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
