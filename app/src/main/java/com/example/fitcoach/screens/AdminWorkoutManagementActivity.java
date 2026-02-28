@@ -14,20 +14,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitcoach.R;
 import com.example.fitcoach.adapters.WorkoutAdapter;
+import com.example.fitcoach.models.WeightCategory;
 import com.example.fitcoach.models.WorkoutTraining;
 import com.example.fitcoach.services.DatabaseService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class AdminWorkoutManagementActivity extends AppCompatActivity implements WorkoutAdapter.OnWorkoutListener {
 
+    private final List<WorkoutTraining> allWorkouts = new ArrayList<>();
+    private final List<WorkoutTraining> filteredWorkouts = new ArrayList<>();
     private RecyclerView workoutsRecyclerView;
     private WorkoutAdapter workoutAdapter;
     private Spinner filterSpinner;
-    private final List<WorkoutTraining> allWorkouts = new ArrayList<>();
-    private final List<WorkoutTraining> filteredWorkouts = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +40,6 @@ public class AdminWorkoutManagementActivity extends AppCompatActivity implements
         initViews();
         setupSpinner();
         setupRecyclerView();
-        loadWorkouts();
 
         FloatingActionButton fabAddWorkout = findViewById(R.id.fab_add_workout);
         fabAddWorkout.setOnClickListener(v -> {
@@ -46,15 +48,24 @@ public class AdminWorkoutManagementActivity extends AppCompatActivity implements
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadWorkouts();
+    }
+
     private void initViews() {
         workoutsRecyclerView = findViewById(R.id.rv_workouts);
         filterSpinner = findViewById(R.id.spinner_filter);
+        // Add bottom padding to the RecyclerView
+        workoutsRecyclerView.setPadding(0, 0, 0, 100);
+        workoutsRecyclerView.setClipToPadding(false);
     }
 
     private void setupSpinner() {
         String[] filterOptions = {"כל האימונים", "תת משקל", "משקל תקין", "עודף משקל"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, filterOptions);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_item_custom, filterOptions);
+        adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_custom);
         filterSpinner.setAdapter(adapter);
 
         filterSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -95,11 +106,35 @@ public class AdminWorkoutManagementActivity extends AppCompatActivity implements
 
     private void filterWorkouts(String category) {
         filteredWorkouts.clear();
-        if (category.equals("כל האימונים")) {
-            filteredWorkouts.addAll(allWorkouts);
+
+        if ("כל האימונים".equals(category)) {
+            List<WorkoutTraining> sortedList = new ArrayList<>(allWorkouts);
+            // Sort by target audience to group them
+            Collections.sort(sortedList, new Comparator<WorkoutTraining>() {
+                @Override
+                public int compare(WorkoutTraining o1, WorkoutTraining o2) {
+                    return o1.getTargetAudience().compareTo(o2.getTargetAudience());
+                }
+            });
+            filteredWorkouts.addAll(sortedList);
         } else {
+            WeightCategory targetAudienceFilter;
+            switch (category) {
+                case "תת משקל":
+                    targetAudienceFilter = WeightCategory.UNDERWEIGHT;
+                    break;
+                case "משקל תקין":
+                    targetAudienceFilter = WeightCategory.NORMAL;
+                    break;
+                case "עודף משקל":
+                    targetAudienceFilter = WeightCategory.OVERWEIGHT;
+                    break;
+                default:
+                    return; // Should not happen
+            }
+
             for (WorkoutTraining workout : allWorkouts) {
-                if (workout.getTargetAudience().contains(category)) {
+                if (targetAudienceFilter.equals(workout.getTargetAudience())) {
                     filteredWorkouts.add(workout);
                 }
             }
@@ -110,14 +145,14 @@ public class AdminWorkoutManagementActivity extends AppCompatActivity implements
 
     @Override
     public void onEdit(WorkoutTraining workout) {
-        Intent intent = new Intent(this, WorkoutEditActivity.class);
-        intent.putExtra("WORKOUT_ID", workout.getId());
+        Intent intent = new Intent(this, WorkoutCreationActivity.class);
+        intent.putExtra("EDIT_WORKOUT_ID", workout.getId());
         startActivity(intent);
     }
 
     @Override
     public void onDelete(WorkoutTraining workout) {
-        DatabaseService.getInstance().deleteWorkout(workout.getId(), new DatabaseService.DatabaseCallback<Void>() {
+        DatabaseService.getInstance().deleteWorkoutTraining(workout.getId(), new DatabaseService.DatabaseCallback<Void>() {
             @Override
             public void onCompleted(Void result) {
                 Toast.makeText(AdminWorkoutManagementActivity.this, "אימון נמחק בהצלחה", Toast.LENGTH_SHORT).show();

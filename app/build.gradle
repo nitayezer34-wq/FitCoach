@@ -36,6 +36,7 @@ dependencies {
     implementation libs.activity
     implementation libs.constraintlayout
     implementation libs.firebase.database
+    implementation 'com.google.firebase:firebase-auth'
     implementation libs.cardview
 
     // Glide

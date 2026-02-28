@@ -2,6 +2,7 @@ package com.example.fitcoach.models;
 
 import androidx.annotation.NonNull;
 
+import com.google.firebase.database.Exclude;
 import com.google.firebase.database.PropertyName;
 
 import java.io.Serializable;
@@ -174,5 +175,20 @@ public class User implements Serializable {
         if (this.heightCm <= 0) return 0;
         double heightInMeters = this.heightCm / 100.0;
         return this.weightKg / (heightInMeters * heightInMeters);
+    }
+
+    private WeightCategory determineWeightCategory(double bmi) {
+        if (bmi < 18.5) {
+            return WeightCategory.UNDERWEIGHT;
+        } else if (bmi < 25) {
+            return WeightCategory.NORMAL;
+        } else {
+            return WeightCategory.OVERWEIGHT;
+        }
+    }
+
+    @Exclude
+    public WeightCategory getWeightCategory() {
+        return determineWeightCategory(calcBMI());
     }
 }

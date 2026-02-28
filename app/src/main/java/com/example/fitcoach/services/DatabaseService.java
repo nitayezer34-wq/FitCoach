@@ -30,6 +30,7 @@ public class DatabaseService {
     private static final String DB_URL = "https://fitcoach-55d45-default-rtdb.europe-west1.firebasedatabase.app/";
     private static DatabaseService instance;
     private final DatabaseReference databaseReference;
+
     private DatabaseService() {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(DB_URL);
         databaseReference = firebaseDatabase.getReference();

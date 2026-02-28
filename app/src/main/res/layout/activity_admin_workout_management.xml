@@ -20,7 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="ניהול מאגר האימונים"
-            android:textColor="#2196F3"
+            android:textColor="@color/fit_primary"
             android:textSize="26sp"
             android:textStyle="bold" />
 
@@ -28,7 +28,7 @@
             android:layout_width="80dp"
             android:layout_height="3dp"
             android:layout_marginTop="8dp"
-            android:background="#2196F3" />
+            android:background="@color/fit_primary" />
     </LinearLayout>
 
     <LinearLayout
@@ -36,15 +36,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/header_layout"
+        android:layout_marginBottom="16dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:gravity="center_vertical">
+        android:paddingEnd="16dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="סנן לפי:"
+            android:textColor="@color/fit_primary"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -52,8 +54,8 @@
             android:id="@+id/spinner_filter"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="8dp"/>
+            android:layout_marginStart="8dp"
+            android:layout_weight="1" />
 
     </LinearLayout>
 
@@ -65,7 +67,7 @@
         android:layout_below="@id/filter_layout"
         android:padding="8dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_workout_activity"/>
+        tools:listitem="@layout/item_workout" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_workout"
@@ -75,7 +77,7 @@
         android:layout_alignParentBottom="true"
         android:layout_margin="24dp"
         android:src="@android:drawable/ic_input_add"
-        app:backgroundTint="#2196F3"
+        app:backgroundTint="@color/fit_primary"
         app:tint="@android:color/white" />
 
 </RelativeLayout>

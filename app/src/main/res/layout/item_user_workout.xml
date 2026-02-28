@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="6dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- "Done" button -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            app:fabSize="mini"
+            app:srcCompat="@drawable/ic_check"
+            app:backgroundTint="@color/fit_accent"
+            app:tint="@color/fit_primary"/>
+
+        <!-- Workout name, aligned to the far right -->
+        <TextView
+            android:id="@+id/workout_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:text="שם התרגיל"
+            android:textColor="@color/fit_primary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <!-- Sets, aligned to the right, below the name -->
+        <TextView
+            android:id="@+id/workout_sets"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/workout_name"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="8dp"
+            android:text="סטים: 3"
+            android:textColor="@color/fit_primary"
+            android:textSize="14sp" />
+
+        <!-- Reps, to the left of sets -->
+        <TextView
+            android:id="@+id/workout_reps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/workout_sets"
+            android:layout_marginEnd="16dp"
+            android:layout_toStartOf="@+id/workout_sets"
+            android:text="חזרות: 12"
+            android:textColor="@color/fit_primary"
+            android:textSize="14sp" />
+
+        <!-- Workout description, aligned right -->
+        <TextView
+            android:id="@+id/workout_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/workout_sets"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="8dp"
+            android:gravity="end"
+            android:text="תיאור קצר שהאדמין נתן על התרגיל יופיע כאן."
+            android:textColor="@color/fit_primary"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

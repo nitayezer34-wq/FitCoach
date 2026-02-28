@@ -41,6 +41,9 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         User user = userList.get(position);
 
+        // Set the listener for the whole item view
+        holder.itemView.setOnClickListener(v -> listener.onUserClick(user));
+
         // עיצוב שם המשתמש
         holder.tvName.setText(user.getName());
         holder.tvEmail.setText(user.getEmail());

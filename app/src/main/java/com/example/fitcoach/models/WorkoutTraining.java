@@ -18,12 +18,15 @@ public class WorkoutTraining implements Serializable {
     private int sets;
     private int reps;
     private double restTimeMinutes; // Changed to double for minutes (e.g. 3.5)
-    private String targetAudience;  // Categories: Underweight, Normal, Overweight
+    private WeightCategory targetAudience;  // Categories: Underweight, Normal, Overweight
+
+    @Exclude
+    private boolean isChecked = false;
 
     public WorkoutTraining() {
     }
 
-    public WorkoutTraining(String id, String name, String description, int caloriesPerSet, int sets, int reps, double restTimeMinutes, String targetAudience) {
+    public WorkoutTraining(String id, String name, String description, int caloriesPerSet, int sets, int reps, double restTimeMinutes, WeightCategory targetAudience) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -32,6 +35,16 @@ public class WorkoutTraining implements Serializable {
         this.reps = reps;
         this.restTimeMinutes = restTimeMinutes;
         this.targetAudience = targetAudience;
+    }
+
+    @Exclude
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    @Exclude
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 
     public String getId() {
@@ -90,11 +103,11 @@ public class WorkoutTraining implements Serializable {
         this.restTimeMinutes = restTimeMinutes;
     }
 
-    public String getTargetAudience() {
+    public WeightCategory getTargetAudience() {
         return targetAudience;
     }
 
-    public void setTargetAudience(String targetAudience) {
+    public void setTargetAudience(WeightCategory targetAudience) {
         this.targetAudience = targetAudience;
     }
 

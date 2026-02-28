@@ -17,6 +17,8 @@ import com.example.fitcoach.models.User;
 import com.example.fitcoach.services.DatabaseService;
 import com.example.fitcoach.utils.SharedPreferencesUtil;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
@@ -29,7 +31,7 @@ public class UsersListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_users_list); // מחבר לעיצוב עם הכותרת הכחולה
+        setContentView(R.layout.activity_users_list);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.users_list), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -41,11 +43,9 @@ public class UsersListActivity extends AppCompatActivity {
         rvUsers = findViewById(R.id.rv_users);
         rvUsers.setLayoutManager(new LinearLayoutManager(this));
 
-        // אתחול האדאפטר עם הממשק החדש (כולל מחיקה)
         adapter = new UserAdapter(new UserAdapter.OnUserClickListener() {
             @Override
             public void onUserClick(User user) {
-                // מעבר לדף הפרופיל הקיים עם ה-ID של המשתמש
                 Intent intent = new Intent(UsersListActivity.this, UserProfileActivity.class);
                 intent.putExtra("user_id", user.getId());
                 startActivity(intent);
@@ -53,12 +53,11 @@ public class UsersListActivity extends AppCompatActivity {
 
             @Override
             public void onDeleteClick(User user) {
-                // שימוש בפונקציית המחיקה שקיימת אצלך ב-DatabaseService
                 dbService.deleteUser(user.getId(), new DatabaseService.DatabaseCallback<Void>() {
                     @Override
                     public void onCompleted(Void object) {
                         Toast.makeText(UsersListActivity.this, "משתמש נמחק", Toast.LENGTH_SHORT).show();
-                        loadUsers(); // רענון הרשימה
+                        loadUsers();
                     }
 
                     @Override
@@ -74,23 +73,26 @@ public class UsersListActivity extends AppCompatActivity {
                 if (user.getId().equals(currentId)) {
                     return;
                 }
-                user.setAdmin(!user.isAdmin());
+                boolean newAdminStatus = !user.isAdmin();
+                user.setAdmin(newAdminStatus);
                 dbService.updateUser(user.getId(), new UnaryOperator<User>() {
                     @Override
                     public User apply(User u) {
                         if (u == null) return u;
-                        u.setAdmin(user.isAdmin());
+                        u.setAdmin(newAdminStatus);
                         return u;
                     }
                 }, new DatabaseService.DatabaseCallback<User>() {
                     @Override
                     public void onCompleted(User updatedUser) {
-                        adapter.notifyItemChanged(position);
+                        String message = newAdminStatus ? "מונה למנהל" : "הוסר מניהול";
+                        Toast.makeText(UsersListActivity.this, message, Toast.LENGTH_SHORT).show();
+                        loadUsers();
                     }
 
                     @Override
                     public void onFailed(Exception e) {
-
+                        Toast.makeText(UsersListActivity.this, "העדכון נכשל", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -101,11 +103,26 @@ public class UsersListActivity extends AppCompatActivity {
     }
 
     private void loadUsers() {
-        // שימוש בשם הפונקציה הנכון מה-Service שלך
         dbService.getUserList(new DatabaseService.DatabaseCallback<List<User>>() {
             @Override
             public void onCompleted(List<User> users) {
                 if (users != null) {
+                    String currentUserId = SharedPreferencesUtil.getUserId(UsersListActivity.this);
+                    Collections.sort(users, new Comparator<User>() {
+                        @Override
+                        public int compare(User u1, User u2) {
+                            // Main admin (current user) on top
+                            if (u1.getId().equals(currentUserId)) return -1;
+                            if (u2.getId().equals(currentUserId)) return 1;
+
+                            // Other admins
+                            if (u1.isAdmin() && !u2.isAdmin()) return -1;
+                            if (!u1.isAdmin() && u2.isAdmin()) return 1;
+
+                            // Regular users (sorted by name)
+                            return u1.getName().compareTo(u2.getName());
+                        }
+                    });
                     adapter.setUserList(users);
                 }
             }

@@ -35,7 +35,13 @@
             android:name=".screens.WorkoutActivity"
             android:exported="false" />
         <activity
+            android:name=".screens.UserWorkoutsActivity"
+            android:exported="false" />
+        <activity
             android:name=".screens.WorkoutCreationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".screens.WorkoutChecklistActivity"
             android:exported="false" />
         <activity
             android:name=".screens.AdminWorkoutManagementActivity"

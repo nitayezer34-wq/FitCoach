@@ -8,6 +8,12 @@ import androidx.annotation.Nullable;
 import com.example.fitcoach.models.Stats;
 import com.example.fitcoach.models.User;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 /// Utility class for shared preferences operations
 /// Contains methods for saving and retrieving data from shared preferences
@@ -19,6 +25,9 @@ public class SharedPreferencesUtil {
     ///
     /// @see Context#getSharedPreferences(String, int)
     private static final String PREF_NAME = "com.example.fitcoach.PREFERENCE_FILE_KEY";
+    private static final String COMPLETED_WORKOUTS_KEY = "completed_workouts";
+    private static final String LAST_CLEARED_DATE_KEY = "last_cleared_date";
+
 
     /// Save a string to shared preferences
     ///
@@ -202,5 +211,50 @@ public class SharedPreferencesUtil {
     /// @param context The context to use
     public static void clearStats(Context context) {
         remove(context, "stats");
+    }
+
+    // Methods for managing completed workouts
+
+    public static void addCompletedWorkout(Context context, String workoutId) {
+        List<String> completedWorkouts = getCompletedWorkouts(context);
+        if (!completedWorkouts.contains(workoutId)) {
+            completedWorkouts.add(workoutId);
+            saveCompletedWorkouts(context, completedWorkouts);
+        }
+    }
+
+    public static List<String> getCompletedWorkouts(Context context) {
+        String json = getString(context, COMPLETED_WORKOUTS_KEY, null);
+        if (json == null) {
+            return new ArrayList<>();
+        }
+        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        return new Gson().fromJson(json, type);
+    }
+
+    public static void clearCompletedWorkouts(Context context) {
+        remove(context, COMPLETED_WORKOUTS_KEY);
+        saveLastClearedDate(context);
+    }
+
+    private static void saveCompletedWorkouts(Context context, List<String> completedWorkouts) {
+        Gson gson = new Gson();
+        String json = gson.toJson(completedWorkouts);
+        saveString(context, COMPLETED_WORKOUTS_KEY, json);
+    }
+
+    private static void saveLastClearedDate(Context context) {
+        Calendar calendar = Calendar.getInstance();
+        saveInt(context, LAST_CLEARED_DATE_KEY, calendar.get(Calendar.DAY_OF_YEAR));
+    }
+
+    public static void checkAndClearCompletedWorkouts(Context context) {
+        int lastClearedDay = getInt(context, LAST_CLEARED_DATE_KEY, -1);
+        Calendar calendar = Calendar.getInstance();
+        int currentDay = calendar.get(Calendar.DAY_OF_YEAR);
+
+        if (lastClearedDay != currentDay) {
+            clearCompletedWorkouts(context);
+        }
     }
 }

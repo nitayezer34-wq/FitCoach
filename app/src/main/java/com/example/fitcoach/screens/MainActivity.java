@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.cv_workout_entry).setOnClickListener(v -> {
-            startActivity(new Intent(this, WorkoutActivity.class));
+            startActivity(new Intent(this, UserWorkoutsActivity.class));
         });
     }
 
