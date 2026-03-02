@@ -4,90 +4,83 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    android:padding="32dp">
+    android:background="#FFFFFF">
 
-    <!-- Logo at the top with plenty of space -->
     <ImageView
         android:id="@+id/logoImage"
-        android:layout_width="0dp"
+        android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_marginTop="80dp"
-        android:contentDescription="FitCoach Logo"
-        android:scaleType="fitCenter"
         android:src="@drawable/fitcoach_logo"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:contentDescription="FitCoach Logo"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="0.6" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/welcomeText"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintVertical_bias="0.3"/>
 
-    <!-- Welcome heading -->
     <TextView
         android:id="@+id/welcomeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
-        android:text="Get Started"
-        android:textColor="#000000"
-        android:textSize="36sp"
+        android:text="ברוכים הבאים ל-FitCoach"
+        android:textSize="28sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@android:color/black"
+        app:layout_constraintTop_toBottomOf="@id/logoImage"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/logoImage" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/subtitleText"
+        android:layout_marginTop="24dp"/>
 
     <TextView
         android:id="@+id/subtitleText"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:gravity="center"
-        android:text="Create an account or sign in to continue"
-        android:textColor="#666666"
+        android:text="התחבר או צור חשבון כדי להתחיל"
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:textColor="#666666"
         app:layout_constraintTop_toBottomOf="@id/welcomeText"
-        app:layout_constraintWidth_percent="0.85" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/buttonsGroup"
+        android:layout_marginTop="8dp"/>
 
-    <!-- Buttons at bottom -->
     <LinearLayout
         android:id="@+id/buttonsGroup"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:padding="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/subtitleText">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subtitleText"
+        app:layout_constraintVertical_bias="1.0">
 
-        <!-- Sign Up Button - Bold and prominent -->
-
-        <!-- Sign In Button - Subtle outline -->
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSignUp"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginBottom="14dp"
-            android:background="#000000"
-            android:elevation="4dp"
-            android:text="Sign Up"
-            android:textAllCaps="false"
-            android:textColor="#FFFFFF"
-            android:textSize="17sp"
-            android:textStyle="bold" />
+            android:layout_height="60dp"
+            android:text="צור חשבון חדש"
+            android:textSize="18sp"
+            app:cornerRadius="15dp"
+            android:backgroundTint="#2196F3"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp"/>
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnSignIn"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="#F5F5F5"
-            android:elevation="0dp"
-            android:text="Sign In"
-            android:textAllCaps="false"
-            android:textColor="#000000"
-            android:textSize="17sp"
-            android:textStyle="bold" />
-
+            android:layout_height="60dp"
+            android:text="יש לי חשבון"
+            android:textSize="18sp"
+            app:cornerRadius="15dp"
+            app:strokeColor="#2196F3"
+            android:textColor="#2196F3"
+            android:textStyle="bold"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

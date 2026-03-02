@@ -1,7 +1,6 @@
 package com.example.fitcoach.screens;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,6 +17,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.example.fitcoach.R;
+import com.example.fitcoach.models.Stats;
 import com.example.fitcoach.models.User;
 import com.example.fitcoach.services.DatabaseService;
 import com.example.fitcoach.utils.SharedPreferencesUtil;
@@ -31,11 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar pbSteps, pbCalories, pbWaterJug;
     private ImageButton btnSettingsGear, btnAddWater, btnRemoveWater;
     private ImageView ivBmiNeedle;
-    // 1. הוספת משתנה לכפתור הפורום
     private Button btnMainForum;
-    private int waterToday = 0, waterTarget = 2000;
-    private int caloriesToday = 0, caloriesTarget = 1000;
-    private int stepsToday = 0, stepsTarget = 5000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loadUserData();
+        updateUI();
     }
 
     private void bindViews() {
@@ -71,8 +68,6 @@ public class MainActivity extends AppCompatActivity {
         pbWaterJug = findViewById(R.id.pb_water_jug);
         btnAddWater = findViewById(R.id.btn_add_water);
         btnRemoveWater = findViewById(R.id.btn_remove_water);
-
-        // 2. קישור הכפתור מה-XML
         btnMainForum = findViewById(R.id.btn_main_forum);
     }
 
@@ -80,20 +75,23 @@ public class MainActivity extends AppCompatActivity {
         btnSettingsGear.setOnClickListener(v -> showSettingsMenu(v));
 
         btnAddWater.setOnClickListener(v -> {
-            waterToday += GLASS_SIZE;
-            saveStats();
-            updateUI();
-        });
-
-        btnRemoveWater.setOnClickListener(v -> {
-            if (waterToday >= GLASS_SIZE) {
-                waterToday -= GLASS_SIZE;
-                saveStats();
+            Stats stats = SharedPreferencesUtil.getStats(this);
+            if(stats != null){
+                stats.setWater(stats.getWater() + GLASS_SIZE);
+                SharedPreferencesUtil.saveStats(this, stats);
                 updateUI();
             }
         });
 
-        // 3. תיקון הלוגיקה למעבר לפורום
+        btnRemoveWater.setOnClickListener(v -> {
+            Stats stats = SharedPreferencesUtil.getStats(this);
+            if (stats != null && stats.getWater() >= GLASS_SIZE) {
+                stats.setWater(stats.getWater() - GLASS_SIZE);
+                SharedPreferencesUtil.saveStats(this, stats);
+                updateUI();
+            }
+        });
+
         btnMainForum.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, RecipeForumActivity.class);
             startActivity(intent);
@@ -104,13 +102,15 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // שאר הפונקציות (loadUserData, saveStats, updateUI, וכו') נשארות ללא שינוי...
     private void loadUserData() {
         User user = SharedPreferencesUtil.getUser(this);
+        if (user == null) return;
+
         DatabaseService.getInstance().getUser(user.getId(), new DatabaseService.DatabaseCallback<User>() {
             @Override
             public void onCompleted(User updatedUser) {
                 SharedPreferencesUtil.saveUser(MainActivity.this, updatedUser);
+                updateBMIGauge(updatedUser);
             }
 
             @Override
@@ -124,36 +124,58 @@ public class MainActivity extends AppCompatActivity {
             tvGreeting.setText("שלום, מתאמן");
         }
 
-        waterTarget = user.getDailyWaterTargetMl() > 0 ? user.getDailyWaterTargetMl() : 2000;
-        pbWaterJug.setMax(waterTarget);
-        pbCalories.setMax(caloriesTarget);
-        pbSteps.setMax(stepsTarget);
+        pbWaterJug.setMax(user.getDailyWaterTargetMl() > 0 ? user.getDailyWaterTargetMl() : 2000);
+        pbCalories.setMax(user.getDailyCaloriesTarget() > 0 ? user.getDailyCaloriesTarget() : 2000);
+        pbSteps.setMax(user.getDailyStepsTarget() > 0 ? user.getDailyStepsTarget() : 5000);
         updateUI();
     }
 
-    private void saveStats() {
-        SharedPreferences.Editor editor = getSharedPreferences("Stats", MODE_PRIVATE).edit();
-        editor.putInt("water_today", waterToday);
-        editor.putInt("burned_today", caloriesToday);
-        editor.putInt("steps_today", stepsToday);
-        editor.apply();
-    }
 
     private void updateUI() {
-        pbWaterJug.setProgress(Math.min(waterToday, waterTarget), true);
-        tvCaloriesValue.setText(caloriesToday + "\nקלוריות");
-        pbCalories.setProgress(Math.min(caloriesToday, caloriesTarget), true);
-        tvStepsValue.setText(stepsToday + "\nצעדים");
-        pbSteps.setProgress(Math.min(stepsToday, stepsTarget), true);
+        Stats stats = SharedPreferencesUtil.getStats(this);
+        User user = SharedPreferencesUtil.getUser(this);
+        if (stats == null || user == null) return;
+
+        pbWaterJug.setProgress((int) Math.min(stats.getWater(), user.getDailyWaterTargetMl()), true);
+
+        int caloriesTarget = user.getDailyCaloriesTarget() > 0 ? user.getDailyCaloriesTarget() : 2000;
+        tvCaloriesValue.setText(String.format("%d/%d", (int)stats.getCalories(), caloriesTarget));
+        pbCalories.setMax(caloriesTarget);
+        pbCalories.setProgress((int) Math.min(stats.getCalories(), caloriesTarget), true);
+
+        int stepsTarget = user.getDailyStepsTarget() > 0 ? user.getDailyStepsTarget() : 5000;
+        tvStepsValue.setText(String.format("%d/%d", stats.getSteps(), stepsTarget));
+        pbSteps.setMax(stepsTarget);
+        pbSteps.setProgress(Math.min(stats.getSteps(), stepsTarget), true);
+    }
+
+    private float map(float value, float fromLow, float fromHigh, float toLow, float toHigh) {
+        return toLow + (value - fromLow) * (toHigh - toLow) / (fromHigh - fromLow);
     }
 
     private void updateBMIGauge(User user) {
         if (user.getHeightCm() > 0 && user.getWeightKg() > 0) {
-            float heightM = user.getHeightCm() / 100f;
-            float bmi = user.getWeightKg() / (heightM * heightM);
-            float rotation = (bmi < 18.5) ? -65f : (bmi < 25) ? 0f : 65f;
-            ivBmiNeedle.setRotation(rotation);
-            tvBmiStatusText.setText(bmi < 18.5 ? "תת משקל" : bmi < 25 ? "משקל תקין" : "משקל עודף");
+            ivBmiNeedle.post(() -> {
+                ivBmiNeedle.setPivotX(ivBmiNeedle.getWidth() / 2f);
+                ivBmiNeedle.setPivotY(ivBmiNeedle.getHeight() - (ivBmiNeedle.getPaddingBottom()));
+                float heightM = user.getHeightCm() / 100f;
+                float bmi = user.getWeightKg() / (heightM * heightM);
+
+                float rotation;
+                if (bmi < 18.5) { // Underweight
+                    rotation = map(bmi, 15f, 18.5f, -65f, -30f);
+                } else if (bmi < 25) { // Normal weight
+                    rotation = map(bmi, 18.5f, 25f, -30f, 30f);
+                } else { // Overweight
+                    rotation = map(bmi, 25f, 30f, 30f, 65f);
+                }
+
+                // Clamp rotation to prevent extreme values
+                rotation = Math.max(-65f, Math.min(rotation, 65f));
+
+                ivBmiNeedle.setRotation(rotation);
+                tvBmiStatusText.setText(bmi < 18.5 ? "תת משקל" : bmi < 25 ? "משקל תקין" : "משקל עודף");
+            });
         }
     }
 

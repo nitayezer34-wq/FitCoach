@@ -1,9 +1,20 @@
 package com.example.fitcoach.utils;
 
+import java.util.regex.Pattern;
+
 public class Validator {
 
+    // Name pattern: allows Hebrew, English, spaces, and hyphens.
+    private static final Pattern NAME_PATTERN =
+            Pattern.compile("^[\\p{L} \\-']+$");
+
+    // Password pattern: at least one digit, one lower case, one upper case, one special character, no whitespace, and at least 8 characters long
+    private static final Pattern PASSWORD_PATTERN =
+            Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$");
+
     public static boolean isNameValid(String name) {
-        return name != null && name.trim().length() >= 3;
+        if (name == null) return false;
+        return NAME_PATTERN.matcher(name.trim()).matches() && name.trim().length() >= 2;
     }
 
     public static boolean isEmailValid(String email) {
@@ -12,7 +23,8 @@ public class Validator {
     }
 
     public static boolean isPasswordValid(String password) {
-        return password != null && password.length() >= 6;
+        if (password == null) return false;
+        return PASSWORD_PATTERN.matcher(password).matches();
     }
 
     public static boolean isGenderValid(String gender) {

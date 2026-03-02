@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:background="#F0F4F8"
+    android:fillViewport="true"
+    android:layoutDirection="rtl"
+    tools:context=".screens.RegisterActivity">
 
     <LinearLayout
-        android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -15,119 +19,376 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="24dp"
-            android:text="יצירת פרופיל כושר"
-            android:textSize="24sp"
+            android:text="יצירת פרופיל מותאם עבורך"
+            android:textColor="#2196F3"
+            android:textSize="28sp"
             android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/etName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="שם מלא"
-            android:inputType="textPersonName" />
+        <View
+            android:layout_width="200dp"
+            android:layout_height="2dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="28dp"
+            android:background="#2196F3" />
 
-        <EditText
-            android:id="@+id/etEmail"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilName"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="אימייל"
-            android:inputType="textEmailAddress" />
+            app:boxStrokeColor="#2196F3"
+            app:hintTextColor="#2196F3"
+            android:textColorHint="#2196F3"
+            android:hint="שם מלא">
 
-        <EditText
-            android:id="@+id/etPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="סיסמה (לפחות 6 תווים)"
-            android:inputType="textPassword" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:textColor="#2196F3" />
 
-        <EditText
-            android:id="@+id/etGender"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="מגדר (זכר/נקבה)"
-            android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/etBirthYear"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilEmail"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="שנת לידה (למשל 1998)"
-            android:inputType="number" />
+            android:layout_marginTop="16dp"
+            app:boxStrokeColor="#2196F3"
+            app:hintTextColor="#2196F3"
+            android:textColorHint="#2196F3"
+            android:hint="אימייל">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:textColor="#2196F3" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/tilPassword"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:passwordToggleEnabled="true"
+            app:boxStrokeColor="#2196F3"
+            app:hintTextColor="#2196F3"
+            android:textColorHint="#2196F3"
+            app:passwordToggleTint="#2196F3"
+            android:hint="סיסמה">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etPassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:textColor="#2196F3" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="מגדר"
+            android:textColor="#1976D2"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:background="#BBDEFB" />
+
+        <RadioGroup
+            android:id="@+id/rgGender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp">
+
+            <RadioButton
+                android:id="@+id/rbMale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="זכר"
+                android:textColor="#2196F3"
+                app:buttonTint="#2196F3" />
+
+            <RadioButton
+                android:id="@+id/rbFemale"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="נקבה"
+                android:textColor="#2196F3"
+                app:buttonTint="#2196F3" />
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="שנת לידה"
+            android:textColor="#1976D2"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:background="#BBDEFB" />
+
+
+        <Spinner
+            android:id="@+id/spinnerBirthYear"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="נתונים פיזיים"
+            android:textColor="#1976D2"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="8dp"
+            android:background="#BBDEFB" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
+            android:baselineAligned="false"
             android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/etHeight"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="גובה (ס''מ)"
-                android:inputType="number" />
+                android:orientation="vertical"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="גובה (ס''מ)"
+                    android:textColor="#1976D2"
+                    android:textStyle="bold"/>
+                 <NumberPicker
+                    android:id="@+id/npHeight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="120dp"/>
+            </LinearLayout>
 
-            <EditText
-                android:id="@+id/etWeight"
+            <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="משקל (ק''ג)"
-                android:inputType="numberDecimal" />
+                android:orientation="vertical"
+                android:gravity="center">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="משקל (ק''ג)"
+                    android:textStyle="bold"
+                    android:textColor="#1976D2"/>
+                <NumberPicker
+                    android:id="@+id/npWeight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="120dp"/>
+            </LinearLayout>
+
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/etActivityLevel"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="רמת פעילות (נמוכה/בינונית/גבוהה)"
-            android:inputType="text" />
 
-        <EditText
-            android:id="@+id/etStepTarget"
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="יעד צעדים יומי"
-            android:inputType="number" />
+            android:layout_marginTop="16dp"
+            android:text="רמת פעילות"
+            android:textColor="#1976D2"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
 
-        <EditText
-            android:id="@+id/etCaloriesTarget"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="יעד קלוריות יומי"
-            android:inputType="number" />
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:background="#BBDEFB" />
 
-        <EditText
-            android:id="@+id/etWaterTarget"
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/cgActivityLevel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleSelection="true"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipLow"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#2196F3"
+                app:chipBackgroundColor="#E3F2FD"
+                app:chipStrokeColor="#2196F3"
+                app:chipStrokeWidth="1dp"
+                android:text="נמוכה" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipMedium"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#2196F3"
+                app:chipBackgroundColor="#E3F2FD"
+                app:chipStrokeColor="#2196F3"
+                app:chipStrokeWidth="1dp"
+                android:text="בינונית" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipHigh"
+                style="@style/Widget.MaterialComponents.Chip.Choice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#2196F3"
+                app:chipBackgroundColor="#E3F2FD"
+                app:chipStrokeColor="#2196F3"
+                app:chipStrokeWidth="1dp"
+                android:text="גבוהה" />
+        </com.google.android.material.chip.ChipGroup>
+
+
+        <TextView
+            android:id="@+id/tvStepTargetLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="יעד צעדים יומי 👟"
+            android:textColor="#1976D2"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tvStepTargetValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#2196F3"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="10000" />
+
+        <SeekBar
+            android:id="@+id/sbStepTarget"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="יעד שתיית מים (מ''ל)"
-            android:inputType="number" />
+            android:layout_marginTop="8dp"
+            android:max="20000"
+            android:progress="10000"
+            android:scaleY="1.5"
+            android:thumbTint="#0D47A1"
+            android:progressTint="#2196F3"
+            android:progressBackgroundTint="#BBDEFB"/>
+
+        <TextView
+            android:id="@+id/tvCaloriesTargetLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="יעד קלוריות יומי 🔥"
+            android:textColor="#1976D2"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvCaloriesTargetValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#2196F3"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="2000" />
+
+        <SeekBar
+            android:id="@+id/sbCaloriesTarget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:max="5000"
+            android:progress="2000"
+            android:scaleY="1.5"
+            android:thumbTint="#0D47A1"
+            android:progressTint="#2196F3"
+            android:progressBackgroundTint="#BBDEFB"/>
+
+        <TextView
+            android:id="@+id/tvWaterTargetLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="יעד שתיית מים (מ''ל) 💧"
+            android:textColor="#1976D2"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:id="@+id/tvWaterTargetValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#2196F3"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            tools:text="2000" />
+
+        <SeekBar
+            android:id="@+id/sbWaterTarget"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:max="5000"
+            android:progress="2000"
+            android:scaleY="1.5"
+            android:thumbTint="#0D47A1"
+            android:progressTint="#2196F3"
+            android:progressBackgroundTint="#BBDEFB"/>
 
         <Button
             android:id="@+id/btnRegisterConfirm"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="צור חשבון" />
+            android:layout_height="60dp"
+            android:layout_marginTop="32dp"
+            android:backgroundTint="#2196F3"
+            android:text="צור חשבון"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            app:cornerRadius="8dp" />
 
         <Button
             android:id="@+id/btnGoLogin"
             style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="יש לי חשבון – התחבר" />
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:text="יש לי חשבון – התחבר"
+            android:textColor="#2196F3" />
 
     </LinearLayout>
 </ScrollView>

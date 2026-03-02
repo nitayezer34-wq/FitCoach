@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.fitcoach.R;
 import com.example.fitcoach.adapters.UserWorkoutAdapter;
 import com.example.fitcoach.models.User;
+import com.example.fitcoach.models.Stats;
 import com.example.fitcoach.models.WeightCategory;
 import com.example.fitcoach.models.WorkoutTraining;
 import com.example.fitcoach.services.DatabaseService;
@@ -90,7 +91,15 @@ public class UserWorkoutsActivity extends AppCompatActivity implements UserWorko
         }
 
         WorkoutTraining workout = workoutList.get(position);
-        caloriesBurned += workout.getTotalExerciseCalories();
+        int workoutCalories = workout.getTotalExerciseCalories();
+        caloriesBurned += workoutCalories;
+
+        // Update user's stats
+        Stats stats = SharedPreferencesUtil.getStats(this);
+        if (stats != null) {
+            stats.setCalories(stats.getCalories() + workoutCalories);
+            SharedPreferencesUtil.saveStats(this, stats);
+        }
 
         SharedPreferencesUtil.addCompletedWorkout(this, workout.getId());
 
