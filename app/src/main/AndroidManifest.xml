@@ -46,6 +46,9 @@
         <activity
             android:name=".screens.AdminWorkoutManagementActivity"
             android:exported="false" />
+        <activity
+            android:name=".screens.AdminRecipeManagementActivity"
+            android:exported="false" />
 
         <activity
             android:name=".screens.MainActivity"

@@ -2,13 +2,13 @@ package com.example.fitcoach.models;
 
 import androidx.annotation.NonNull;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class Stats {
 
-    private LocalDate date;
+    private String date;
     private int steps;
     private double calories;
     private double water;
@@ -16,14 +16,14 @@ public class Stats {
 
 
     public Stats() {
-        date = LocalDate.now();
-        steps = 0;
-        calories = 0;
-        water = 0;
-        workoutTrainings = new ArrayList<>();
+        this.date = getCurrentDateString();
+        this.steps = 0;
+        this.calories = 0;
+        this.water = 0;
+        this.workoutTrainings = new ArrayList<>();
     }
 
-    public Stats(LocalDate date, int steps, double calories, double water,
+    public Stats(String date, int steps, double calories, double water,
                  List<WorkoutTraining> workoutTrainings) {
         this.date = date;
         this.steps = steps;
@@ -32,11 +32,19 @@ public class Stats {
         this.workoutTrainings = workoutTrainings;
     }
 
-    public LocalDate getDate() {
+    private String getCurrentDateString() {
+        Calendar c = Calendar.getInstance();
+        return String.format("%d-%02d-%02d", 
+            c.get(Calendar.YEAR), 
+            c.get(Calendar.MONTH) + 1, 
+            c.get(Calendar.DAY_OF_MONTH));
+    }
+
+    public String getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -76,7 +84,7 @@ public class Stats {
     @Override
     public String toString() {
         return "Stats{" +
-                "date=" + date +
+                "date='" + date + '\'' +
                 ", steps=" + steps +
                 ", calories=" + calories +
                 ", water=" + water +
@@ -97,6 +105,6 @@ public class Stats {
     }
 
     public boolean isThisToday() {
-        return this.date.equals(LocalDate.now());
+        return this.date != null && this.date.equals(getCurrentDateString());
     }
 }

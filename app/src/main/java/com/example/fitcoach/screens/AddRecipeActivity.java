@@ -3,6 +3,7 @@ package com.example.fitcoach.screens;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +20,9 @@ public class AddRecipeActivity extends AppCompatActivity {
 
     private EditText etTitle, etImageUrl, etPrepTime, etCalories, etAllergens, etIngredients, etInstructions;
     private Button btnSave;
+    private TextView tvTitle;
     private DatabaseService dbService;
+    private String recipeIdToEdit = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,10 +32,18 @@ public class AddRecipeActivity extends AppCompatActivity {
         dbService = DatabaseService.getInstance();
         bindViews();
 
+        recipeIdToEdit = getIntent().getStringExtra("RECIPE_ID");
+        if (recipeIdToEdit != null) {
+            tvTitle.setText("עריכת מתכון");
+            btnSave.setText("עדכן מתכון");
+            loadRecipeData(recipeIdToEdit);
+        }
+
         btnSave.setOnClickListener(v -> saveRecipe());
     }
 
     private void bindViews() {
+        tvTitle = findViewById(R.id.tvAddRecipeTitle); // Ensure this ID exists in XML or add it
         etTitle = findViewById(R.id.etRecipeTitle);
         etImageUrl = findViewById(R.id.etImageUrl);
         etPrepTime = findViewById(R.id.etPrepTime);
@@ -41,6 +52,28 @@ public class AddRecipeActivity extends AppCompatActivity {
         etIngredients = findViewById(R.id.etIngredients);
         etInstructions = findViewById(R.id.etInstructions);
         btnSave = findViewById(R.id.btnSaveRecipe);
+    }
+
+    private void loadRecipeData(String recipeId) {
+        dbService.getRecipe(recipeId, new DatabaseService.DatabaseCallback<Recipe>() {
+            @Override
+            public void onCompleted(Recipe recipe) {
+                if (recipe != null) {
+                    etTitle.setText(recipe.getTitle());
+                    etImageUrl.setText(recipe.getImageUrl());
+                    etPrepTime.setText(String.valueOf(recipe.getPrepTimeInMinutes()));
+                    etCalories.setText(String.valueOf(recipe.getCalories()));
+                    etAllergens.setText(recipe.getAllergens() != null ? String.join(", ", recipe.getAllergens()) : "");
+                    etIngredients.setText(recipe.getIngredients() != null ? String.join("\n", recipe.getIngredients()) : "");
+                    etInstructions.setText(recipe.getInstructions() != null ? String.join("\n", recipe.getInstructions()) : "");
+                }
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                Toast.makeText(AddRecipeActivity.this, "שגיאה בטעינת נתוני המתכון", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void saveRecipe() {
@@ -64,15 +97,15 @@ public class AddRecipeActivity extends AppCompatActivity {
         List<String> ingredients = textToList(ingredientsStr, "\n");
         List<String> instructions = textToList(instructionsStr, "\n");
 
-        String id = dbService.generateRecipeId();
+        String id = (recipeIdToEdit != null) ? recipeIdToEdit : dbService.generateRecipeId();
 
-        // Using the new constructor for a new recipe
-        Recipe newRecipe = new Recipe(id, title, imageUrl, calories, prepTime, allergens, ingredients, instructions);
+        Recipe recipe = new Recipe(id, title, imageUrl, calories, prepTime, allergens, ingredients, instructions);
 
-        dbService.createNewRecipe(newRecipe, new DatabaseService.DatabaseCallback<Void>() {
+        dbService.createNewRecipe(recipe, new DatabaseService.DatabaseCallback<Void>() {
             @Override
             public void onCompleted(Void object) {
-                Toast.makeText(AddRecipeActivity.this, "המתכון עלה לפורום!", Toast.LENGTH_SHORT).show();
+                String msg = (recipeIdToEdit != null) ? "המתכון עודכן בהצלחה!" : "המתכון עלה לפורום!";
+                Toast.makeText(AddRecipeActivity.this, msg, Toast.LENGTH_SHORT).show();
                 finish();
             }
 

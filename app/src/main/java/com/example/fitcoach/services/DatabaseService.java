@@ -1,9 +1,12 @@
 package com.example.fitcoach.services;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.fitcoach.models.Recipe;
+import com.example.fitcoach.models.Stats;
 import com.example.fitcoach.models.User;
 import com.example.fitcoach.models.WorkoutTraining;
 import com.google.firebase.database.DataSnapshot;
@@ -22,10 +25,12 @@ import java.util.Map;
 import java.util.function.UnaryOperator;
 
 public class DatabaseService {
+    private static final String TAG = "DatabaseService";
     private static final String
             USERS_PATH = "users",
             WORKOUT_PATH = "workouts",
-            RECIPES_PATH = "recipes";
+            RECIPES_PATH = "recipes",
+            STATS_PATH = "stats";
 
     private static final String DB_URL = "https://fitcoach-55d45-default-rtdb.europe-west1.firebasedatabase.app/";
     private static DatabaseService instance;
@@ -43,7 +48,6 @@ public class DatabaseService {
         return instance;
     }
 
-    // ... (generic methods: writeData, deleteData, etc.)
     private void writeData(@NotNull final String path, @NotNull final Object data, final @Nullable DatabaseCallback<Void> callback) {
         readData(path).setValue(data, (error, ref) -> {
             if (error != null) {
@@ -78,8 +82,18 @@ public class DatabaseService {
                 callback.onFailed(task.getException());
                 return;
             }
-            T data = task.getResult().getValue(clazz);
-            callback.onCompleted(data);
+            try {
+                DataSnapshot snapshot = task.getResult();
+                if (snapshot.exists()) {
+                    T data = snapshot.getValue(clazz);
+                    callback.onCompleted(data);
+                } else {
+                    callback.onCompleted(null);
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "Error deserializing " + clazz.getSimpleName() + " at " + path, e);
+                callback.onFailed(e);
+            }
         });
     }
 
@@ -90,11 +104,18 @@ public class DatabaseService {
                 return;
             }
             List<T> tList = new ArrayList<>();
-            task.getResult().getChildren().forEach(dataSnapshot -> {
-                T t = dataSnapshot.getValue(clazz);
-                tList.add(t);
-            });
-            callback.onCompleted(tList);
+            try {
+                for (DataSnapshot dataSnapshot : task.getResult().getChildren()) {
+                    T t = dataSnapshot.getValue(clazz);
+                    if (t != null) {
+                        tList.add(t);
+                    }
+                }
+                callback.onCompleted(tList);
+            } catch (Exception e) {
+                Log.e(TAG, "Error deserializing list of " + clazz.getSimpleName() + " at " + path, e);
+                callback.onFailed(e);
+            }
         });
     }
 
@@ -107,20 +128,29 @@ public class DatabaseService {
             @NonNull
             @Override
             public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                T currentValue = currentData.getValue(clazz);
-                if (currentValue == null) {
-                    currentValue = function.apply(null);
-                } else {
-                    currentValue = function.apply(currentValue);
+                try {
+                    T currentValue = currentData.getValue(clazz);
+                    if (currentValue == null) {
+                        currentValue = function.apply(null);
+                    } else {
+                        currentValue = function.apply(currentValue);
+                    }
+                    currentData.setValue(currentValue);
+                    return Transaction.success(currentData);
+                } catch (Exception e) {
+                    Log.e(TAG, "Transaction error at " + path, e);
+                    return Transaction.abort();
                 }
-                currentData.setValue(currentValue);
-                return Transaction.success(currentData);
             }
 
             @Override
             public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
                 if (error != null) {
                     callback.onFailed(error.toException());
+                    return;
+                }
+                if (!committed) {
+                    callback.onFailed(new Exception("Transaction aborted"));
                     return;
                 }
                 T result = currentData != null ? currentData.getValue(clazz) : null;
@@ -151,41 +181,28 @@ public class DatabaseService {
     }
 
     public void getUserByEmailAndPassword(@NotNull final String email, @NotNull final String password, @NotNull final DatabaseCallback<User> callback) {
-        getUserList(new DatabaseCallback<List<User>>() {
-            @Override
-            public void onCompleted(List<User> users) {
-                for (User user : users) {
-                    if (user.getEmail().equals(email) && user.getPassword().equals(password)) {
+        readData(USERS_PATH).orderByChild("email").equalTo(email).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                for (DataSnapshot ds : task.getResult().getChildren()) {
+                    User user = ds.getValue(User.class);
+                    if (user != null && user.getPassword().equals(password)) {
                         callback.onCompleted(user);
                         return;
                     }
                 }
                 callback.onCompleted(null);
-            }
-
-            @Override
-            public void onFailed(Exception e) {
-                callback.onFailed(e);
+            } else {
+                callback.onFailed(task.getException());
             }
         });
     }
 
     public void checkIfEmailExists(@NotNull final String email, @NotNull final DatabaseCallback<Boolean> callback) {
-        getUserList(new DatabaseCallback<List<User>>() {
-            @Override
-            public void onCompleted(List<User> users) {
-                for (User user : users) {
-                    if (user.getEmail().equals(email)) {
-                        callback.onCompleted(true);
-                        return;
-                    }
-                }
-                callback.onCompleted(false);
-            }
-
-            @Override
-            public void onFailed(Exception e) {
-                callback.onFailed(e);
+        readData(USERS_PATH).orderByChild("email").equalTo(email).get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                callback.onCompleted(task.getResult().exists());
+            } else {
+                callback.onFailed(task.getException());
             }
         });
     }
@@ -229,7 +246,6 @@ public class DatabaseService {
         getDataList(RECIPES_PATH, Recipe.class, callback);
     }
 
-    // New method to get a single recipe
     public void getRecipe(@NotNull final String id, @NotNull final DatabaseCallback<Recipe> callback) {
         getData(RECIPES_PATH + "/" + id, Recipe.class, callback);
     }
@@ -238,7 +254,6 @@ public class DatabaseService {
         deleteData(RECIPES_PATH + "/" + id, callback);
     }
 
-    // New method to update a recipe's rating
     public void updateRecipeRating(@NotNull final String recipeId, double newAverageRating, int newRatingCount, double newTotalRatingSum, @Nullable final DatabaseCallback<Void> callback) {
         Map<String, Object> ratingUpdates = new HashMap<>();
         ratingUpdates.put("rating", newAverageRating);
@@ -252,6 +267,19 @@ public class DatabaseService {
                 if (callback != null) callback.onCompleted(null);
             }
         });
+    }
+
+    // region Stats Section
+    public void getStats(@NotNull final String userId, @NotNull final DatabaseCallback<Stats> callback) {
+        getData(STATS_PATH + "/" + userId, Stats.class, callback);
+    }
+
+    public void updateStats(@NotNull final String userId, UnaryOperator<Stats> function, @NotNull final DatabaseCallback<Stats> callback) {
+        runTransaction(STATS_PATH + "/" + userId, Stats.class, function, callback);
+    }
+
+    public void saveStats(@NotNull final String userId, @NotNull final Stats stats, @Nullable final DatabaseCallback<Void> callback) {
+        writeData(STATS_PATH + "/" + userId, stats, callback);
     }
 
     public interface DatabaseCallback<T> {

@@ -18,29 +18,45 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="20dp"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
 
-            <TextView
-                android:id="@+id/tv_main_welcome"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="שלום, מתאמן!"
-                android:textColor="#2196F3"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:orientation="horizontal">
 
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1" />
+                <TextView
+                    android:id="@+id/tv_main_welcome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="שלום, מתאמן!"
+                    android:textColor="#2196F3"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
-            <ImageButton
-                android:id="@+id/btn_settings_gear"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                android:contentDescription="@null"
-                android:src="@android:drawable/ic_menu_preferences" />
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <ImageButton
+                    android:id="@+id/btn_settings_gear"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@null"
+                    android:src="@android:drawable/ic_menu_preferences"
+                    app:tint="#2196F3" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="60dp"
+                android:layout_height="3dp"
+                android:layout_marginTop="4dp"
+                android:layout_gravity="start"
+                android:background="#2196F3" />
 
         </LinearLayout>
 
@@ -207,6 +223,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="BMI תקין"
+                    android:textColor="#2196F3"
                     android:textStyle="bold" />
             </LinearLayout>
 
@@ -225,7 +242,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:contentDescription="@null"
-                        android:src="@drawable/ic_water_jug" />
+                        android:src="@drawable/ic_water_jug"
+                        app:tint="#2196F3" />
 
                     <ProgressBar
                         android:id="@+id/pb_water_jug"
@@ -248,7 +266,8 @@
                         android:layout_height="55dp"
                         android:background="@android:color/transparent"
                         android:contentDescription="@null"
-                        android:src="@drawable/ic_glass_plus" />
+                        android:src="@drawable/ic_glass_plus"
+                        app:tint="#2196F3" />
 
                     <ImageButton
                         android:id="@+id/btn_remove_water"
@@ -257,7 +276,8 @@
                         android:layout_marginTop="10dp"
                         android:background="@android:color/transparent"
                         android:contentDescription="@null"
-                        android:src="@drawable/ic_glass_minus" />
+                        android:src="@drawable/ic_glass_minus"
+                        app:tint="#2196F3" />
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>

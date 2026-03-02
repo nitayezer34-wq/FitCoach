@@ -1,6 +1,7 @@
 package com.example.fitcoach.screens;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private ProgressBar pbSteps, pbCalories, pbWaterJug;
     private ImageButton btnSettingsGear, btnAddWater, btnRemoveWater;
     private ImageView ivBmiNeedle;
-    private Button btnMainForum;
+    private Button btnMainForum, btnMainNavigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +41,14 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        View mainView = findViewById(R.id.main);
+        if (mainView != null) {
+            ViewCompat.setOnApplyWindowInsetsListener(mainView, (v, insets) -> {
+                Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+                return insets;
+            });
+        }
 
         bindViews();
         setupButtons();
@@ -53,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         loadUserData();
-        updateUI();
     }
 
     private void bindViews() {
@@ -69,84 +73,144 @@ public class MainActivity extends AppCompatActivity {
         btnAddWater = findViewById(R.id.btn_add_water);
         btnRemoveWater = findViewById(R.id.btn_remove_water);
         btnMainForum = findViewById(R.id.btn_main_forum);
+        btnMainNavigation = findViewById(R.id.btn_main_navigation);
     }
 
     private void setupButtons() {
-        btnSettingsGear.setOnClickListener(v -> showSettingsMenu(v));
+        if (btnSettingsGear != null) {
+            btnSettingsGear.setOnClickListener(this::showSettingsMenu);
+        }
 
-        btnAddWater.setOnClickListener(v -> {
-            Stats stats = SharedPreferencesUtil.getStats(this);
-            if(stats != null){
-                stats.setWater(stats.getWater() + GLASS_SIZE);
-                SharedPreferencesUtil.saveStats(this, stats);
-                updateUI();
-            }
-        });
+        if (btnAddWater != null) {
+            btnAddWater.setOnClickListener(v -> {
+                Stats stats = SharedPreferencesUtil.getStats(this);
+                if (stats != null) {
+                    stats.setWater(stats.getWater() + GLASS_SIZE);
+                    SharedPreferencesUtil.saveStats(this, stats);
+                    DatabaseService.getInstance().saveStats(SharedPreferencesUtil.getUserId(this), stats, null);
+                    updateUI();
+                }
+            });
+        }
 
-        btnRemoveWater.setOnClickListener(v -> {
-            Stats stats = SharedPreferencesUtil.getStats(this);
-            if (stats != null && stats.getWater() >= GLASS_SIZE) {
-                stats.setWater(stats.getWater() - GLASS_SIZE);
-                SharedPreferencesUtil.saveStats(this, stats);
-                updateUI();
-            }
-        });
+        if (btnRemoveWater != null) {
+            btnRemoveWater.setOnClickListener(v -> {
+                Stats stats = SharedPreferencesUtil.getStats(this);
+                if (stats != null && stats.getWater() >= GLASS_SIZE) {
+                    stats.setWater(stats.getWater() - GLASS_SIZE);
+                    SharedPreferencesUtil.saveStats(this, stats);
+                    DatabaseService.getInstance().saveStats(SharedPreferencesUtil.getUserId(this), stats, null);
+                    updateUI();
+                }
+            });
+        }
 
-        btnMainForum.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, RecipeForumActivity.class);
-            startActivity(intent);
-        });
+        if (btnMainForum != null) {
+            btnMainForum.setOnClickListener(v -> {
+                Intent intent = new Intent(MainActivity.this, RecipeForumActivity.class);
+                startActivity(intent);
+            });
+        }
 
-        findViewById(R.id.cv_workout_entry).setOnClickListener(v -> {
-            startActivity(new Intent(this, UserWorkoutsActivity.class));
-        });
+        if (btnMainNavigation != null) {
+            btnMainNavigation.setOnClickListener(v -> {
+                String wazeUri = "waze://?favorite=work&navigate=yes";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(wazeUri));
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                } else {
+                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.waze.com/ul"));
+                    startActivity(intent);
+                }
+            });
+        }
+
+        View workoutEntry = findViewById(R.id.cv_workout_entry);
+        if (workoutEntry != null) {
+            workoutEntry.setOnClickListener(v -> {
+                startActivity(new Intent(this, UserWorkoutsActivity.class));
+            });
+        }
     }
 
     private void loadUserData() {
         User user = SharedPreferencesUtil.getUser(this);
-        if (user == null) return;
+        if (user == null) {
+            // If user data is missing, redirect to login
+            SharedPreferencesUtil.signOutUser(this);
+            startActivity(new Intent(this, LoginActivity.class));
+            finish();
+            return;
+        }
 
         DatabaseService.getInstance().getUser(user.getId(), new DatabaseService.DatabaseCallback<User>() {
             @Override
             public void onCompleted(User updatedUser) {
-                SharedPreferencesUtil.saveUser(MainActivity.this, updatedUser);
-                updateBMIGauge(updatedUser);
+                if (updatedUser != null) {
+                    SharedPreferencesUtil.saveUser(MainActivity.this, updatedUser);
+                    updateBMIGauge(updatedUser);
+                    
+                    if (updatedUser.getName() != null && !updatedUser.getName().isEmpty()) {
+                        tvGreeting.setText("שלום, " + updatedUser.getName());
+                    }
+                    
+                    if (pbWaterJug != null) pbWaterJug.setMax(updatedUser.getDailyWaterTargetMl() > 0 ? updatedUser.getDailyWaterTargetMl() : 2000);
+                    if (pbCalories != null) pbCalories.setMax(updatedUser.getDailyCaloriesTarget() > 0 ? updatedUser.getDailyCaloriesTarget() : 2000);
+                    if (pbSteps != null) pbSteps.setMax(updatedUser.getDailyStepsTarget() > 0 ? updatedUser.getDailyStepsTarget() : 5000);
+                }
+                updateUI();
             }
 
             @Override
             public void onFailed(Exception e) {
+                updateUI();
             }
         });
 
-        if (user.getName() != null && !user.getName().isEmpty()) {
-            tvGreeting.setText("שלום, " + user.getName());
-        } else {
-            tvGreeting.setText("שלום, מתאמן");
-        }
+        DatabaseService.getInstance().getStats(user.getId(), new DatabaseService.DatabaseCallback<Stats>() {
+            @Override
+            public void onCompleted(Stats dbStats) {
+                if (dbStats != null) {
+                    SharedPreferencesUtil.saveStats(MainActivity.this, dbStats);
+                } else {
+                    Stats newStats = new Stats();
+                    SharedPreferencesUtil.saveStats(MainActivity.this, newStats);
+                    DatabaseService.getInstance().saveStats(user.getId(), newStats, null);
+                }
+                updateUI();
+            }
 
-        pbWaterJug.setMax(user.getDailyWaterTargetMl() > 0 ? user.getDailyWaterTargetMl() : 2000);
-        pbCalories.setMax(user.getDailyCaloriesTarget() > 0 ? user.getDailyCaloriesTarget() : 2000);
-        pbSteps.setMax(user.getDailyStepsTarget() > 0 ? user.getDailyStepsTarget() : 5000);
-        updateUI();
+            @Override
+            public void onFailed(Exception e) {
+                updateUI();
+            }
+        });
     }
-
 
     private void updateUI() {
         Stats stats = SharedPreferencesUtil.getStats(this);
         User user = SharedPreferencesUtil.getUser(this);
         if (stats == null || user == null) return;
 
-        pbWaterJug.setProgress((int) Math.min(stats.getWater(), user.getDailyWaterTargetMl()), true);
+        if (pbWaterJug != null) {
+            int waterTarget = user.getDailyWaterTargetMl() > 0 ? user.getDailyWaterTargetMl() : 2000;
+            pbWaterJug.setMax(waterTarget);
+            pbWaterJug.setProgress((int) Math.min(stats.getWater(), waterTarget));
+        }
 
-        int caloriesTarget = user.getDailyCaloriesTarget() > 0 ? user.getDailyCaloriesTarget() : 2000;
-        tvCaloriesValue.setText(String.format("%d/%d", (int)stats.getCalories(), caloriesTarget));
-        pbCalories.setMax(caloriesTarget);
-        pbCalories.setProgress((int) Math.min(stats.getCalories(), caloriesTarget), true);
+        if (pbCalories != null && tvCaloriesValue != null) {
+            int caloriesTarget = user.getDailyCaloriesTarget() > 0 ? user.getDailyCaloriesTarget() : 2000;
+            tvCaloriesValue.setText(String.format("%d/%d", (int)stats.getCalories(), caloriesTarget));
+            pbCalories.setMax(caloriesTarget);
+            pbCalories.setProgress((int) Math.min(stats.getCalories(), caloriesTarget));
+        }
 
-        int stepsTarget = user.getDailyStepsTarget() > 0 ? user.getDailyStepsTarget() : 5000;
-        tvStepsValue.setText(String.format("%d/%d", stats.getSteps(), stepsTarget));
-        pbSteps.setMax(stepsTarget);
-        pbSteps.setProgress(Math.min(stats.getSteps(), stepsTarget), true);
+        if (pbSteps != null && tvStepsValue != null) {
+            int stepsTarget = user.getDailyStepsTarget() > 0 ? user.getDailyStepsTarget() : 5000;
+            tvStepsValue.setText(String.format("%d/%d", stats.getSteps(), stepsTarget));
+            pbSteps.setMax(stepsTarget);
+            pbSteps.setProgress(Math.min(stats.getSteps(), stepsTarget));
+        }
     }
 
     private float map(float value, float fromLow, float fromHigh, float toLow, float toHigh) {
@@ -154,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateBMIGauge(User user) {
-        if (user.getHeightCm() > 0 && user.getWeightKg() > 0) {
+        if (user != null && user.getHeightCm() > 0 && user.getWeightKg() > 0 && ivBmiNeedle != null) {
             ivBmiNeedle.post(() -> {
                 ivBmiNeedle.setPivotX(ivBmiNeedle.getWidth() / 2f);
                 ivBmiNeedle.setPivotY(ivBmiNeedle.getHeight() - (ivBmiNeedle.getPaddingBottom()));
@@ -162,27 +226,30 @@ public class MainActivity extends AppCompatActivity {
                 float bmi = user.getWeightKg() / (heightM * heightM);
 
                 float rotation;
-                if (bmi < 18.5) { // Underweight
+                if (bmi < 18.5) {
                     rotation = map(bmi, 15f, 18.5f, -65f, -30f);
-                } else if (bmi < 25) { // Normal weight
+                } else if (bmi < 25) {
                     rotation = map(bmi, 18.5f, 25f, -30f, 30f);
-                } else { // Overweight
+                } else {
                     rotation = map(bmi, 25f, 30f, 30f, 65f);
                 }
 
-                // Clamp rotation to prevent extreme values
                 rotation = Math.max(-65f, Math.min(rotation, 65f));
-
                 ivBmiNeedle.setRotation(rotation);
-                tvBmiStatusText.setText(bmi < 18.5 ? "תת משקל" : bmi < 25 ? "משקל תקין" : "משקל עודף");
+                if (tvBmiStatusText != null) {
+                    tvBmiStatusText.setText(bmi < 18.5 ? "תת משקל" : bmi < 25 ? "משקל תקין" : "משקל עודף");
+                }
             });
         }
     }
 
     private void showSettingsMenu(View view) {
+        User user = SharedPreferencesUtil.getUser(this);
+        if (user == null) return;
+
         PopupMenu popup = new PopupMenu(this, view);
         popup.getMenu().add("עריכת פרופיל");
-        if (SharedPreferencesUtil.getUser(MainActivity.this).isAdmin()) {
+        if (user.isAdmin()) {
             popup.getMenu().add("אדמין");
         }
         popup.getMenu().add("התנתקות");
@@ -197,6 +264,9 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case "התנתקות":
                     SharedPreferencesUtil.signOutUser(this);
+                    Intent intent = new Intent(this, LandingActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                     finish();
                     break;
             }

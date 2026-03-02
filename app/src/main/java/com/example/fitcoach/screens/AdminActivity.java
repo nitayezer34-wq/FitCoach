@@ -27,6 +27,7 @@ public class AdminActivity extends AppCompatActivity {
         CardView cvAddWorkout = findViewById(R.id.cv_add_workout);
         CardView cvManageWorkouts = findViewById(R.id.cv_manage_workouts);
         CardView cvManageUsers = findViewById(R.id.cv_manage_users);
+        CardView cvManageRecipes = findViewById(R.id.cv_manage_recipes);
 
         // לחיצה על הוספת אימון
         cvAddWorkout.setOnClickListener(v -> {
@@ -40,9 +41,15 @@ public class AdminActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // כאן התיקון: מעבר לדף ניהול משתמשים
+        // מעבר לדף ניהול משתמשים
         cvManageUsers.setOnClickListener(v -> {
             Intent intent = new Intent(AdminActivity.this, UsersListActivity.class);
+            startActivity(intent);
+        });
+
+        // ניהול מתכונים
+        cvManageRecipes.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminActivity.this, AdminRecipeManagementActivity.class);
             startActivity(intent);
         });
     }
