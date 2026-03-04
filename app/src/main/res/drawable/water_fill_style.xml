@@ -1,25 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Background of the progress (empty part) -->
+    <!-- Background (Empty Part) - Transparent -->
     <item android:id="@android:id/background">
         <shape>
-            <solid android:color="#00000000" /> <!-- Transparent background inside the jug -->
+            <solid android:color="#00000000" />
         </shape>
     </item>
 
-    <!-- The water itself -->
+    <!-- The Water Progress -->
     <item android:id="@android:id/progress">
         <clip
             android:clipOrientation="vertical"
             android:gravity="bottom">
-            <shape>
-                <gradient
-                    android:startColor="#4FC3F7"
-                    android:centerColor="#2196F3"
-                    android:endColor="#1976D2"
-                    android:angle="0" />
-                <corners android:radius="2dp" />
-            </shape>
+            <layer-list>
+                <!-- 1. Main Water Body with Vertical Gradient for Depth -->
+                <item>
+                    <shape>
+                        <gradient
+                            android:startColor="#1565C0"
+                            android:centerColor="#1E88E5"
+                            android:endColor="#4FC3F7"
+                            android:angle="90" />
+                        <corners android:radius="4dp" />
+                    </shape>
+                </item>
+
+                <!-- 2. Subtle Side Reflection (Glow) -->
+                <item android:left="5dp" android:right="30dp" android:top="5dp" android:bottom="5dp">
+                    <shape>
+                        <gradient
+                            android:startColor="#40FFFFFF"
+                            android:endColor="#00FFFFFF"
+                            android:angle="0" />
+                        <corners android:radius="10dp" />
+                    </shape>
+                </item>
+
+                <!-- 3. Surface Shine (The "Top" of the water) -->
+                <item android:gravity="top" android:height="3dp">
+                    <shape>
+                        <solid android:color="#B3E5FC" />
+                    </shape>
+                </item>
+            </layer-list>
         </clip>
     </item>
 </layer-list>

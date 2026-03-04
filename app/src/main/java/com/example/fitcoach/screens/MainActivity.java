@@ -1,9 +1,11 @@
 package com.example.fitcoach.screens;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -86,16 +88,11 @@ public class MainActivity extends AppCompatActivity {
                 Stats stats = SharedPreferencesUtil.getStats(this);
                 if (stats != null) {
                     stats.setWater(stats.getWater() + GLASS_SIZE);
-                    SharedPreferencesUtil.saveStats(this, stats);
-                    DatabaseService.getInstance().saveStats(SharedPreferencesUtil.getUserId(this), stats, null);
-                    updateUI();
+                    saveAndRefreshStats(stats);
                 } else {
-                    // Create new stats if not exists
                     Stats newStats = new Stats();
                     newStats.setWater(GLASS_SIZE);
-                    SharedPreferencesUtil.saveStats(this, newStats);
-                    DatabaseService.getInstance().saveStats(SharedPreferencesUtil.getUserId(this), newStats, null);
-                    updateUI();
+                    saveAndRefreshStats(newStats);
                 }
             });
         }
@@ -105,9 +102,7 @@ public class MainActivity extends AppCompatActivity {
                 Stats stats = SharedPreferencesUtil.getStats(this);
                 if (stats != null && stats.getWater() >= GLASS_SIZE) {
                     stats.setWater(stats.getWater() - GLASS_SIZE);
-                    SharedPreferencesUtil.saveStats(this, stats);
-                    DatabaseService.getInstance().saveStats(SharedPreferencesUtil.getUserId(this), stats, null);
-                    updateUI();
+                    saveAndRefreshStats(stats);
                 }
             });
         }
@@ -140,10 +135,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void saveAndRefreshStats(Stats stats) {
+        SharedPreferencesUtil.saveStats(this, stats);
+        DatabaseService.getInstance().saveStats(SharedPreferencesUtil.getUserId(this), stats, null);
+        updateUI();
+    }
+
     private void loadUserData() {
         User user = SharedPreferencesUtil.getUser(this);
         if (user == null) {
-            // If user data is missing, redirect to login
             SharedPreferencesUtil.signOutUser(this);
             startActivity(new Intent(this, LoginActivity.class));
             finish();
@@ -202,7 +202,13 @@ public class MainActivity extends AppCompatActivity {
         if (pbWaterJug != null) {
             int waterTarget = user.getDailyWaterTargetMl() > 0 ? user.getDailyWaterTargetMl() : 2000;
             pbWaterJug.setMax(waterTarget);
-            pbWaterJug.setProgress((int) Math.min(stats.getWater(), waterTarget));
+            int targetProgress = (int) Math.min(stats.getWater(), waterTarget);
+            
+            // Smooth Animation for Water
+            ObjectAnimator animation = ObjectAnimator.ofInt(pbWaterJug, "progress", pbWaterJug.getProgress(), targetProgress);
+            animation.setDuration(800);
+            animation.setInterpolator(new DecelerateInterpolator());
+            animation.start();
         }
 
         if (pbCalories != null && tvCaloriesValue != null) {
