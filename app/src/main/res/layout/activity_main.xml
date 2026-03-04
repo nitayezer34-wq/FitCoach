@@ -266,8 +266,7 @@
                         android:layout_height="55dp"
                         android:background="@android:color/transparent"
                         android:contentDescription="@null"
-                        android:src="@drawable/ic_glass_plus"
-                        app:tint="#2196F3" />
+                        android:src="@drawable/ic_glass_plus" />
 
                     <ImageButton
                         android:id="@+id/btn_remove_water"
@@ -276,8 +275,7 @@
                         android:layout_marginTop="10dp"
                         android:background="@android:color/transparent"
                         android:contentDescription="@null"
-                        android:src="@drawable/ic_glass_minus"
-                        app:tint="#2196F3" />
+                        android:src="@drawable/ic_glass_minus" />
                 </LinearLayout>
             </LinearLayout>
         </RelativeLayout>

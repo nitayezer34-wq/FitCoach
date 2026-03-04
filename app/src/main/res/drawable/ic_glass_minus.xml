@@ -1,4 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector>
-
-</selector>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+    <!-- Glass Body -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M30,15 L70,15 L65,85 L35,85 Z"
+        android:strokeColor="#BDBDBD"
+        android:strokeWidth="2"/>
+    <!-- Minus Sign -->
+    <path
+        android:strokeColor="#03A9F4"
+        android:strokeWidth="6"
+        android:strokeLineCap="round"
+        android:pathData="M35,50 H65" />
+</vector>
