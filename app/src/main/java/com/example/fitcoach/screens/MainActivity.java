@@ -89,6 +89,13 @@ public class MainActivity extends AppCompatActivity {
                     SharedPreferencesUtil.saveStats(this, stats);
                     DatabaseService.getInstance().saveStats(SharedPreferencesUtil.getUserId(this), stats, null);
                     updateUI();
+                } else {
+                    // Create new stats if not exists
+                    Stats newStats = new Stats();
+                    newStats.setWater(GLASS_SIZE);
+                    SharedPreferencesUtil.saveStats(this, newStats);
+                    DatabaseService.getInstance().saveStats(SharedPreferencesUtil.getUserId(this), newStats, null);
+                    updateUI();
                 }
             });
         }

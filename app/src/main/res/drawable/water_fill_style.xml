@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background of the progress (empty part) -->
     <item android:id="@android:id/background">
         <shape>
-            <solid android:color="#F0F0F0" />
+            <solid android:color="#00000000" /> <!-- Transparent background inside the jug -->
         </shape>
     </item>
+
+    <!-- The water itself -->
     <item android:id="@android:id/progress">
         <clip
             android:clipOrientation="vertical"
             android:gravity="bottom">
             <shape>
-                <solid android:color="#2196F3" />
+                <gradient
+                    android:startColor="#4FC3F7"
+                    android:centerColor="#2196F3"
+                    android:endColor="#1976D2"
+                    android:angle="0" />
+                <corners android:radius="2dp" />
             </shape>
         </clip>
     </item>

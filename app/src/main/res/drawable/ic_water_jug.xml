@@ -1,19 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="90dp"
-    android:height="120dp"
-    android:viewportWidth="90"
-    android:viewportHeight="120">
+    android:width="100dp"
+    android:height="140dp"
+    android:viewportWidth="100"
+    android:viewportHeight="140">
+
+    <!-- The Jug Body (Outer Glass) -->
     <path
-        android:pathData="M20,20 L70,20 L75,110 L15,110 Z"
+        android:pathData="M30,20 L70,20 C75,20 80,25 80,30 L85,120 C85,130 75,135 70,135 L30,135 C25,135 15,130 15,120 L20,30 C20,25 25,20 30,20 Z"
         android:strokeWidth="3"
-        android:strokeColor="#444444" />
+        android:strokeColor="#B0BEC5"
+        android:fillColor="#10B0BEC5" />
+
+    <!-- Handle -->
     <path
-        android:pathData="M20,20 L10,30 L20,40"
-        android:strokeWidth="3"
-        android:strokeColor="#444444" />
+        android:pathData="M80,45 C95,45 95,105 83,110"
+        android:strokeWidth="4"
+        android:strokeColor="#B0BEC5"
+        android:strokeLineCap="round" />
+
+    <!-- Spout/Top Detail -->
     <path
-        android:pathData="M70,40 C85,40 85,90 73,95"
+        android:pathData="M30,20 L22,20 L20,28"
         android:strokeWidth="3"
-        android:strokeColor="#444444" />
+        android:strokeColor="#B0BEC5"
+        android:strokeLineCap="round" />
+
+    <!-- Reflection/Gloss Effect -->
+    <path
+        android:pathData="M35,30 L32,110"
+        android:strokeWidth="2"
+        android:strokeColor="#40FFFFFF"
+        android:strokeLineCap="round" />
+
 </vector>
