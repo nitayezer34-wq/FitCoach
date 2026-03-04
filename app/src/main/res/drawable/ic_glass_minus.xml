@@ -7,12 +7,12 @@
     <path
         android:fillColor="#FFFFFF"
         android:pathData="M30,15 L70,15 L65,85 L35,85 Z"
-        android:strokeColor="#BDBDBD"
-        android:strokeWidth="2"/>
+        android:strokeWidth="2"
+        android:strokeColor="#BDBDBD" />
     <!-- Minus Sign -->
     <path
-        android:strokeColor="#03A9F4"
+        android:pathData="M35,50 H65"
         android:strokeWidth="6"
-        android:strokeLineCap="round"
-        android:pathData="M35,50 H65" />
+        android:strokeColor="#03A9F4"
+        android:strokeLineCap="round" />
 </vector>

@@ -1,8 +1,6 @@
 package com.example.fitcoach.screens;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,10 +18,8 @@ import java.util.List;
 
 public class UserWorkoutActivity extends AppCompatActivity implements UserWorkoutAdapter.OnWorkoutDoneListener {
 
-    private RecyclerView rvUserWorkouts;
     private UserWorkoutAdapter adapter;
     private List<WorkoutTraining> workoutList;
-    private int initialWorkoutCount;
     private int caloriesBurned = 0;
 
     @Override
@@ -31,7 +27,7 @@ public class UserWorkoutActivity extends AppCompatActivity implements UserWorkou
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_workout);
 
-        rvUserWorkouts = findViewById(R.id.rv_user_workouts);
+        RecyclerView rvUserWorkouts = findViewById(R.id.rv_user_workouts);
         rvUserWorkouts.setLayoutManager(new LinearLayoutManager(this));
 
         // Initialize with dummy data for now
@@ -39,7 +35,7 @@ public class UserWorkoutActivity extends AppCompatActivity implements UserWorkou
         workoutList.add(new WorkoutTraining(null, "Push Ups", "Description for Push Ups", 50, 3, 12, 1.5, null));
         workoutList.add(new WorkoutTraining(null, "Squats", "Description for Squats", 50, 3, 15, 1.5, null));
         workoutList.add(new WorkoutTraining(null, "Plank", "Description for Plank", 50, 3, 60, 1.5, null));
-        initialWorkoutCount = workoutList.size();
+        int initialWorkoutCount = workoutList.size();
 
         adapter = new UserWorkoutAdapter(this, workoutList, this);
         rvUserWorkouts.setAdapter(adapter);
@@ -49,7 +45,7 @@ public class UserWorkoutActivity extends AppCompatActivity implements UserWorkou
     public void onWorkoutDone(int position) {
         WorkoutTraining workout = workoutList.get(position);
         caloriesBurned += workout.getTotalExerciseCalories();
-        
+
         workoutList.remove(position);
         adapter.notifyItemRemoved(position);
         adapter.notifyItemRangeChanged(position, workoutList.size());

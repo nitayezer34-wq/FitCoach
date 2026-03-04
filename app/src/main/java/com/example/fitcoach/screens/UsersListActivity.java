@@ -17,14 +17,10 @@ import com.example.fitcoach.models.User;
 import com.example.fitcoach.services.DatabaseService;
 import com.example.fitcoach.utils.SharedPreferencesUtil;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import java.util.function.UnaryOperator;
 
 public class UsersListActivity extends AppCompatActivity {
 
-    private RecyclerView rvUsers;
     private UserAdapter adapter;
     private DatabaseService dbService;
 
@@ -40,7 +36,7 @@ public class UsersListActivity extends AppCompatActivity {
         });
 
         dbService = DatabaseService.getInstance();
-        rvUsers = findViewById(R.id.rv_users);
+        RecyclerView rvUsers = findViewById(R.id.rv_users);
         rvUsers.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new UserAdapter(new UserAdapter.OnUserClickListener() {
@@ -53,7 +49,7 @@ public class UsersListActivity extends AppCompatActivity {
 
             @Override
             public void onDeleteClick(User user) {
-                dbService.deleteUser(user.getId(), new DatabaseService.DatabaseCallback<Void>() {
+                dbService.deleteUser(user.getId(), new DatabaseService.DatabaseCallback<>() {
                     @Override
                     public void onCompleted(Void object) {
                         Toast.makeText(UsersListActivity.this, "משתמש נמחק", Toast.LENGTH_SHORT).show();
@@ -75,14 +71,11 @@ public class UsersListActivity extends AppCompatActivity {
                 }
                 boolean newAdminStatus = !user.isAdmin();
                 user.setAdmin(newAdminStatus);
-                dbService.updateUser(user.getId(), new UnaryOperator<User>() {
-                    @Override
-                    public User apply(User u) {
-                        if (u == null) return u;
-                        u.setAdmin(newAdminStatus);
-                        return u;
-                    }
-                }, new DatabaseService.DatabaseCallback<User>() {
+                dbService.updateUser(user.getId(), u -> {
+                    if (u == null) return null;
+                    u.setAdmin(newAdminStatus);
+                    return u;
+                }, new DatabaseService.DatabaseCallback<>() {
                     @Override
                     public void onCompleted(User updatedUser) {
                         String message = newAdminStatus ? "מונה למנהל" : "הוסר מניהול";
@@ -103,25 +96,22 @@ public class UsersListActivity extends AppCompatActivity {
     }
 
     private void loadUsers() {
-        dbService.getUserList(new DatabaseService.DatabaseCallback<List<User>>() {
+        dbService.getUserList(new DatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(List<User> users) {
                 if (users != null) {
                     String currentUserId = SharedPreferencesUtil.getUserId(UsersListActivity.this);
-                    Collections.sort(users, new Comparator<User>() {
-                        @Override
-                        public int compare(User u1, User u2) {
-                            // Main admin (current user) on top
-                            if (u1.getId().equals(currentUserId)) return -1;
-                            if (u2.getId().equals(currentUserId)) return 1;
+                    users.sort((u1, u2) -> {
+                        // Main admin (current user) on top
+                        if (u1.getId().equals(currentUserId)) return -1;
+                        if (u2.getId().equals(currentUserId)) return 1;
 
-                            // Other admins
-                            if (u1.isAdmin() && !u2.isAdmin()) return -1;
-                            if (!u1.isAdmin() && u2.isAdmin()) return 1;
+                        // Other admins
+                        if (u1.isAdmin() && !u2.isAdmin()) return -1;
+                        if (!u1.isAdmin() && u2.isAdmin()) return 1;
 
-                            // Regular users (sorted by name)
-                            return u1.getName().compareTo(u2.getName());
-                        }
+                        // Regular users (sorted by name)
+                        return u1.getName().compareTo(u2.getName());
                     });
                     adapter.setUserList(users);
                 }

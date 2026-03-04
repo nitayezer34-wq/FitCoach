@@ -34,10 +34,10 @@ public class Stats {
 
     private String getCurrentDateString() {
         Calendar c = Calendar.getInstance();
-        return String.format("%d-%02d-%02d", 
-            c.get(Calendar.YEAR), 
-            c.get(Calendar.MONTH) + 1, 
-            c.get(Calendar.DAY_OF_MONTH));
+        return String.format("%d-%02d-%02d",
+                c.get(Calendar.YEAR),
+                c.get(Calendar.MONTH) + 1,
+                c.get(Calendar.DAY_OF_MONTH));
     }
 
     public String getDate() {

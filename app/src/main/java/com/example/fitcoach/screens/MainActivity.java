@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,7 +28,6 @@ import com.example.fitcoach.utils.SharedPreferencesUtil;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
-
     private final int GLASS_SIZE = 250;
     private TextView tvGreeting, tvStepsValue, tvCaloriesValue, tvBmiStatusText;
     private ProgressBar pbSteps, pbCalories, pbWaterJug;
@@ -121,8 +119,7 @@ public class MainActivity extends AppCompatActivity {
                 if (intent.resolveActivity(getPackageManager()) != null) {
                     startActivity(intent);
                 } else {
-                    intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.waze.com/ul"));
-                    startActivity(intent);
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.waze.com/ul")));
                 }
             });
         }
@@ -137,7 +134,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void saveAndRefreshStats(Stats stats) {
         SharedPreferencesUtil.saveStats(this, stats);
-        DatabaseService.getInstance().saveStats(SharedPreferencesUtil.getUserId(this), stats, null);
+        String userId = SharedPreferencesUtil.getUserId(this);
+        if (userId != null) {
+            DatabaseService.getInstance().saveStats(userId, stats, null);
+        }
         updateUI();
     }
 
@@ -150,20 +150,23 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        DatabaseService.getInstance().getUser(user.getId(), new DatabaseService.DatabaseCallback<User>() {
+        DatabaseService.getInstance().getUser(user.getId(), new DatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(User updatedUser) {
                 if (updatedUser != null) {
                     SharedPreferencesUtil.saveUser(MainActivity.this, updatedUser);
                     updateBMIGauge(updatedUser);
-                    
-                    if (updatedUser.getName() != null && !updatedUser.getName().isEmpty()) {
-                        tvGreeting.setText("שלום, " + updatedUser.getName());
+
+                    if (updatedUser.getName() != null && !updatedUser.getName().isEmpty() && tvGreeting != null) {
+                        tvGreeting.setText(String.format("שלום, %s", updatedUser.getName()));
                     }
-                    
-                    if (pbWaterJug != null) pbWaterJug.setMax(updatedUser.getDailyWaterTargetMl() > 0 ? updatedUser.getDailyWaterTargetMl() : 2000);
-                    if (pbCalories != null) pbCalories.setMax(updatedUser.getDailyCaloriesTarget() > 0 ? updatedUser.getDailyCaloriesTarget() : 2000);
-                    if (pbSteps != null) pbSteps.setMax(updatedUser.getDailyStepsTarget() > 0 ? updatedUser.getDailyStepsTarget() : 5000);
+
+                    if (pbWaterJug != null)
+                        pbWaterJug.setMax(updatedUser.getDailyWaterTargetMl() > 0 ? updatedUser.getDailyWaterTargetMl() : 2000);
+                    if (pbCalories != null)
+                        pbCalories.setMax(updatedUser.getDailyCaloriesTarget() > 0 ? updatedUser.getDailyCaloriesTarget() : 2000);
+                    if (pbSteps != null)
+                        pbSteps.setMax(updatedUser.getDailyStepsTarget() > 0 ? updatedUser.getDailyStepsTarget() : 5000);
                 }
                 updateUI();
             }
@@ -174,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        DatabaseService.getInstance().getStats(user.getId(), new DatabaseService.DatabaseCallback<Stats>() {
+        DatabaseService.getInstance().getStats(user.getId(), new DatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(Stats dbStats) {
                 if (dbStats != null) {
@@ -203,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
             int waterTarget = user.getDailyWaterTargetMl() > 0 ? user.getDailyWaterTargetMl() : 2000;
             pbWaterJug.setMax(waterTarget);
             int targetProgress = (int) Math.min(stats.getWater(), waterTarget);
-            
+
             // Smooth Animation for Water
             ObjectAnimator animation = ObjectAnimator.ofInt(pbWaterJug, "progress", pbWaterJug.getProgress(), targetProgress);
             animation.setDuration(800);
@@ -213,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (pbCalories != null && tvCaloriesValue != null) {
             int caloriesTarget = user.getDailyCaloriesTarget() > 0 ? user.getDailyCaloriesTarget() : 2000;
-            tvCaloriesValue.setText(String.format("%d/%d", (int)stats.getCalories(), caloriesTarget));
+            tvCaloriesValue.setText(String.format("%d/%d", (int) stats.getCalories(), caloriesTarget));
             pbCalories.setMax(caloriesTarget);
             pbCalories.setProgress((int) Math.min(stats.getCalories(), caloriesTarget));
         }
@@ -222,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
             int stepsTarget = user.getDailyStepsTarget() > 0 ? user.getDailyStepsTarget() : 5000;
             tvStepsValue.setText(String.format("%d/%d", stats.getSteps(), stepsTarget));
             pbSteps.setMax(stepsTarget);
-            pbSteps.setProgress(Math.min(stats.getSteps(), stepsTarget));
+            pbSteps.setProgress(Math.min(stepsTarget, stats.getSteps()));
         }
     }
 
@@ -276,15 +279,19 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(this, AdminActivity.class));
                     break;
                 case "התנתקות":
-                    SharedPreferencesUtil.signOutUser(this);
-                    Intent intent = new Intent(this, LandingActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    finish();
+                    handleSignOut();
                     break;
             }
             return true;
         });
         popup.show();
+    }
+
+    private void handleSignOut() {
+        SharedPreferencesUtil.signOutUser(this);
+        Intent intent = new Intent(this, LandingActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 }

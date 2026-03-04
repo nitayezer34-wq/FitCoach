@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitcoach.R;
 import com.example.fitcoach.adapters.UserWorkoutAdapter;
-import com.example.fitcoach.models.User;
 import com.example.fitcoach.models.Stats;
+import com.example.fitcoach.models.User;
 import com.example.fitcoach.models.WeightCategory;
 import com.example.fitcoach.models.WorkoutTraining;
 import com.example.fitcoach.services.DatabaseService;
@@ -25,7 +25,6 @@ public class UserWorkoutsActivity extends AppCompatActivity implements UserWorko
 
     private static final String TAG = "UserWorkoutsActivity";
 
-    private RecyclerView recyclerView;
     private UserWorkoutAdapter adapter;
     private List<WorkoutTraining> workoutList;
     private TextView workoutHeaderTitle;
@@ -38,7 +37,7 @@ public class UserWorkoutsActivity extends AppCompatActivity implements UserWorko
 
         SharedPreferencesUtil.checkAndClearCompletedWorkouts(this);
 
-        recyclerView = findViewById(R.id.workouts_recycler_view);
+        RecyclerView recyclerView = findViewById(R.id.workouts_recycler_view);
         workoutHeaderTitle = findViewById(R.id.workout_header_title);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -62,7 +61,7 @@ public class UserWorkoutsActivity extends AppCompatActivity implements UserWorko
         WeightCategory userWeightCategory = user.getWeightCategory();
         List<String> completedWorkoutIds = SharedPreferencesUtil.getCompletedWorkouts(this);
 
-        DatabaseService.getInstance().getWorkoutTrainingList(new DatabaseService.DatabaseCallback<List<WorkoutTraining>>() {
+        DatabaseService.getInstance().getWorkoutTrainingList(new DatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(List<WorkoutTraining> workoutTrainings) {
                 if (userWeightCategory != null) {

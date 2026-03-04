@@ -21,9 +21,9 @@ import java.util.List;
 
 public class WorkoutChecklistAdapter extends RecyclerView.Adapter<WorkoutChecklistAdapter.WorkoutViewHolder> {
 
-    private List<WorkoutTraining> workoutList;
-    private Context context;
+    private final Context context;
     private final String userId;
+    private List<WorkoutTraining> workoutList;
 
     public WorkoutChecklistAdapter(Context context, List<WorkoutTraining> workoutList) {
         this.context = context;
@@ -55,8 +55,8 @@ public class WorkoutChecklistAdapter extends RecyclerView.Adapter<WorkoutCheckli
     }
 
     static class WorkoutViewHolder extends RecyclerView.ViewHolder {
-        TextView tvExerciseName;
-        CheckBox cbDone;
+        final TextView tvExerciseName;
+        final CheckBox cbDone;
 
         public WorkoutViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -66,14 +66,14 @@ public class WorkoutChecklistAdapter extends RecyclerView.Adapter<WorkoutCheckli
 
         public void bind(final WorkoutTraining workout, Context context, String userId) {
             tvExerciseName.setText(workout.getName());
-            
+
             List<String> completedIds = SharedPreferencesUtil.getCompletedWorkouts(context);
             cbDone.setOnCheckedChangeListener(null);
             cbDone.setChecked(completedIds.contains(workout.getId()));
 
             cbDone.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 int caloriesToChange = workout.getCaloriesPerSet() * workout.getSets();
-                
+
                 if (isChecked) {
                     // Update SharedPreferences immediately for UI responsiveness
                     Stats localStats = SharedPreferencesUtil.getStats(context);
@@ -89,11 +89,12 @@ public class WorkoutChecklistAdapter extends RecyclerView.Adapter<WorkoutCheckli
                             if (stats == null) stats = new Stats();
                             stats.setCalories(stats.getCalories() + caloriesToChange);
                             return stats;
-                        }, new DatabaseService.DatabaseCallback<Stats>() {
+                        }, new DatabaseService.DatabaseCallback<>() {
                             @Override
                             public void onCompleted(Stats updatedStats) {
                                 Toast.makeText(context, "כל הכבוד! האימון סונכרן למסד הנתונים", Toast.LENGTH_SHORT).show();
                             }
+
                             @Override
                             public void onFailed(Exception e) {
                                 Toast.makeText(context, "שגיאה בסנכרון: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -114,11 +115,14 @@ public class WorkoutChecklistAdapter extends RecyclerView.Adapter<WorkoutCheckli
                                 stats.setCalories(Math.max(0, stats.getCalories() - caloriesToChange));
                             }
                             return stats;
-                        }, new DatabaseService.DatabaseCallback<Stats>() {
+                        }, new DatabaseService.DatabaseCallback<>() {
                             @Override
-                            public void onCompleted(Stats object) {}
+                            public void onCompleted(Stats object) {
+                            }
+
                             @Override
-                            public void onFailed(Exception e) {}
+                            public void onFailed(Exception e) {
+                            }
                         });
                     }
                 }

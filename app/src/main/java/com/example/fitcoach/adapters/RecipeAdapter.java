@@ -21,8 +21,8 @@ import java.util.List;
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
     private final OnRecipeClickListener listener;
+    private final Context context;
     private List<Recipe> recipeList = new ArrayList<>();
-    private Context context;
 
     public RecipeAdapter(Context context, OnRecipeClickListener listener) {
         this.context = context;
@@ -57,9 +57,12 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
     }
 
     static class RecipeViewHolder extends RecyclerView.ViewHolder {
-        ImageView ivRecipeImage;
-        TextView tvRecipeTitle, tvPrepTime, tvCalories, tvAllergens;
-        LinearLayout llRecipeRating;
+        final ImageView ivRecipeImage;
+        final TextView tvRecipeTitle;
+        final TextView tvPrepTime;
+        final TextView tvCalories;
+        final TextView tvAllergens;
+        final LinearLayout llRecipeRating;
 
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -91,7 +94,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
 
             if (recipe.getAllergens() != null && !recipe.getAllergens().isEmpty()) {
                 tvAllergens.setVisibility(View.VISIBLE);
-                tvAllergens.setText("אלרגנים: " + String.join(", ", recipe.getAllergens()));
+                tvAllergens.setText(String.format("אלרגנים: %s", String.join(", ", recipe.getAllergens())));
             } else {
                 tvAllergens.setVisibility(View.GONE);
             }

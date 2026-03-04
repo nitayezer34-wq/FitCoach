@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.UnaryOperator;
 
 public class DatabaseService {
@@ -197,12 +198,24 @@ public class DatabaseService {
         });
     }
 
-    public void checkIfEmailExists(@NotNull final String email, @NotNull final DatabaseCallback<Boolean> callback) {
-        readData(USERS_PATH).orderByChild("email").equalTo(email).get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                callback.onCompleted(task.getResult().exists());
-            } else {
-                callback.onFailed(task.getException());
+    public void checkIfEmailExists(@NonNull String email, @NonNull DatabaseCallback<Boolean> callback) {
+        getUserList(new DatabaseCallback<>() {
+            @Override
+            public void onCompleted(List<User> users) {
+                if (users != null) {
+                    for (User user : users) {
+                        if (Objects.equals(user.getEmail(), email)) {
+                            callback.onCompleted(true);
+                            return;
+                        }
+                    }
+                }
+                callback.onCompleted(false);
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                callback.onFailed(e);
             }
         });
     }

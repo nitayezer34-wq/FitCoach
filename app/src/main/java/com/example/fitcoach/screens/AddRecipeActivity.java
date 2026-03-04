@@ -55,7 +55,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     }
 
     private void loadRecipeData(String recipeId) {
-        dbService.getRecipe(recipeId, new DatabaseService.DatabaseCallback<Recipe>() {
+        dbService.getRecipe(recipeId, new DatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(Recipe recipe) {
                 if (recipe != null) {
@@ -101,7 +101,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 
         Recipe recipe = new Recipe(id, title, imageUrl, calories, prepTime, allergens, ingredients, instructions);
 
-        dbService.createNewRecipe(recipe, new DatabaseService.DatabaseCallback<Void>() {
+        dbService.createNewRecipe(recipe, new DatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(Void object) {
                 String msg = (recipeIdToEdit != null) ? "המתכון עודכן בהצלחה!" : "המתכון עלה לפורום!";

@@ -56,7 +56,7 @@ public class WorkoutEditActivity extends AppCompatActivity {
     }
 
     private void loadWorkoutData() {
-        dbService.getWorkoutTraining(workoutId, new DatabaseService.DatabaseCallback<WorkoutTraining>() {
+        dbService.getWorkoutTraining(workoutId, new DatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(WorkoutTraining workout) {
                 if (workout != null) {
@@ -114,7 +114,7 @@ public class WorkoutEditActivity extends AppCompatActivity {
 
             WorkoutTraining workout = new WorkoutTraining(workoutId, name, desc, calories, sets, reps, restTime, targetAudience);
 
-            dbService.createNewWorkoutTraining(workout, new DatabaseService.DatabaseCallback<Void>() {
+            dbService.createNewWorkoutTraining(workout, new DatabaseService.DatabaseCallback<>() {
                 @Override
                 public void onCompleted(Void object) {
                     Toast.makeText(WorkoutEditActivity.this, "האימון עודכן בהצלחה!", Toast.LENGTH_SHORT).show();

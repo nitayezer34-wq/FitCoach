@@ -54,8 +54,9 @@ public class AdminWorkoutAdapter extends RecyclerView.Adapter<AdminWorkoutAdapte
     }
 
     static class WorkoutViewHolder extends RecyclerView.ViewHolder {
-        TextView tvName;
-        ImageButton btnEdit, btnDelete;
+        final TextView tvName;
+        final ImageButton btnEdit;
+        final ImageButton btnDelete;
 
         public WorkoutViewHolder(@NonNull View itemView) {
             super(itemView);

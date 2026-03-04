@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import com.example.fitcoach.R;
 import com.example.fitcoach.models.User;
@@ -35,7 +33,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
+public class RegisterActivity extends AppCompatActivity {
 
     private TextInputLayout tilName, tilEmail, tilPassword;
     private TextInputEditText etName, etEmail, etPassword;
@@ -45,7 +43,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private ChipGroup cgActivityLevel;
     private SeekBar sbStepTarget, sbCaloriesTarget, sbWaterTarget;
     private TextView tvStepTargetValue, tvCaloriesTargetValue, tvWaterTargetValue;
-    private Button btnRegister, btnGoLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,11 +71,11 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         tvCaloriesTargetValue = findViewById(R.id.tvCaloriesTargetValue);
         sbWaterTarget = findViewById(R.id.sbWaterTarget);
         tvWaterTargetValue = findViewById(R.id.tvWaterTargetValue);
-        btnRegister = findViewById(R.id.btnRegisterConfirm);
-        btnGoLogin = findViewById(R.id.btnGoLogin);
+        Button btnRegister = findViewById(R.id.btnRegisterConfirm);
+        Button btnGoLogin = findViewById(R.id.btnGoLogin);
 
-        btnRegister.setOnClickListener(this);
-        btnGoLogin.setOnClickListener(this);
+        btnRegister.setOnClickListener(v -> handleRegistration());
+        btnGoLogin.setOnClickListener(view -> finish());
     }
 
     private void setupUI() {
@@ -129,10 +126,14 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 progress = (progress / step) * step;
                 textView.setText(String.valueOf(progress));
             }
+
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
         });
         // Initial text update
         textView.setText(String.valueOf(seekBar.getProgress()));
@@ -147,26 +148,20 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private void addTextWatcher(TextInputEditText editText, TextInputLayout layout) {
         editText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(layout.isErrorEnabled()){
+                if (layout.isErrorEnabled()) {
                     layout.setErrorEnabled(false);
                 }
             }
+
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void afterTextChanged(Editable s) {
+            }
         });
-    }
-
-
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.btnGoLogin) {
-            finish();
-        } else if (v.getId() == R.id.btnRegisterConfirm) {
-            handleRegistration();
-        }
     }
 
     private void handleRegistration() {
@@ -176,7 +171,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         }
 
         String email = Objects.requireNonNull(etEmail.getText()).toString().trim();
-        DatabaseService.getInstance().checkIfEmailExists(email, new DatabaseService.DatabaseCallback<Boolean>() {
+        DatabaseService.getInstance().checkIfEmailExists(email, new DatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(Boolean exists) {
                 if (exists) {
@@ -216,7 +211,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
         User user = new User(userId, name, email, password, gender, birthYear, height, weight, activityLevel, stepTarget, caloriesTarget, waterTarget, false);
 
-        DatabaseService.getInstance().createNewUser(user, new DatabaseService.DatabaseCallback<Void>() {
+        DatabaseService.getInstance().createNewUser(user, new DatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(Void result) {
                 SharedPreferencesUtil.saveUser(RegisterActivity.this, user);

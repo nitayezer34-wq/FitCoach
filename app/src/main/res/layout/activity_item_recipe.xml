@@ -94,12 +94,12 @@
                     android:id="@+id/tvPrepTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:drawableStart="@android:drawable/ic_menu_recent_history"
                     android:drawablePadding="4dp"
                     android:gravity="center_vertical"
                     android:text="25 דקות"
                     android:textColor="#757575"
                     android:textSize="14sp"
+                    app:drawableStartCompat="@android:drawable/ic_menu_recent_history"
                     app:drawableTint="#2196F3" />
 
                 <TextView
@@ -107,12 +107,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
-                    android:drawableStart="@android:drawable/ic_menu_compass"
                     android:drawablePadding="4dp"
                     android:gravity="center_vertical"
                     android:text="350 קלוריות"
                     android:textColor="#757575"
                     android:textSize="14sp"
+                    app:drawableStartCompat="@android:drawable/ic_menu_compass"
                     app:drawableTint="#2196F3" />
 
             </LinearLayout>

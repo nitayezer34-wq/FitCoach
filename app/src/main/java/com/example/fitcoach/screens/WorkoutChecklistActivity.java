@@ -20,7 +20,6 @@ import java.util.List;
 
 public class WorkoutChecklistActivity extends AppCompatActivity {
 
-    private RecyclerView rvWorkouts;
     private WorkoutChecklistAdapter adapter;
     private DatabaseService dbService;
     private User currentUser;
@@ -33,7 +32,7 @@ public class WorkoutChecklistActivity extends AppCompatActivity {
         dbService = DatabaseService.getInstance();
         currentUser = SharedPreferencesUtil.getUser(this);
 
-        rvWorkouts = findViewById(R.id.rv_workout_checklist);
+        RecyclerView rvWorkouts = findViewById(R.id.rv_workout_checklist);
         rvWorkouts.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new WorkoutChecklistAdapter(this, new ArrayList<>());
@@ -50,7 +49,7 @@ public class WorkoutChecklistActivity extends AppCompatActivity {
 
         WeightCategory userWeightCategory = currentUser.getWeightCategory();
 
-        dbService.getWorkoutTrainingList(new DatabaseService.DatabaseCallback<List<WorkoutTraining>>() {
+        dbService.getWorkoutTrainingList(new DatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(List<WorkoutTraining> allWorkouts) {
                 if (allWorkouts != null && userWeightCategory != null) {

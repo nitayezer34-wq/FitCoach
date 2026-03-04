@@ -18,8 +18,6 @@ import java.util.List;
 
 public class RecipeForumActivity extends AppCompatActivity {
 
-    private RecyclerView rvRecipes;
-    private FloatingActionButton fabAddRecipe;
     private RecipeAdapter adapter;
     private DatabaseService dbService;
 
@@ -30,8 +28,8 @@ public class RecipeForumActivity extends AppCompatActivity {
 
         dbService = DatabaseService.getInstance();
 
-        rvRecipes = findViewById(R.id.rvRecipes);
-        fabAddRecipe = findViewById(R.id.fabAddRecipe);
+        RecyclerView rvRecipes = findViewById(R.id.rvRecipes);
+        FloatingActionButton fabAddRecipe = findViewById(R.id.fabAddRecipe);
 
         rvRecipes.setLayoutManager(new LinearLayoutManager(this));
 
@@ -43,9 +41,7 @@ public class RecipeForumActivity extends AppCompatActivity {
 
         rvRecipes.setAdapter(adapter);
 
-        fabAddRecipe.setOnClickListener(v -> {
-            startActivity(new Intent(RecipeForumActivity.this, AddRecipeActivity.class));
-        });
+        fabAddRecipe.setOnClickListener(v -> startActivity(new Intent(RecipeForumActivity.this, AddRecipeActivity.class)));
     }
 
     @Override
@@ -55,7 +51,7 @@ public class RecipeForumActivity extends AppCompatActivity {
     }
 
     private void loadRecipes() {
-        dbService.getRecipeList(new DatabaseService.DatabaseCallback<List<Recipe>>() {
+        dbService.getRecipeList(new DatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(List<Recipe> recipes) {
                 if (recipes != null) {

@@ -56,7 +56,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
     private void loadRecipeDetails() {
         if (recipeId == null) return;
 
-        dbService.getRecipe(recipeId, new DatabaseService.DatabaseCallback<Recipe>() {
+        dbService.getRecipe(recipeId, new DatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(Recipe recipe) {
                 currentRecipe = recipe;
@@ -154,7 +154,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         int newRatingCount = currentRecipe.getRatingCount() + 1;
         double newAverageRating = newTotalSum / newRatingCount;
 
-        dbService.updateRecipeRating(recipeId, newAverageRating, newRatingCount, newTotalSum, new DatabaseService.DatabaseCallback<Void>() {
+        dbService.updateRecipeRating(recipeId, newAverageRating, newRatingCount, newTotalSum, new DatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(Void aVoid) {
                 Toast.makeText(RecipeDetailsActivity.this, "תודה על הדירוג!", Toast.LENGTH_SHORT).show();

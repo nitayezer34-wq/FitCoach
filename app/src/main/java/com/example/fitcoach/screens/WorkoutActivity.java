@@ -19,7 +19,6 @@ import java.util.List;
 
 public class WorkoutActivity extends AppCompatActivity implements WorkoutAdapter.OnWorkoutListener {
 
-    private RecyclerView rvWorkouts;
     private WorkoutAdapter adapter;
     private DatabaseService dbService;
     private User currentUser;
@@ -32,7 +31,7 @@ public class WorkoutActivity extends AppCompatActivity implements WorkoutAdapter
         dbService = DatabaseService.getInstance();
         currentUser = SharedPreferencesUtil.getUser(this);
 
-        rvWorkouts = findViewById(R.id.rv_workouts);
+        RecyclerView rvWorkouts = findViewById(R.id.rv_workouts);
         rvWorkouts.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new WorkoutAdapter(new ArrayList<>(), this);
@@ -46,16 +45,11 @@ public class WorkoutActivity extends AppCompatActivity implements WorkoutAdapter
 
         String userBmiCategory = getUserBmiCategory(currentUser.calcBMI());
 
-        dbService.getWorkoutTrainingList(new DatabaseService.DatabaseCallback<List<WorkoutTraining>>() {
+        dbService.getWorkoutTrainingList(new DatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(List<WorkoutTraining> allWorkouts) {
                 if (allWorkouts != null) {
                     List<WorkoutTraining> filteredWorkouts = new ArrayList<>();
-                    for (WorkoutTraining workout : allWorkouts) {
-                        if (userBmiCategory.equals(workout.getTargetAudience())) {
-                            filteredWorkouts.add(workout);
-                        }
-                    }
                     adapter.setWorkoutList(filteredWorkouts);
                 }
             }

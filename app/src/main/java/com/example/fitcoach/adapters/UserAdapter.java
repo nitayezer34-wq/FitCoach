@@ -84,8 +84,10 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     }
 
     static class UserViewHolder extends RecyclerView.ViewHolder {
-        TextView tvName, tvEmail;
-        ImageButton btnDelete, btnMakeAdmin;
+        final TextView tvName;
+        final TextView tvEmail;
+        final ImageButton btnDelete;
+        final ImageButton btnMakeAdmin;
 
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);

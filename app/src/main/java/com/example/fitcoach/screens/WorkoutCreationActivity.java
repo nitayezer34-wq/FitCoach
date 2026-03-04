@@ -58,7 +58,7 @@ public class WorkoutCreationActivity extends AppCompatActivity {
     }
 
     private void loadWorkoutData() {
-        dbService.getWorkoutTraining(existingWorkoutId, new DatabaseService.DatabaseCallback<WorkoutTraining>() {
+        dbService.getWorkoutTraining(existingWorkoutId, new DatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(WorkoutTraining workout) {
                 if (workout != null) {
@@ -118,7 +118,7 @@ public class WorkoutCreationActivity extends AppCompatActivity {
 
             WorkoutTraining workout = new WorkoutTraining(id, name, desc, calories, sets, reps, restTime, targetAudience);
 
-            dbService.createNewWorkoutTraining(workout, new DatabaseService.DatabaseCallback<Void>() {
+            dbService.createNewWorkoutTraining(workout, new DatabaseService.DatabaseCallback<>() {
                 @Override
                 public void onCompleted(Void object) {
                     String message = (existingWorkoutId == null) ? "האימון נוצר בהצלחה!" : "האימון עודכן בהצלחה!";

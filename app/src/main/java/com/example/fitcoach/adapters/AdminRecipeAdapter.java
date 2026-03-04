@@ -49,12 +49,14 @@ public class AdminRecipeAdapter extends RecyclerView.Adapter<AdminRecipeAdapter.
 
     public interface OnRecipeActionListener {
         void onDeleteRecipe(Recipe recipe);
+
         void onEditRecipe(Recipe recipe);
     }
 
     static class RecipeViewHolder extends RecyclerView.ViewHolder {
-        TextView tvName;
-        ImageButton btnDelete, btnEdit;
+        final TextView tvName;
+        final ImageButton btnDelete;
+        final ImageButton btnEdit;
 
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);

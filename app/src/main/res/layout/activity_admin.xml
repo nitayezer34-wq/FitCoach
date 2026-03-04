@@ -47,7 +47,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
+                android:layout_marginEnd="15dp"
                 android:text="הוספת אימון חדש למערכת"
                 android:textColor="#2196F3"
                 android:textSize="18sp"
@@ -81,7 +81,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
+                android:layout_marginEnd="15dp"
                 android:text="ניהול ועריכת אימונים"
                 android:textColor="#2196F3"
                 android:textSize="18sp"
@@ -115,7 +115,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
+                android:layout_marginEnd="15dp"
                 android:text="ניהול משתמשים"
                 android:textColor="#2196F3"
                 android:textSize="18sp"
@@ -149,7 +149,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
+                android:layout_marginEnd="15dp"
                 android:text="ניהול ומחיקת מתכונים"
                 android:textColor="#2196F3"
                 android:textSize="18sp"

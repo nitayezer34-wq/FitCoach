@@ -34,9 +34,7 @@ public class AdminRecipeManagementActivity extends AppCompatActivity implements 
         setupRecyclerView();
 
         FloatingActionButton fabAddRecipe = findViewById(R.id.fab_add_recipe);
-        fabAddRecipe.setOnClickListener(v -> {
-            startActivity(new Intent(AdminRecipeManagementActivity.this, AddRecipeActivity.class));
-        });
+        fabAddRecipe.setOnClickListener(v -> startActivity(new Intent(AdminRecipeManagementActivity.this, AddRecipeActivity.class)));
     }
 
     @Override
@@ -56,7 +54,7 @@ public class AdminRecipeManagementActivity extends AppCompatActivity implements 
     }
 
     private void loadRecipes() {
-        dbService.getRecipeList(new DatabaseService.DatabaseCallback<List<Recipe>>() {
+        dbService.getRecipeList(new DatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(List<Recipe> recipes) {
                 if (recipes != null) {
@@ -74,7 +72,7 @@ public class AdminRecipeManagementActivity extends AppCompatActivity implements 
 
     @Override
     public void onDeleteRecipe(Recipe recipe) {
-        dbService.deleteRecipe(recipe.getId(), new DatabaseService.DatabaseCallback<Void>() {
+        dbService.deleteRecipe(recipe.getId(), new DatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(Void result) {
                 Toast.makeText(AdminRecipeManagementActivity.this, "מתכון נמחק בהצלחה", Toast.LENGTH_SHORT).show();

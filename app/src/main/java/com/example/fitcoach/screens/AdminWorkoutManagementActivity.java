@@ -20,7 +20,6 @@ import com.example.fitcoach.services.DatabaseService;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -87,7 +86,7 @@ public class AdminWorkoutManagementActivity extends AppCompatActivity implements
     }
 
     private void loadWorkouts() {
-        DatabaseService.getInstance().getWorkoutTrainingList(new DatabaseService.DatabaseCallback<List<WorkoutTraining>>() {
+        DatabaseService.getInstance().getWorkoutTrainingList(new DatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(List<WorkoutTraining> workouts) {
                 if (workouts != null) {
@@ -110,12 +109,7 @@ public class AdminWorkoutManagementActivity extends AppCompatActivity implements
         if ("כל האימונים".equals(category)) {
             List<WorkoutTraining> sortedList = new ArrayList<>(allWorkouts);
             // Sort by target audience to group them
-            Collections.sort(sortedList, new Comparator<WorkoutTraining>() {
-                @Override
-                public int compare(WorkoutTraining o1, WorkoutTraining o2) {
-                    return o1.getTargetAudience().compareTo(o2.getTargetAudience());
-                }
-            });
+            sortedList.sort(Comparator.comparing(WorkoutTraining::getTargetAudience));
             filteredWorkouts.addAll(sortedList);
         } else {
             WeightCategory targetAudienceFilter;
@@ -152,7 +146,7 @@ public class AdminWorkoutManagementActivity extends AppCompatActivity implements
 
     @Override
     public void onDelete(WorkoutTraining workout) {
-        DatabaseService.getInstance().deleteWorkoutTraining(workout.getId(), new DatabaseService.DatabaseCallback<Void>() {
+        DatabaseService.getInstance().deleteWorkoutTraining(workout.getId(), new DatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(Void result) {
                 Toast.makeText(AdminWorkoutManagementActivity.this, "אימון נמחק בהצלחה", Toast.LENGTH_SHORT).show();

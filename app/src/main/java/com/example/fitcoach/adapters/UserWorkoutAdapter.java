@@ -17,16 +17,10 @@ import java.util.List;
 
 public class UserWorkoutAdapter extends RecyclerView.Adapter<UserWorkoutAdapter.UserWorkoutViewHolder> {
 
-    private List<WorkoutTraining> workoutList;
-    private Context context;
-    private OnWorkoutDoneListener onWorkoutDoneListener;
-
-    public interface OnWorkoutDoneListener {
-        void onWorkoutDone(int position);
-    }
+    private final List<WorkoutTraining> workoutList;
+    private final OnWorkoutDoneListener onWorkoutDoneListener;
 
     public UserWorkoutAdapter(Context context, List<WorkoutTraining> workoutList, OnWorkoutDoneListener onWorkoutDoneListener) {
-        this.context = context;
         this.workoutList = workoutList;
         this.onWorkoutDoneListener = onWorkoutDoneListener;
     }
@@ -49,12 +43,16 @@ public class UserWorkoutAdapter extends RecyclerView.Adapter<UserWorkoutAdapter.
         return workoutList.size();
     }
 
+    public interface OnWorkoutDoneListener {
+        void onWorkoutDone(int position);
+    }
+
     class UserWorkoutViewHolder extends RecyclerView.ViewHolder {
-        TextView workoutName;
-        TextView workoutSets;
-        TextView workoutReps;
-        TextView workoutDescription;
-        FloatingActionButton fabDone;
+        final TextView workoutName;
+        final TextView workoutSets;
+        final TextView workoutReps;
+        final TextView workoutDescription;
+        final FloatingActionButton fabDone;
 
         public UserWorkoutViewHolder(@NonNull View itemView) {
             super(itemView);

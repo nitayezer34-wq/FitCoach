@@ -37,10 +37,10 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:boxStrokeColor="#2196F3"
-            app:hintTextColor="#2196F3"
+            android:hint="שם מלא"
             android:textColorHint="#2196F3"
-            android:hint="שם מלא">
+            app:boxStrokeColor="#2196F3"
+            app:hintTextColor="#2196F3">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etName"
@@ -57,10 +57,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:boxStrokeColor="#2196F3"
-            app:hintTextColor="#2196F3"
+            android:hint="אימייל"
             android:textColorHint="#2196F3"
-            android:hint="אימייל">
+            app:boxStrokeColor="#2196F3"
+            app:hintTextColor="#2196F3">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etEmail"
@@ -77,12 +77,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            app:passwordToggleEnabled="true"
+            android:hint="סיסמה"
+            android:textColorHint="#2196F3"
             app:boxStrokeColor="#2196F3"
             app:hintTextColor="#2196F3"
-            android:textColorHint="#2196F3"
-            app:passwordToggleTint="#2196F3"
-            android:hint="סיסמה">
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="#2196F3">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etPassword"
@@ -112,11 +112,10 @@
             android:id="@+id/rgGender"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
 
             <RadioButton
-                android:id="@+id/rbMale"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="זכר"
@@ -124,7 +123,6 @@
                 app:buttonTint="#2196F3" />
 
             <RadioButton
-                android:id="@+id/rbFemale"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -141,6 +139,7 @@
             android:textColor="#1976D2"
             android:textSize="16sp"
             android:textStyle="bold" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -161,7 +160,8 @@
             android:text="נתונים פיזיים"
             android:textColor="#1976D2"
             android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
+
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
@@ -180,36 +180,40 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="גובה (ס''מ)"
                     android:textColor="#1976D2"
-                    android:textStyle="bold"/>
-                 <NumberPicker
+                    android:textStyle="bold" />
+
+                <NumberPicker
                     android:id="@+id/npHeight"
                     android:layout_width="wrap_content"
-                    android:layout_height="120dp"/>
+                    android:layout_height="120dp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center">
+                android:gravity="center"
+                android:orientation="vertical">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="משקל (ק''ג)"
-                    android:textStyle="bold"
-                    android:textColor="#1976D2"/>
+                    android:textColor="#1976D2"
+                    android:textStyle="bold" />
+
                 <NumberPicker
                     android:id="@+id/npWeight"
                     android:layout_width="wrap_content"
-                    android:layout_height="120dp"/>
+                    android:layout_height="120dp" />
             </LinearLayout>
 
         </LinearLayout>
@@ -222,7 +226,7 @@
             android:text="רמת פעילות"
             android:textColor="#1976D2"
             android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <View
             android:layout_width="match_parent"
@@ -234,54 +238,50 @@
             android:id="@+id/cgActivityLevel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:singleSelection="true"
             android:layout_gravity="center"
-            android:layout_marginTop="8dp">
+            android:layout_marginTop="8dp"
+            app:singleSelection="true">
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chipLow"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="נמוכה"
                 android:textColor="#2196F3"
                 app:chipBackgroundColor="#E3F2FD"
                 app:chipStrokeColor="#2196F3"
-                app:chipStrokeWidth="1dp"
-                android:text="נמוכה" />
+                app:chipStrokeWidth="1dp" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chipMedium"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="בינונית"
                 android:textColor="#2196F3"
                 app:chipBackgroundColor="#E3F2FD"
                 app:chipStrokeColor="#2196F3"
-                app:chipStrokeWidth="1dp"
-                android:text="בינונית" />
+                app:chipStrokeWidth="1dp" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chipHigh"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="גבוהה"
                 android:textColor="#2196F3"
                 app:chipBackgroundColor="#E3F2FD"
                 app:chipStrokeColor="#2196F3"
-                app:chipStrokeWidth="1dp"
-                android:text="גבוהה" />
+                app:chipStrokeWidth="1dp" />
         </com.google.android.material.chip.ChipGroup>
 
 
         <TextView
-            android:id="@+id/tvStepTargetLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="יעד צעדים יומי 👟"
             android:textColor="#1976D2"
             android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvStepTargetValue"
@@ -300,13 +300,12 @@
             android:layout_marginTop="8dp"
             android:max="20000"
             android:progress="10000"
-            android:scaleY="1.5"
-            android:thumbTint="#0D47A1"
+            android:progressBackgroundTint="#BBDEFB"
             android:progressTint="#2196F3"
-            android:progressBackgroundTint="#BBDEFB"/>
+            android:scaleY="1.5"
+            android:thumbTint="#0D47A1" />
 
         <TextView
-            android:id="@+id/tvCaloriesTargetLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -332,20 +331,19 @@
             android:layout_marginTop="8dp"
             android:max="5000"
             android:progress="2000"
-            android:scaleY="1.5"
-            android:thumbTint="#0D47A1"
+            android:progressBackgroundTint="#BBDEFB"
             android:progressTint="#2196F3"
-            android:progressBackgroundTint="#BBDEFB"/>
+            android:scaleY="1.5"
+            android:thumbTint="#0D47A1" />
 
         <TextView
-            android:id="@+id/tvWaterTargetLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="יעד שתיית מים (מ''ל) 💧"
             android:textColor="#1976D2"
             android:textSize="16sp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvWaterTargetValue"
@@ -364,10 +362,10 @@
             android:layout_marginTop="8dp"
             android:max="5000"
             android:progress="2000"
-            android:scaleY="1.5"
-            android:thumbTint="#0D47A1"
+            android:progressBackgroundTint="#BBDEFB"
             android:progressTint="#2196F3"
-            android:progressBackgroundTint="#BBDEFB"/>
+            android:scaleY="1.5"
+            android:thumbTint="#0D47A1" />
 
         <Button
             android:id="@+id/btnRegisterConfirm"

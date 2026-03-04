@@ -228,7 +228,8 @@ public class SharedPreferencesUtil {
         if (json == null) {
             return new ArrayList<>();
         }
-        Type type = new TypeToken<ArrayList<String>>() {}.getType();
+        Type type = new TypeToken<ArrayList<String>>() {
+        }.getType();
         return new Gson().fromJson(json, type);
     }
 

@@ -54,7 +54,7 @@ public class UserProfileActivity extends AppCompatActivity {
     }
 
     private void loadUserFromDb(String userId) {
-        dbService.getUser(userId, new DatabaseService.DatabaseCallback<User>() {
+        dbService.getUser(userId, new DatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(User user) {
                 if (user != null) {
@@ -108,7 +108,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 user.setDailyCaloriesTarget(userToUpdate.getDailyCaloriesTarget());
                 user.setDailyWaterTargetMl(userToUpdate.getDailyWaterTargetMl());
                 return user;
-            }, new DatabaseService.DatabaseCallback<User>() {
+            }, new DatabaseService.DatabaseCallback<>() {
                 @Override
                 public void onCompleted(User updatedUser) {
                     // Also update the user in SharedPreferences if it's the current user

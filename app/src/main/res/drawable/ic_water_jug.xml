@@ -12,25 +12,35 @@
         android:strokeWidth="2.5">
         <aapt:attr name="android:fillColor">
             <gradient
-                android:startY="30"
-                android:startX="60"
-                android:endY="150"
                 android:endX="60"
+                android:endY="150"
+                android:startX="60"
+                android:startY="30"
                 android:type="linear">
-                <item android:offset="0" android:color="#152196F3" />
-                <item android:offset="1" android:color="#302196F3" />
+                <item
+                    android:color="#152196F3"
+                    android:offset="0" />
+                <item
+                    android:color="#302196F3"
+                    android:offset="1" />
             </gradient>
         </aapt:attr>
         <aapt:attr name="android:strokeColor">
             <gradient
-                android:startY="30"
-                android:startX="60"
-                android:endY="150"
                 android:endX="60"
+                android:endY="150"
+                android:startX="60"
+                android:startY="30"
                 android:type="linear">
-                <item android:offset="0" android:color="#B0BEC5" />
-                <item android:offset="0.5" android:color="#2196F3" />
-                <item android:offset="1" android:color="#1976D2" />
+                <item
+                    android:color="#B0BEC5"
+                    android:offset="0" />
+                <item
+                    android:color="#2196F3"
+                    android:offset="0.5" />
+                <item
+                    android:color="#1976D2"
+                    android:offset="1" />
             </gradient>
         </aapt:attr>
     </path>
@@ -42,38 +52,42 @@
         android:strokeLineCap="round">
         <aapt:attr name="android:strokeColor">
             <gradient
-                android:startY="55"
-                android:startX="105"
-                android:endY="130"
                 android:endX="105"
+                android:endY="130"
+                android:startX="105"
+                android:startY="55"
                 android:type="linear">
-                <item android:offset="0" android:color="#2196F3" />
-                <item android:offset="1" android:color="#1976D2" />
+                <item
+                    android:color="#2196F3"
+                    android:offset="0" />
+                <item
+                    android:color="#1976D2"
+                    android:offset="1" />
             </gradient>
         </aapt:attr>
     </path>
 
     <!-- Spout Detail - Refined and smaller to look more elegant -->
     <path
+        android:fillColor="#202196F3"
         android:pathData="M35,30 L20,30 C16,30 16,38 22,42 L25,44"
         android:strokeWidth="2.2"
         android:strokeColor="#1976D2"
-        android:strokeLineCap="round"
-        android:fillColor="#202196F3" />
+        android:strokeLineCap="round" />
 
     <!-- Lid (Top) - Enlarged and taller -->
     <path
-        android:pathData="M32,18 L88,18 C93,18 95,23 95,30 L25,30 C25,23 27,18 32,18 Z"
         android:fillColor="#FFFFFF"
-        android:strokeColor="#1976D2"
-        android:strokeWidth="1.8" />
+        android:pathData="M32,18 L88,18 C93,18 95,23 95,30 L25,30 C25,23 27,18 32,18 Z"
+        android:strokeWidth="1.8"
+        android:strokeColor="#1976D2" />
 
     <!-- Top Knob - Adjusted position for the larger lid -->
     <path
-        android:pathData="M55,12 L65,12 C67,12 68,15 68,18 L52,18 C52,15 53,12 55,12 Z"
         android:fillColor="#2196F3"
-        android:strokeColor="#1976D2"
-        android:strokeWidth="1.2" />
+        android:pathData="M55,12 L65,12 C67,12 68,15 68,18 L52,18 C52,15 53,12 55,12 Z"
+        android:strokeWidth="1.2"
+        android:strokeColor="#1976D2" />
 
     <!-- Sharp Reflections to give it "pop" -->
     <path
@@ -82,13 +96,17 @@
         android:strokeLineCap="round">
         <aapt:attr name="android:strokeColor">
             <gradient
-                android:startY="45"
-                android:startX="35"
-                android:endY="140"
                 android:endX="32"
+                android:endY="140"
+                android:startX="35"
+                android:startY="45"
                 android:type="linear">
-                <item android:offset="0" android:color="#F0FFFFFF" />
-                <item android:offset="1" android:color="#00FFFFFF" />
+                <item
+                    android:color="#F0FFFFFF"
+                    android:offset="0" />
+                <item
+                    android:color="#00FFFFFF"
+                    android:offset="1" />
             </gradient>
         </aapt:attr>
     </path>
