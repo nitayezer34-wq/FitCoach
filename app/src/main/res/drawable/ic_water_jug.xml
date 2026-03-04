@@ -53,27 +53,27 @@
         </aapt:attr>
     </path>
 
-    <!-- Spout Detail - More visible -->
+    <!-- Spout Detail - Refined and smaller to look more elegant -->
     <path
-        android:pathData="M35,30 L22,30 C18,30 18,35 22,38 L25,40"
-        android:strokeWidth="2.5"
+        android:pathData="M35,30 L20,30 C16,30 16,38 22,42 L25,44"
+        android:strokeWidth="2.2"
         android:strokeColor="#1976D2"
         android:strokeLineCap="round"
         android:fillColor="#202196F3" />
 
-    <!-- Lid (Top) - Changed color to stand out from #F5F5F5 background -->
+    <!-- Lid (Top) - Enlarged and taller -->
     <path
-        android:pathData="M32,25 L88,25 C92,25 95,27 95,30 L25,30 C25,27 28,25 32,25 Z"
+        android:pathData="M32,18 L88,18 C93,18 95,23 95,30 L25,30 C25,23 27,18 32,18 Z"
         android:fillColor="#FFFFFF"
         android:strokeColor="#1976D2"
-        android:strokeWidth="1.5" />
+        android:strokeWidth="1.8" />
 
-    <!-- Top Knob - More visible -->
+    <!-- Top Knob - Adjusted position for the larger lid -->
     <path
-        android:pathData="M55,20 L65,20 C67,20 68,22 68,25 L52,25 C52,22 53,20 55,20 Z"
+        android:pathData="M55,12 L65,12 C67,12 68,15 68,18 L52,18 C52,15 53,12 55,12 Z"
         android:fillColor="#2196F3"
         android:strokeColor="#1976D2"
-        android:strokeWidth="1" />
+        android:strokeWidth="1.2" />
 
     <!-- Sharp Reflections to give it "pop" -->
     <path
