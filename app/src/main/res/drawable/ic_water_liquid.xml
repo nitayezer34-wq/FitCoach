@@ -1,31 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:aapt="http://schemas.android.com/aapt"
-    android:width="100dp"
-    android:height="140dp"
-    android:viewportWidth="100"
-    android:viewportHeight="140">
+    android:width="120dp"
+    android:height="160dp"
+    android:viewportWidth="120"
+    android:viewportHeight="160">
 
-    <!-- Inner jug shape to be used as the liquid -->
+    <!-- Inner jug shape for liquid - Matches the new ic_water_jug.xml -->
     <path
-        android:pathData="M31,22 L69,22 C73,22 78,26 78,31 L83,119 C83,128 74,133 69,133 L31,133 C26,133 17,128 17,119 L22,31 C22,26 27,22 31,22 Z">
+        android:pathData="M35,31 L85,31 C90,31 94,36 94,41 L99,134 C99,144 89,149 84,149 L36,149 C31,149 21,144 21,134 L26,41 C26,36 31,31 35,31 Z">
         <aapt:attr name="android:fillColor">
             <gradient
-                android:startColor="#1565C0"
-                android:centerColor="#1E88E5"
-                android:endColor="#4FC3F7"
-                android:startY="133"
-                android:startX="50"
-                android:endY="22"
-                android:endX="50"
-                android:type="linear" />
+                android:startY="150"
+                android:startX="60"
+                android:endY="30"
+                android:endX="60"
+                android:type="linear">
+                <item android:offset="0" android:color="#1565C0" />
+                <item android:offset="0.5" android:color="#1E88E5" />
+                <item android:offset="1" android:color="#4FC3F7" />
+            </gradient>
         </aapt:attr>
     </path>
 
-    <!-- Surface highlight -->
+    <!-- Moving wave reflection effect at the top -->
     <path
-        android:pathData="M25,30 Q50,25 75,30"
-        android:strokeWidth="2"
-        android:strokeColor="#80FFFFFF"
+        android:pathData="M25,45 Q60,35 95,45"
+        android:strokeWidth="2.5"
+        android:strokeColor="#60FFFFFF"
         android:strokeLineCap="round" />
+
+    <!-- Deep water shadow at the bottom -->
+    <path
+        android:pathData="M35,145 H85"
+        android:strokeWidth="8"
+        android:strokeColor="#10000000" />
+
 </vector>

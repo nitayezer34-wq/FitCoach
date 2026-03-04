@@ -1,36 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="100dp"
-    android:height="140dp"
-    android:viewportWidth="100"
-    android:viewportHeight="140">
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="120dp"
+    android:height="160dp"
+    android:viewportWidth="120"
+    android:viewportHeight="160">
 
-    <!-- The Jug Body (Outer Glass) -->
+    <!-- The Jug Glass Body - Stronger Outline and more visible glass tint -->
     <path
-        android:pathData="M30,20 L70,20 C75,20 80,25 80,30 L85,120 C85,130 75,135 70,135 L30,135 C25,135 15,130 15,120 L20,30 C20,25 25,20 30,20 Z"
-        android:strokeWidth="3"
-        android:strokeColor="#B0BEC5"
-        android:fillColor="#10B0BEC5" />
+        android:pathData="M35,30 L85,30 C90,30 95,35 95,40 L100,135 C100,145 90,150 85,150 L35,150 C30,150 20,145 20,135 L25,40 C25,35 30,30 35,30 Z"
+        android:strokeWidth="2.5">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startY="30"
+                android:startX="60"
+                android:endY="150"
+                android:endX="60"
+                android:type="linear">
+                <item android:offset="0" android:color="#152196F3" />
+                <item android:offset="1" android:color="#302196F3" />
+            </gradient>
+        </aapt:attr>
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:startY="30"
+                android:startX="60"
+                android:endY="150"
+                android:endX="60"
+                android:type="linear">
+                <item android:offset="0" android:color="#B0BEC5" />
+                <item android:offset="0.5" android:color="#2196F3" />
+                <item android:offset="1" android:color="#1976D2" />
+            </gradient>
+        </aapt:attr>
+    </path>
 
-    <!-- Handle -->
+    <!-- Stylish Handle - Darker and thicker -->
     <path
-        android:pathData="M80,45 C95,45 95,105 83,110"
+        android:pathData="M95,55 C115,55 115,125 98,130"
+        android:strokeWidth="6"
+        android:strokeLineCap="round">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:startY="55"
+                android:startX="105"
+                android:endY="130"
+                android:endX="105"
+                android:type="linear">
+                <item android:offset="0" android:color="#2196F3" />
+                <item android:offset="1" android:color="#1976D2" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Spout Detail - More visible -->
+    <path
+        android:pathData="M35,30 L22,30 C18,30 18,35 22,38 L25,40"
+        android:strokeWidth="2.5"
+        android:strokeColor="#1976D2"
+        android:strokeLineCap="round"
+        android:fillColor="#202196F3" />
+
+    <!-- Lid (Top) - Changed color to stand out from #F5F5F5 background -->
+    <path
+        android:pathData="M32,25 L88,25 C92,25 95,27 95,30 L25,30 C25,27 28,25 32,25 Z"
+        android:fillColor="#FFFFFF"
+        android:strokeColor="#1976D2"
+        android:strokeWidth="1.5" />
+
+    <!-- Top Knob - More visible -->
+    <path
+        android:pathData="M55,20 L65,20 C67,20 68,22 68,25 L52,25 C52,22 53,20 55,20 Z"
+        android:fillColor="#2196F3"
+        android:strokeColor="#1976D2"
+        android:strokeWidth="1" />
+
+    <!-- Sharp Reflections to give it "pop" -->
+    <path
+        android:pathData="M35,45 L32,140"
         android:strokeWidth="4"
-        android:strokeColor="#B0BEC5"
-        android:strokeLineCap="round" />
+        android:strokeLineCap="round">
+        <aapt:attr name="android:strokeColor">
+            <gradient
+                android:startY="45"
+                android:startX="35"
+                android:endY="140"
+                android:endX="32"
+                android:type="linear">
+                <item android:offset="0" android:color="#F0FFFFFF" />
+                <item android:offset="1" android:color="#00FFFFFF" />
+            </gradient>
+        </aapt:attr>
+    </path>
 
-    <!-- Spout/Top Detail -->
     <path
-        android:pathData="M30,20 L22,20 L20,28"
-        android:strokeWidth="3"
-        android:strokeColor="#B0BEC5"
-        android:strokeLineCap="round" />
-
-    <!-- Reflection/Gloss Effect -->
-    <path
-        android:pathData="M35,30 L32,110"
+        android:pathData="M45,40 L43,80"
         android:strokeWidth="2"
-        android:strokeColor="#40FFFFFF"
+        android:strokeColor="#A0FFFFFF"
         android:strokeLineCap="round" />
 
 </vector>
