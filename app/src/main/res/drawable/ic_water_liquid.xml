@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="100dp"
+    android:height="140dp"
+    android:viewportWidth="100"
+    android:viewportHeight="140">
+
+    <!-- Inner jug shape to be used as the liquid -->
+    <path
+        android:pathData="M31,22 L69,22 C73,22 78,26 78,31 L83,119 C83,128 74,133 69,133 L31,133 C26,133 17,128 17,119 L22,31 C22,26 27,22 31,22 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startColor="#1565C0"
+                android:centerColor="#1E88E5"
+                android:endColor="#4FC3F7"
+                android:startY="133"
+                android:startX="50"
+                android:endY="22"
+                android:endX="50"
+                android:type="linear" />
+        </aapt:attr>
+    </path>
+
+    <!-- Surface highlight -->
+    <path
+        android:pathData="M25,30 Q50,25 75,30"
+        android:strokeWidth="2"
+        android:strokeColor="#80FFFFFF"
+        android:strokeLineCap="round" />
+</vector>

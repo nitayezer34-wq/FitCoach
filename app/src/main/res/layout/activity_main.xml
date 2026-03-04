@@ -244,13 +244,12 @@
                         android:contentDescription="@null"
                         android:src="@drawable/ic_water_jug" />
 
+                    <!-- ProgressBar is now exactly the same size as the container -->
                     <ProgressBar
                         android:id="@+id/pb_water_jug"
                         style="?android:attr/progressBarStyleHorizontal"
-                        android:layout_width="65dp"
-                        android:layout_height="110dp"
-                        android:layout_gravity="center_horizontal|bottom"
-                        android:layout_marginBottom="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:progressDrawable="@drawable/water_fill_style" />
                 </FrameLayout>
 

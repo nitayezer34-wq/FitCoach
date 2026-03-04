@@ -7,42 +7,11 @@
         </shape>
     </item>
 
-    <!-- The Water Progress -->
+    <!-- The Water Progress - Clip using the jug inner shape -->
     <item android:id="@android:id/progress">
         <clip
             android:clipOrientation="vertical"
-            android:gravity="bottom">
-            <layer-list>
-                <!-- 1. Main Water Body with Vertical Gradient for Depth -->
-                <item>
-                    <shape>
-                        <gradient
-                            android:startColor="#1565C0"
-                            android:centerColor="#1E88E5"
-                            android:endColor="#4FC3F7"
-                            android:angle="90" />
-                        <corners android:radius="4dp" />
-                    </shape>
-                </item>
-
-                <!-- 2. Subtle Side Reflection (Glow) -->
-                <item android:left="5dp" android:right="30dp" android:top="5dp" android:bottom="5dp">
-                    <shape>
-                        <gradient
-                            android:startColor="#40FFFFFF"
-                            android:endColor="#00FFFFFF"
-                            android:angle="0" />
-                        <corners android:radius="10dp" />
-                    </shape>
-                </item>
-
-                <!-- 3. Surface Shine (The "Top" of the water) -->
-                <item android:gravity="top" android:height="3dp">
-                    <shape>
-                        <solid android:color="#B3E5FC" />
-                    </shape>
-                </item>
-            </layer-list>
-        </clip>
+            android:drawable="@drawable/ic_water_liquid"
+            android:gravity="bottom" />
     </item>
 </layer-list>
