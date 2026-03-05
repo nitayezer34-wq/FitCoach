@@ -173,7 +173,7 @@
             android:layout_height="55dp"
             android:layout_marginTop="15dp"
             android:backgroundTint="#2196F3"
-            android:text="ניווט למסלול ריצה (Waze)"
+            android:text="ניווט למסלול ריצה (Google Maps)"
             android:textColor="@android:color/white" />
 
         <Button

@@ -74,57 +74,34 @@ public class WorkoutChecklistAdapter extends RecyclerView.Adapter<WorkoutCheckli
             cbDone.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 int caloriesToChange = workout.getCaloriesPerSet() * workout.getSets();
 
+                // 1. Update LOCAL stats immediately
+                Stats localStats = SharedPreferencesUtil.getStats(context);
+                if (localStats == null) localStats = new Stats();
+
                 if (isChecked) {
-                    // Update SharedPreferences immediately for UI responsiveness
-                    Stats localStats = SharedPreferencesUtil.getStats(context);
-                    if (localStats != null) {
-                        localStats.setCalories(localStats.getCalories() + caloriesToChange);
-                        SharedPreferencesUtil.saveStats(context, localStats);
-                    }
+                    localStats.setCalories(localStats.getCalories() + caloriesToChange);
                     SharedPreferencesUtil.addCompletedWorkout(context, workout.getId());
-
-                    // Sync with Firebase Database
-                    if (userId != null) {
-                        DatabaseService.getInstance().updateStats(userId, stats -> {
-                            if (stats == null) stats = new Stats();
-                            stats.setCalories(stats.getCalories() + caloriesToChange);
-                            return stats;
-                        }, new DatabaseService.DatabaseCallback<>() {
-                            @Override
-                            public void onCompleted(Stats updatedStats) {
-                                Toast.makeText(context, "כל הכבוד! האימון סונכרן למסד הנתונים", Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onFailed(Exception e) {
-                                Toast.makeText(context, "שגיאה בסנכרון: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
                 } else {
-                    // Handle uncheck (optional)
-                    Stats localStats = SharedPreferencesUtil.getStats(context);
-                    if (localStats != null) {
-                        localStats.setCalories(Math.max(0, localStats.getCalories() - caloriesToChange));
-                        SharedPreferencesUtil.saveStats(context, localStats);
-                    }
-                    // Sync subtraction with Firebase
-                    if (userId != null) {
-                        DatabaseService.getInstance().updateStats(userId, stats -> {
-                            if (stats != null) {
-                                stats.setCalories(Math.max(0, stats.getCalories() - caloriesToChange));
-                            }
-                            return stats;
-                        }, new DatabaseService.DatabaseCallback<>() {
-                            @Override
-                            public void onCompleted(Stats object) {
-                            }
+                    localStats.setCalories(Math.max(0, localStats.getCalories() - caloriesToChange));
+                    // Note: You might want a removeCompletedWorkout method in SharedPreferencesUtil
+                }
+                
+                // CRITICAL: Save the updated stats back to SharedPreferences
+                SharedPreferencesUtil.saveStats(context, localStats);
 
-                            @Override
-                            public void onFailed(Exception e) {
-                            }
-                        });
-                    }
+                // 2. Sync with Firebase
+                if (userId != null) {
+                    DatabaseService.getInstance().saveStats(userId, localStats, new DatabaseService.DatabaseCallback<Void>() {
+                        @Override
+                        public void onCompleted(Void object) {
+                            // Optional: show feedback
+                        }
+
+                        @Override
+                        public void onFailed(Exception e) {
+                            Toast.makeText(context, "שגיאה בסנכרון: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             });
         }
