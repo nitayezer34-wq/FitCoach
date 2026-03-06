@@ -68,41 +68,40 @@ public class WorkoutChecklistAdapter extends RecyclerView.Adapter<WorkoutCheckli
             tvExerciseName.setText(workout.getName());
 
             List<String> completedIds = SharedPreferencesUtil.getCompletedWorkouts(context);
+            
+            // Set initial state without triggering listener
             cbDone.setOnCheckedChangeListener(null);
             cbDone.setChecked(completedIds.contains(workout.getId()));
 
             cbDone.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                int caloriesToChange = workout.getCaloriesPerSet() * workout.getSets();
-
-                // 1. Update LOCAL stats immediately
-                Stats localStats = SharedPreferencesUtil.getStats(context);
-                if (localStats == null) localStats = new Stats();
-
-                if (isChecked) {
-                    localStats.setCalories(localStats.getCalories() + caloriesToChange);
-                    SharedPreferencesUtil.addCompletedWorkout(context, workout.getId());
-                } else {
-                    localStats.setCalories(Math.max(0, localStats.getCalories() - caloriesToChange));
-                    // Note: You might want a removeCompletedWorkout method in SharedPreferencesUtil
-                }
+                int caloriesPerExercise = workout.getCaloriesPerSet() * workout.getSets();
                 
-                // CRITICAL: Save the updated stats back to SharedPreferences
-                SharedPreferencesUtil.saveStats(context, localStats);
-
-                // 2. Sync with Firebase
-                if (userId != null) {
-                    DatabaseService.getInstance().saveStats(userId, localStats, new DatabaseService.DatabaseCallback<Void>() {
-                        @Override
-                        public void onCompleted(Void object) {
-                            // Optional: show feedback
-                        }
-
-                        @Override
-                        public void onFailed(Exception e) {
-                            Toast.makeText(context, "שגיאה בסנכרון: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                // Get current stats
+                Stats stats = SharedPreferencesUtil.getStats(context);
+                
+                if (isChecked) {
+                    // Prevent double adding if already in list
+                    if (!SharedPreferencesUtil.getCompletedWorkouts(context).contains(workout.getId())) {
+                        stats.setCalories(stats.getCalories() + caloriesPerExercise);
+                        SharedPreferencesUtil.addCompletedWorkout(context, workout.getId());
+                    }
+                } else {
+                    // Prevent double subtracting if not in list
+                    if (SharedPreferencesUtil.getCompletedWorkouts(context).contains(workout.getId())) {
+                        stats.setCalories(Math.max(0, stats.getCalories() - caloriesPerExercise));
+                        SharedPreferencesUtil.removeCompletedWorkout(context, workout.getId());
+                    }
                 }
+
+                // SAVE BOTH LOCALLY
+                SharedPreferencesUtil.saveStats(context, stats);
+
+                // SYNC WITH FIREBASE
+                if (userId != null) {
+                    DatabaseService.getInstance().saveStats(userId, stats, null);
+                }
+
+                Toast.makeText(context, isChecked ? "נוספו " + caloriesPerExercise + " קלוריות" : "בוטל", Toast.LENGTH_SHORT).show();
             });
         }
     }

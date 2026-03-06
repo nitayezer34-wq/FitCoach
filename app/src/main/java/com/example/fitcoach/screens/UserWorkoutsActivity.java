@@ -28,7 +28,7 @@ public class UserWorkoutsActivity extends AppCompatActivity implements UserWorko
     private UserWorkoutAdapter adapter;
     private List<WorkoutTraining> workoutList;
     private TextView workoutHeaderTitle;
-    private int caloriesBurned = 0;
+    private int caloriesBurnedInSession = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,18 +90,31 @@ public class UserWorkoutsActivity extends AppCompatActivity implements UserWorko
         }
 
         WorkoutTraining workout = workoutList.get(position);
-        int workoutCalories = workout.getTotalExerciseCalories();
-        caloriesBurned += workoutCalories;
+        
+        // החישוב: קלוריות לסט * מספר סטים
+        int workoutCalories = workout.getCaloriesPerSet() * workout.getSets();
+        caloriesBurnedInSession += workoutCalories;
 
-        // Update user's stats
+        // עדכון הסטטיסטיקה הכללית של המשתמש
         Stats stats = SharedPreferencesUtil.getStats(this);
-        if (stats != null) {
-            stats.setCalories(stats.getCalories() + workoutCalories);
-            SharedPreferencesUtil.saveStats(this, stats);
+        if (stats == null) stats = new Stats();
+        
+        // הוספת הקלוריות לערך הקיים
+        stats.setCalories(stats.getCalories() + workoutCalories);
+        
+        // שמירה מקומית
+        SharedPreferencesUtil.saveStats(this, stats);
+        
+        // סנכרון עם Firebase כדי ש-MainActivity יראה את זה
+        String userId = SharedPreferencesUtil.getUserId(this);
+        if (userId != null) {
+            DatabaseService.getInstance().saveStats(userId, stats, null);
         }
 
+        // סימון האימון כבוצע כדי שלא יופיע שוב היום
         SharedPreferencesUtil.addCompletedWorkout(this, workout.getId());
 
+        // עדכון הרשימה במסך
         workoutList.remove(position);
         adapter.notifyItemRemoved(position);
         adapter.notifyItemRangeChanged(position, workoutList.size());
@@ -109,12 +122,10 @@ public class UserWorkoutsActivity extends AppCompatActivity implements UserWorko
         if (workoutList.isEmpty()) {
             User user = SharedPreferencesUtil.getUser(this);
             String userName = (user != null && user.getName() != null) ? user.getName() : "";
-            String finalMessage = String.format("כל הכבוד, %s! 💪 שרפת %d קלוריות 🏅", userName, caloriesBurned);
+            String finalMessage = String.format("כל הכבוד, %s! 💪 שרפת %d קלוריות באימון 🏅", userName, caloriesBurnedInSession);
             Toast.makeText(this, finalMessage, Toast.LENGTH_LONG).show();
-        } else if (workoutList.size() == 1) {
-            Toast.makeText(this, "רק עוד קצת!", Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "כל הכבוד, אלוף! המשך כך", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "מעולה! נוספו " + workoutCalories + " קלוריות למד", Toast.LENGTH_SHORT).show();
         }
     }
 }

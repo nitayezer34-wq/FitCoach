@@ -200,10 +200,12 @@ public class SharedPreferencesUtil {
     /// @see Stats
     /// @see #isUserLoggedIn(Context)
     public static Stats getStats(Context context) {
-        if (!isUserLoggedIn(context)) {
-            return null;
+        Stats stats = getObject(context, "stats", Stats.class);
+        if (stats == null) {
+            stats = new Stats();
+            saveStats(context, stats);
         }
-        return getObject(context, "stats", Stats.class);
+        return stats;
     }
 
     /// Sign out the user by removing user data from shared preferences
@@ -223,6 +225,14 @@ public class SharedPreferencesUtil {
         }
     }
 
+    public static void removeCompletedWorkout(Context context, String workoutId) {
+        List<String> completedWorkouts = getCompletedWorkouts(context);
+        if (completedWorkouts.contains(workoutId)) {
+            completedWorkouts.remove(workoutId);
+            saveCompletedWorkouts(context, completedWorkouts);
+        }
+    }
+
     public static List<String> getCompletedWorkouts(Context context) {
         String json = getString(context, COMPLETED_WORKOUTS_KEY, null);
         if (json == null) {
@@ -231,6 +241,10 @@ public class SharedPreferencesUtil {
         Type type = new TypeToken<ArrayList<String>>() {
         }.getType();
         return new Gson().fromJson(json, type);
+    }
+
+    public static boolean isWorkoutCompleted(Context context, String workoutId) {
+        return getCompletedWorkouts(context).contains(workoutId);
     }
 
     public static void clearCompletedWorkouts(Context context) {
