@@ -7,12 +7,14 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitcoach.R;
 import com.example.fitcoach.models.Recipe;
 
 import java.util.List;
+import java.util.Objects;
 
 public class AdminRecipeAdapter extends RecyclerView.Adapter<AdminRecipeAdapter.RecipeViewHolder> {
 
@@ -24,9 +26,40 @@ public class AdminRecipeAdapter extends RecyclerView.Adapter<AdminRecipeAdapter.
         this.listener = listener;
     }
 
-    public void setRecipes(List<Recipe> recipes) {
-        this.recipes = recipes;
-        notifyDataSetChanged();
+    public void setRecipes(List<Recipe> newRecipes) {
+        if (this.recipes == null) {
+            this.recipes = newRecipes;
+            notifyItemRangeInserted(0, newRecipes.size());
+            return;
+        }
+
+        DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+            @Override
+            public int getOldListSize() {
+                return recipes.size();
+            }
+
+            @Override
+            public int getNewListSize() {
+                return newRecipes.size();
+            }
+
+            @Override
+            public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                return Objects.equals(recipes.get(oldItemPosition).getId(), 
+                                     newRecipes.get(newItemPosition).getId());
+            }
+
+            @Override
+            public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                Recipe oldRecipe = recipes.get(oldItemPosition);
+                Recipe newRecipe = newRecipes.get(newItemPosition);
+                return Objects.equals(oldRecipe.getTitle(), newRecipe.getTitle());
+            }
+        });
+
+        this.recipes = newRecipes;
+        result.dispatchUpdatesTo(this);
     }
 
     @NonNull

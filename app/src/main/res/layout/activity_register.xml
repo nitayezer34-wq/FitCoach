@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="יצירת פרופיל מותאם עבורך"
+            android:text="@string/create_profile_header"
             android:textColor="#2196F3"
             android:textSize="28sp"
             android:textStyle="bold" />
@@ -37,7 +37,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="שם מלא"
+            android:hint="@string/full_name_hint"
             android:textColorHint="#2196F3"
             app:boxStrokeColor="#2196F3"
             app:hintTextColor="#2196F3">
@@ -57,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="אימייל"
+            android:hint="@string/email_hint"
             android:textColorHint="#2196F3"
             app:boxStrokeColor="#2196F3"
             app:hintTextColor="#2196F3">
@@ -77,7 +77,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="סיסמה"
+            android:hint="@string/password_hint"
             android:textColorHint="#2196F3"
             app:boxStrokeColor="#2196F3"
             app:hintTextColor="#2196F3"
@@ -97,7 +97,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="מגדר"
+            android:text="@string/gender_label"
             android:textColor="#1976D2"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -118,7 +118,7 @@
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="זכר"
+                android:text="@string/male"
                 android:textColor="#2196F3"
                 app:buttonTint="#2196F3" />
 
@@ -126,7 +126,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:text="נקבה"
+                android:text="@string/female"
                 android:textColor="#2196F3"
                 app:buttonTint="#2196F3" />
         </RadioGroup>
@@ -135,7 +135,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="שנת לידה"
+            android:text="@string/birth_year_label"
             android:textColor="#1976D2"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -157,7 +157,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="נתונים פיזיים"
+            android:text="@string/physical_data_label"
             android:textColor="#1976D2"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -186,7 +186,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="גובה (ס''מ)"
+                    android:text="@string/height_label"
                     android:textColor="#1976D2"
                     android:textStyle="bold" />
 
@@ -206,7 +206,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="משקל (ק''ג)"
+                    android:text="@string/weight_label"
                     android:textColor="#1976D2"
                     android:textStyle="bold" />
 
@@ -223,7 +223,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="רמת פעילות"
+            android:text="@string/activity_level_label"
             android:textColor="#1976D2"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -246,7 +246,7 @@
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="נמוכה"
+                android:text="@string/activity_low"
                 android:textColor="#2196F3"
                 app:chipBackgroundColor="#E3F2FD"
                 app:chipStrokeColor="#2196F3"
@@ -256,7 +256,7 @@
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="בינונית"
+                android:text="@string/activity_medium"
                 android:textColor="#2196F3"
                 app:chipBackgroundColor="#E3F2FD"
                 app:chipStrokeColor="#2196F3"
@@ -266,7 +266,7 @@
                 style="@style/Widget.MaterialComponents.Chip.Choice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="גבוהה"
+                android:text="@string/activity_high"
                 android:textColor="#2196F3"
                 app:chipBackgroundColor="#E3F2FD"
                 app:chipStrokeColor="#2196F3"
@@ -278,7 +278,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="יעד צעדים יומי 👟"
+            android:text="@string/daily_steps_target_label"
             android:textColor="#1976D2"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -309,7 +309,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="יעד קלוריות יומי 🔥"
+            android:text="@string/daily_calories_target_label"
             android:textColor="#1976D2"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -340,7 +340,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="יעד שתיית מים (מ''ל) 💧"
+            android:text="@string/daily_water_target_label"
             android:textColor="#1976D2"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -373,7 +373,7 @@
             android:layout_height="60dp"
             android:layout_marginTop="32dp"
             android:backgroundTint="#2196F3"
-            android:text="צור חשבון"
+            android:text="@string/register_confirm_button"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             app:cornerRadius="8dp" />
@@ -385,7 +385,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
-            android:text="יש לי חשבון – התחבר"
+            android:text="@string/have_account_login"
             android:textColor="#2196F3" />
 
     </LinearLayout>

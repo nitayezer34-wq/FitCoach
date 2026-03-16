@@ -34,7 +34,7 @@
                 android:id="@+id/tv_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="שם משתמש"
+                android:text="@string/username_label"
                 android:textColor="#212121"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -44,7 +44,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
-                android:text="email@example.com"
+                android:text="@string/email_sample"
                 android:textColor="#757575"
                 android:textSize="14sp" />
         </LinearLayout>

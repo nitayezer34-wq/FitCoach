@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="30dp"
-        android:text="לוח בקרת מנהל"
+        android:text="@string/admin_control_panel"
         android:textColor="#2196F3"
         android:textSize="26sp"
         android:textStyle="bold" />
@@ -32,28 +32,18 @@
         app:cardCornerRadius="15dp"
         app:cardElevation="4dp">
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:drawableStartCompat="@android:drawable/ic_menu_add"
+            android:drawablePadding="15dp"
+            app:drawableTint="#2196F3"
             android:gravity="center_vertical"
-            android:padding="20dp">
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:contentDescription="@null"
-                android:src="@android:drawable/ic_menu_add"
-                app:tint="#2196F3" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                android:text="הוספת אימון חדש למערכת"
-                android:textColor="#2196F3"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </LinearLayout>
+            android:padding="20dp"
+            android:text="@string/add_new_workout_system"
+            android:textColor="#2196F3"
+            android:textSize="18sp"
+            android:textStyle="bold" />
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
@@ -67,28 +57,18 @@
         app:cardCornerRadius="15dp"
         app:cardElevation="4dp">
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:drawableStartCompat="@android:drawable/ic_menu_edit"
+            android:drawablePadding="15dp"
+            app:drawableTint="#2196F3"
             android:gravity="center_vertical"
-            android:padding="20dp">
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:contentDescription="@null"
-                android:src="@android:drawable/ic_menu_edit"
-                app:tint="#2196F3" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                android:text="ניהול ועריכת אימונים"
-                android:textColor="#2196F3"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </LinearLayout>
+            android:padding="20dp"
+            android:text="@string/manage_edit_workouts"
+            android:textColor="#2196F3"
+            android:textSize="18sp"
+            android:textStyle="bold" />
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
@@ -102,28 +82,18 @@
         app:cardCornerRadius="15dp"
         app:cardElevation="4dp">
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:drawableStartCompat="@android:drawable/ic_menu_myplaces"
+            android:drawablePadding="15dp"
+            app:drawableTint="#2196F3"
             android:gravity="center_vertical"
-            android:padding="20dp">
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:contentDescription="@null"
-                android:src="@android:drawable/ic_menu_myplaces"
-                app:tint="#2196F3" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                android:text="ניהול משתמשים"
-                android:textColor="#2196F3"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </LinearLayout>
+            android:padding="20dp"
+            android:text="@string/manage_users"
+            android:textColor="#2196F3"
+            android:textSize="18sp"
+            android:textStyle="bold" />
     </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
@@ -137,28 +107,18 @@
         app:cardCornerRadius="15dp"
         app:cardElevation="4dp">
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:drawableStartCompat="@android:drawable/ic_menu_delete"
+            android:drawablePadding="15dp"
+            app:drawableTint="#2196F3"
             android:gravity="center_vertical"
-            android:padding="20dp">
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:contentDescription="@null"
-                android:src="@android:drawable/ic_menu_delete"
-                app:tint="#2196F3" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="15dp"
-                android:text="ניהול ומחיקת מתכונים"
-                android:textColor="#2196F3"
-                android:textSize="18sp"
-                android:textStyle="bold" />
-        </LinearLayout>
+            android:padding="20dp"
+            android:text="@string/manage_delete_recipes"
+            android:textColor="#2196F3"
+            android:textSize="18sp"
+            android:textStyle="bold" />
     </androidx.cardview.widget.CardView>
 
 </LinearLayout>

@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="כמה אהבת את המתכון?"
+        android:text="@string/how_much_did_you_like"
         android:textColor="#2196F3"
         android:textSize="22sp"
         android:textStyle="bold" />
@@ -31,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="55dp"
         android:backgroundTint="#2196F3"
-        android:text="שלח דירוג"
+        android:text="@string/submit_rating"
         android:textColor="@android:color/white"
         android:textSize="18sp" />
 

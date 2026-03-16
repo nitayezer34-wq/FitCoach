@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="16dp"
-                android:text="הוספת מתכון חדש"
+                android:text="@string/add_new_recipe"
                 android:textColor="#2196F3"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -47,7 +47,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
-                        android:text="פרטי המתכון"
+                        android:text="@string/recipe_details_header"
                         android:textColor="#2196F3"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -57,16 +57,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
+                        android:autofillHints="none"
                         android:backgroundTint="#2196F3"
-                        android:hint="שם המתכון" />
+                        android:hint="@string/recipe_name_hint"
+                        android:inputType="textPersonName" />
 
                     <EditText
                         android:id="@+id/etImageUrl"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
+                        android:autofillHints="none"
                         android:backgroundTint="#2196F3"
-                        android:hint="כתובת URL של התמונה" />
+                        android:hint="@string/image_url_hint"
+                        android:inputType="textUri" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -79,8 +83,9 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="8dp"
                             android:layout_weight="1"
+                            android:autofillHints="none"
                             android:backgroundTint="#2196F3"
-                            android:hint="זמן הכנה (דקות)"
+                            android:hint="@string/prep_time_minutes_hint"
                             android:inputType="number" />
 
                         <EditText
@@ -89,8 +94,9 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:layout_weight="1"
+                            android:autofillHints="none"
                             android:backgroundTint="#2196F3"
-                            android:hint="סה״כ קלוריות"
+                            android:hint="@string/total_calories_hint"
                             android:inputType="number" />
                     </LinearLayout>
                 </LinearLayout>
@@ -115,7 +121,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
-                        android:text="מצרכים"
+                        android:text="@string/ingredients_header"
                         android:textColor="#2196F3"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -124,9 +130,10 @@
                         android:id="@+id/etIngredients"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:autofillHints="none"
                         android:backgroundTint="#2196F3"
                         android:gravity="top"
-                        android:hint="כל מצרך בשורה חדשה..."
+                        android:hint="@string/ingredients_hint"
                         android:inputType="textMultiLine"
                         android:minLines="3" />
                 </LinearLayout>
@@ -151,7 +158,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
-                        android:text="אופן ההכנה"
+                        android:text="@string/instructions_header"
                         android:textColor="#2196F3"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -160,9 +167,10 @@
                         android:id="@+id/etInstructions"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:autofillHints="none"
                         android:backgroundTint="#2196F3"
                         android:gravity="top"
-                        android:hint="כל שלב בשורה חדשה..."
+                        android:hint="@string/instructions_hint"
                         android:inputType="textMultiLine"
                         android:minLines="3" />
                 </LinearLayout>
@@ -187,7 +195,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
-                        android:text="מידע נוסף"
+                        android:text="@string/more_info_header"
                         android:textColor="#2196F3"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -196,8 +204,10 @@
                         android:id="@+id/etAllergens"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:autofillHints="none"
                         android:backgroundTint="#2196F3"
-                        android:hint="אלרגנים (מופרדים בפסיק)" />
+                        android:hint="@string/allergens_hint"
+                        android:inputType="text" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
         </LinearLayout>
@@ -210,7 +220,7 @@
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
         android:backgroundTint="#2196F3"
-        android:text="הוסף מתכון"
+        android:text="@string/add_recipe_button"
         android:textColor="@android:color/white"
         android:textSize="18sp"
         android:textStyle="bold"

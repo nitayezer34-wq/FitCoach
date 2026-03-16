@@ -20,10 +20,11 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="16dp"
-            android:text="האימון שלך, [שם משתמש]"
+            android:text="@string/your_workout_name"
             android:textColor="@color/fit_primary"
             android:textSize="26sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="האימון שלך, [שם משתמש]" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -31,7 +32,7 @@
             android:layout_below="@id/workout_header_title"
             android:layout_alignEnd="@id/workout_header_title"
             android:layout_marginTop="4dp"
-            android:text="קטן עליך, תן בראש!"
+            android:text="@string/keep_it_up"
             android:textColor="@color/fit_primary"
             android:textSize="18sp" />
 

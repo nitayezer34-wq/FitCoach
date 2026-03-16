@@ -35,7 +35,7 @@ public class UserWorkoutAdapter extends RecyclerView.Adapter<UserWorkoutAdapter.
     @Override
     public void onBindViewHolder(@NonNull UserWorkoutViewHolder holder, int position) {
         WorkoutTraining workout = workoutList.get(position);
-        holder.bind(workout, position);
+        holder.bind(workout);
     }
 
     @Override
@@ -63,15 +63,16 @@ public class UserWorkoutAdapter extends RecyclerView.Adapter<UserWorkoutAdapter.
             fabDone = itemView.findViewById(R.id.fab_done);
         }
 
-        public void bind(final WorkoutTraining workout, final int position) {
+        public void bind(final WorkoutTraining workout) {
+            Context context = itemView.getContext();
             workoutName.setText(workout.getName());
-            workoutSets.setText("סטים: " + workout.getSets());
-            workoutReps.setText("חזרות: " + workout.getReps());
+            workoutSets.setText(context.getString(R.string.sets_label_plural, workout.getSets()));
+            workoutReps.setText(context.getString(R.string.reps_label_plural, workout.getReps()));
             workoutDescription.setText(workout.getDescription());
 
             fabDone.setOnClickListener(v -> {
                 if (onWorkoutDoneListener != null) {
-                    onWorkoutDoneListener.onWorkoutDone(getAdapterPosition());
+                    onWorkoutDoneListener.onWorkoutDone(getBindingAdapterPosition());
                 }
             });
         }

@@ -22,6 +22,10 @@ public class Validator {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
+    public static boolean isEmailInvalid(String email) {
+        return !isEmailValid(email);
+    }
+
     public static boolean isPasswordValid(String password) {
         if (password == null) return false;
         return PASSWORD_PATTERN.matcher(password).matches();

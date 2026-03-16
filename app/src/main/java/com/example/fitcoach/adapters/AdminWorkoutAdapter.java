@@ -7,12 +7,14 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitcoach.R;
 import com.example.fitcoach.models.WorkoutTraining;
 
 import java.util.List;
+import java.util.Objects;
 
 public class AdminWorkoutAdapter extends RecyclerView.Adapter<AdminWorkoutAdapter.WorkoutViewHolder> {
 
@@ -24,9 +26,42 @@ public class AdminWorkoutAdapter extends RecyclerView.Adapter<AdminWorkoutAdapte
         this.listener = listener;
     }
 
-    public void setWorkouts(List<WorkoutTraining> workouts) {
-        this.workouts = workouts;
-        notifyDataSetChanged();
+    public void setWorkouts(List<WorkoutTraining> newWorkouts) {
+        if (this.workouts == null) {
+            this.workouts = newWorkouts;
+            notifyItemRangeInserted(0, newWorkouts.size());
+            return;
+        }
+
+        DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+            @Override
+            public int getOldListSize() {
+                return workouts.size();
+            }
+
+            @Override
+            public int getNewListSize() {
+                return newWorkouts.size();
+            }
+
+            @Override
+            public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                return Objects.equals(workouts.get(oldItemPosition).getId(), 
+                                     newWorkouts.get(newItemPosition).getId());
+            }
+
+            @Override
+            public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                WorkoutTraining oldW = workouts.get(oldItemPosition);
+                WorkoutTraining newW = newWorkouts.get(newItemPosition);
+                return Objects.equals(oldW.getName(), newW.getName()) &&
+                       oldW.getSets() == newW.getSets() &&
+                       oldW.getReps() == newW.getReps();
+            }
+        });
+
+        this.workouts = newWorkouts;
+        result.dispatchUpdatesTo(this);
     }
 
     @NonNull
@@ -44,7 +79,7 @@ public class AdminWorkoutAdapter extends RecyclerView.Adapter<AdminWorkoutAdapte
 
     @Override
     public int getItemCount() {
-        return workouts.size();
+        return workouts != null ? workouts.size() : 0;
     }
 
     public interface OnWorkoutActionListener {

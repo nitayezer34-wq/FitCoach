@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitcoach.R;
@@ -14,6 +15,7 @@ import com.example.fitcoach.models.WeightCategory;
 import com.example.fitcoach.models.WorkoutTraining;
 
 import java.util.List;
+import java.util.Objects;
 
 public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutViewHolder> {
 
@@ -43,8 +45,40 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
     }
 
     public void setWorkoutList(List<WorkoutTraining> newWorkoutList) {
+        if (this.workoutList == null) {
+            this.workoutList = newWorkoutList;
+            notifyItemRangeInserted(0, newWorkoutList.size());
+            return;
+        }
+
+        DiffUtil.DiffResult result = DiffUtil.calculateDiff(new DiffUtil.Callback() {
+            @Override
+            public int getOldListSize() {
+                return workoutList.size();
+            }
+
+            @Override
+            public int getNewListSize() {
+                return newWorkoutList.size();
+            }
+
+            @Override
+            public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
+                return Objects.equals(workoutList.get(oldItemPosition).getId(), 
+                                     newWorkoutList.get(newItemPosition).getId());
+            }
+
+            @Override
+            public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
+                WorkoutTraining oldW = workoutList.get(oldItemPosition);
+                WorkoutTraining newW = newWorkoutList.get(newItemPosition);
+                return Objects.equals(oldW.getName(), newW.getName()) &&
+                       oldW.getTargetAudience() == newW.getTargetAudience();
+            }
+        });
+
         this.workoutList = newWorkoutList;
-        notifyDataSetChanged();
+        result.dispatchUpdatesTo(this);
     }
 
     public interface OnWorkoutListener {

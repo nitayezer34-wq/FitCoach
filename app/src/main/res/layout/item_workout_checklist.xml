@@ -10,13 +10,13 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Exercise Name"
+        android:text="@string/exercise_name_hint"
         android:textSize="18sp" />
 
     <CheckBox
         android:id="@+id/cb_done"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="בוצע" />
+        android:text="@string/done" />
 
 </LinearLayout>

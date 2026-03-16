@@ -31,7 +31,7 @@
                     android:id="@+id/tv_main_welcome"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="שלום, מתאמן!"
+                    android:text="@string/hello_trainee"
                     android:textColor="#2196F3"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -92,8 +92,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:gravity="center"
-                        android:text="0
-צעדים"
+                        android:text="@string/steps_with_value_placeholder"
                         android:textColor="#2196F3"
                         android:textStyle="bold" />
                 </RelativeLayout>
@@ -125,8 +124,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
                         android:gravity="center"
-                        android:text="0
-קלוריות"
+                        android:text="@string/calories_with_value_placeholder"
                         android:textColor="#2196F3"
                         android:textStyle="bold" />
                 </RelativeLayout>
@@ -153,7 +151,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="האימון היומי שלך"
+                    android:text="@string/daily_workout_header"
                     android:textColor="#2196F3"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -162,7 +160,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="לחץ כאן כדי להתחיל אימון ולשרוף קלוריות"
+                    android:text="@string/start_workout_promo"
                     android:textColor="#2196F3" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -173,7 +171,7 @@
             android:layout_height="55dp"
             android:layout_marginTop="15dp"
             android:backgroundTint="#2196F3"
-            android:text="ניווט למסלול ריצה (Google Maps)"
+            android:text="@string/navigation_running_route"
             android:textColor="@android:color/white" />
 
         <Button
@@ -182,7 +180,7 @@
             android:layout_height="55dp"
             android:layout_marginTop="10dp"
             android:backgroundTint="@android:color/white"
-            android:text="פורום מתכונים בריאים"
+            android:text="@string/healthy_recipes_forum"
             android:textColor="#2196F3" />
 
         <RelativeLayout
@@ -191,6 +189,7 @@
             android:layout_marginTop="30dp">
 
             <LinearLayout
+                android:id="@+id/ll_bmi_gauge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -220,15 +219,17 @@
                     android:id="@+id/tv_bmi_status_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="BMI תקין"
+                    android:text="@string/bmi_normal"
                     android:textColor="#2196F3"
                     android:textStyle="bold" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/ll_water_jug"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
+                android:layout_toStartOf="@id/ll_bmi_gauge"
                 android:gravity="bottom"
                 android:orientation="horizontal">
 

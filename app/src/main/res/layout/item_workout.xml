@@ -28,16 +28,8 @@
             android:layout_height="wrap_content"
             android:padding="16dp">
 
-            <TextView
-                android:id="@+id/workout_category"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:textSize="18sp"
-                android:textStyle="italic" />
-
             <LinearLayout
+                android:id="@+id/ll_workout_actions"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
@@ -49,7 +41,7 @@
                     android:layout_height="48dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
-                    android:contentDescription="Edit Workout"
+                    android:contentDescription="@string/edit_workout"
                     android:focusable="true"
                     android:padding="10dp"
                     android:src="@drawable/ic_edit"
@@ -62,13 +54,24 @@
                     android:layout_marginStart="12dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
-                    android:contentDescription="Delete Workout"
+                    android:contentDescription="@string/delete_workout"
                     android:focusable="true"
                     android:padding="10dp"
                     android:src="@drawable/ic_delete"
                     app:tint="@color/fit_primary" />
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/workout_category"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@id/ll_workout_actions"
+                android:layout_marginEnd="8dp"
+                android:textSize="18sp"
+                android:textStyle="italic" />
 
         </RelativeLayout>
     </LinearLayout>

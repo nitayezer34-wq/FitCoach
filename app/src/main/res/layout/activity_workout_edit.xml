@@ -15,21 +15,26 @@
             android:id="@+id/et_workout_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="שם האימון" />
+            android:autofillHints="none"
+            android:hint="@string/workout_name_hint"
+            android:inputType="text" />
 
         <EditText
             android:id="@+id/et_workout_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="תיאור" />
+            android:autofillHints="none"
+            android:hint="@string/short_description_hint"
+            android:inputType="text" />
 
         <EditText
             android:id="@+id/et_calories_per_set"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="קלוריות לסט"
+            android:autofillHints="none"
+            android:hint="@string/calories_per_set"
             android:inputType="number" />
 
         <EditText
@@ -37,7 +42,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="סטים"
+            android:autofillHints="none"
+            android:hint="@string/sets"
             android:inputType="number" />
 
         <EditText
@@ -45,7 +51,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="חזרות"
+            android:autofillHints="none"
+            android:hint="@string/reps"
             android:inputType="number" />
 
         <EditText
@@ -53,14 +60,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:hint="זמן מנוחה (דקות)"
+            android:autofillHints="none"
+            android:hint="@string/rest_time_minutes"
             android:inputType="numberDecimal" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="קהל יעד" />
+            android:text="@string/target_audience_label" />
 
         <RadioGroup
             android:id="@+id/rg_target_audience"
@@ -72,19 +80,19 @@
                 android:id="@+id/rb_underweight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="תת משקל" />
+                android:text="@string/underweight" />
 
             <RadioButton
                 android:id="@+id/rb_normal_weight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="משקל תקין" />
+                android:text="@string/normal_weight" />
 
             <RadioButton
                 android:id="@+id/rb_overweight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="עודף משקל" />
+                android:text="@string/overweight" />
         </RadioGroup>
 
         <Button
@@ -92,7 +100,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="עדכן אימון" />
+            android:text="@string/update_workout_button" />
 
     </LinearLayout>
 </ScrollView>

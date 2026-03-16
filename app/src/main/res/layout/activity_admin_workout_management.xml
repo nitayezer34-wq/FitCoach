@@ -19,7 +19,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ניהול מאגר האימונים"
+            android:text="@string/manage_workouts_pool"
             android:textColor="@color/fit_primary"
             android:textSize="26sp"
             android:textStyle="bold" />
@@ -45,7 +45,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="סנן לפי:"
+            android:text="@string/filter_by"
             android:textColor="@color/fit_primary"
             android:textSize="16sp"
             android:textStyle="bold" />

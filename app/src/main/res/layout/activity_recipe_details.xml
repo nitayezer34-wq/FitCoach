@@ -37,7 +37,7 @@
                     android:textColor="#212121"
                     android:textSize="24sp"
                     android:textStyle="bold"
-                    tools:text="שם המתכון" />
+                    tools:text="@string/recipe_name_placeholder" />
 
                 <LinearLayout
                     android:id="@+id/llRating_details"
@@ -72,7 +72,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:text="מצרכים"
+                    android:text="@string/ingredients_header"
                     android:textColor="#2196F3"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -89,7 +89,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:layout_marginBottom="8dp"
-                    android:text="אופן ההכנה"
+                    android:text="@string/instructions_header"
                     android:textColor="#2196F3"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -111,7 +111,7 @@
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
         android:backgroundTint="#FFC107"
-        android:text="דרג את המתכון"
+        android:text="@string/rate_recipe"
         android:textColor="@android:color/white"
         android:textSize="18sp"
         android:textStyle="bold" />

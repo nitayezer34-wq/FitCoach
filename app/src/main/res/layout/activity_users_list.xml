@@ -19,7 +19,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ניהול משתמשים"
+            android:text="@string/manage_users"
             android:textColor="#2196F3"
             android:textSize="26sp"
             android:textStyle="bold" />

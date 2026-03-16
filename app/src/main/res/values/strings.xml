@@ -2,4 +2,149 @@
     <string name="app_name">FitCoach</string>
     <string name="title_activity_register">RegisterActivity</string>
 
+    <!-- General -->
+    <string name="save">שמור</string>
+    <string name="cancel">ביטול</string>
+    <string name="edit">עריכה</string>
+    <string name="delete">מחיקה</string>
+    <string name="loading">טוען…</string>
+    <string name="done">בוצע</string>
+    <string name="next">המשך</string>
+    <string name="email_label">אימייל</string>
+    <string name="username_label">שם משתמש</string>
+
+    <!-- Landing Activity -->
+    <string name="welcome_to_fitcoach">ברוכים הבאים ל-FitCoach</string>
+    <string name="landing_subtitle">התחבר או צור חשבון כדי להתחיל</string>
+    <string name="create_new_account">צור חשבון חדש</string>
+    <string name="already_have_account">יש לי חשבון</string>
+    <string name="logo_description">FitCoach Logo</string>
+
+    <!-- Login Activity -->
+    <string name="login_welcome">התחבר לחשבון שלך</string>
+    <string name="email_hint">אימייל</string>
+    <string name="password_hint">סיסמה</string>
+    <string name="login_button">התחבר</string>
+    <string name="no_account_register">אין לך חשבון? הירשם עכשיו</string>
+
+    <!-- Register Activity -->
+    <string name="create_profile_header">יצירת פרופיל מותאם עבורך</string>
+    <string name="full_name_hint">שם מלא</string>
+    <string name="gender_label">מגדר</string>
+    <string name="male">זכר</string>
+    <string name="female">נקבה</string>
+    <string name="birth_year_label">שנת לידה</string>
+    <string name="physical_data_label">נתונים פיזיים</string>
+    <string name="height_label">גובה (ס״מ)</string>
+    <string name="weight_label">משקל (ק״ג)</string>
+    <string name="activity_level_label">רמת פעילות</string>
+    <string name="activity_low">נמוכה</string>
+    <string name="activity_medium">בינונית</string>
+    <string name="activity_high">גבוהה</string>
+    <string name="daily_steps_target_label">יעד צעדים יומי 👟</string>
+    <string name="daily_calories_target_label">יעד קלוריות יומי 🔥</string>
+    <string name="daily_water_target_label">יעד שתיית מים (מ״ל) 💧</string>
+    <string name="register_confirm_button">צור חשבון</string>
+    <string name="have_account_login">יש לי חשבון – התחבר</string>
+
+    <!-- Main Activity -->
+    <string name="hello_trainee">שלום, מתאמן!</string>
+    <string name="steps_label">צעדים</string>
+    <string name="calories_label">קלוריות</string>
+    <string name="steps_count_suffix">צעדים</string>
+    <string name="calories_count_suffix">קלוריות</string>
+    <string name="steps_with_value_placeholder">0\nצעדים</string>
+    <string name="calories_with_value_placeholder">0\nקלוריות</string>
+    <string name="daily_workout_header">האימון היומי שלך</string>
+    <string name="start_workout_promo">לחץ כאן כדי להתחיל אימון ולשרוף קלוריות</string>
+    <string name="navigation_running_route">ניווט למסלול ריצה (Google Maps)</string>
+    <string name="healthy_recipes_forum">פורום מתכונים בריאים</string>
+    <string name="bmi_normal">BMI תקין</string>
+
+    <!-- Admin Activity -->
+    <string name="admin_control_panel">לוח בקרת מנהל</string>
+    <string name="add_new_workout_system">הוספת אימון חדש למערכת</string>
+    <string name="manage_edit_workouts">ניהול ועריכת אימונים</string>
+    <string name="manage_users">ניהול משתמשים</string>
+    <string name="manage_delete_recipes">ניהול ומחיקת מתכונים</string>
+
+    <!-- Add Recipe Activity -->
+    <string name="add_new_recipe">הוספת מתכון חדש</string>
+    <string name="recipe_details_header">פרטי המתכון</string>
+    <string name="recipe_name_hint">שם המתכון</string>
+    <string name="image_url_hint">כתובת URL של התמונה</string>
+    <string name="prep_time_minutes_hint">זמן הכנה (דקות)</string>
+    <string name="total_calories_hint">סה״כ קלוריות</string>
+    <string name="ingredients_header">מצרכים</string>
+    <string name="ingredients_hint">כל מצרך בשורה חדשה…</string>
+    <string name="instructions_header">אופן ההכנה</string>
+    <string name="instructions_hint">כל שלב בשורה חדשה…</string>
+    <string name="more_info_header">מידע נוסף</string>
+    <string name="allergens_hint">אלרגנים (מופרדים בפסיק)</string>
+    <string name="add_recipe_button">הוסף מתכון</string>
+
+    <!-- Recipe Item/Details -->
+    <string name="recipe_name_placeholder">שם המתכון</string>
+    <string name="prep_time_placeholder">25 דקות</string>
+    <string name="calories_placeholder">350 קלוריות</string>
+    <string name="allergens_label">אלרגנים: %s</string>
+    <string name="allergens_sample">אלרגנים: בוטנים, אגוזים</string>
+    <string name="rate_recipe">דרג את המתכון</string>
+    <string name="rate_this_recipe">דרג את המתכון</string>
+    <string name="how_much_did_you_like">כמה אהבת את המתכון?</string>
+    <string name="submit_rating">שלח דירוג</string>
+    <string name="healthy_recipes_forum_title">פורום מתכונים בריאים</string>
+
+    <!-- User Profile -->
+    <string name="edit_profile">עריכת פרופיל</string>
+    <string name="personal_details">פרטים אישיים</string>
+    <string name="save_changes">שמור שינויים</string>
+    <string name="daily_targets">יעדים יומיים</string>
+    <string name="daily_steps_target">יעד צעדים יומי</string>
+    <string name="daily_calories_target">יעד קלוריות יומי</string>
+    <string name="daily_water_target">יעד מים יומי (מ״ל)</string>
+
+    <!-- Workouts -->
+    <string name="my_workout_plan">התוכנית אימון שלי</string>
+    <string name="your_workout_name">האימון שלך, %s</string>
+    <string name="sets_label_plural">סטים: %d</string>
+    <string name="reps_label_plural">חזרות: %d</string>
+    <string name="sets_sample">3 סטים</string>
+    <string name="reps_sample">12 חזרות</string>
+    <string name="workout_description_placeholder">תיאור קצר שהאדמין נתן על התרגיל יופיע כאן.</string>
+    <string name="keep_it_up">קטן עליך, תן בראש</string>
+    <string name="exercise_name_label">שם התרגיל</string>
+    <string name="exercise_name_hint">Exercise Name</string>
+    <string name="edit_workout">Edit Workout</string>
+    <string name="delete_workout">Delete Workout</string>
+
+    <!-- Admin Management -->
+    <string name="manage_recipes_pool">ניהול מאגר המתכונים</string>
+    <string name="manage_workouts_pool">ניהול מאגר האימונים</string>
+    <string name="filter_by">סנן לפי:</string>
+    <string name="workout_name_placeholder">שם האימון</string>
+
+    <!-- Workout Creation / Edit -->
+    <string name="create_new_workout">יצירת אימון חדש</string>
+    <string name="workout_details">פרטי האימון</string>
+    <string name="workout_name_hint">שם האימון</string>
+    <string name="short_description_hint">תיאור קצר</string>
+    <string name="target_audience_label">קהל יעד</string>
+    <string name="target_audience_bmi">קהל יעד (לפי BMI)</string>
+    <string name="underweight">תת משקל</string>
+    <string name="normal_weight">משקל תקין</string>
+    <string name="overweight">עודף משקל</string>
+    <string name="workout_structure">מבנה האימון</string>
+    <string name="sets_count_hint">מספר סטים</string>
+    <string name="reps_per_set_hint">חזרות לסט</string>
+    <string name="burned_calories_per_set_hint">קלוריות שנשרפות בסט</string>
+    <string name="calories_per_set">קלוריות לסט</string>
+    <string name="sets">סטים</string>
+    <string name="reps">חזרות</string>
+    <string name="rest_time_minutes">זמן מנוחה (דקות)</string>
+    <string name="create_workout_button">צור אימון</string>
+    <string name="update_workout_button">עדכן אימון</string>
+
+    <string name="email_sample">email@example.com</string>
+
 </resources>

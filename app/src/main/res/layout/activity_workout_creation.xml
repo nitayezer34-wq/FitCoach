@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginBottom="16dp"
-                android:text="יצירת אימון חדש"
+                android:text="@string/create_new_workout"
                 android:textColor="#2196F3"
                 android:textSize="24sp"
                 android:textStyle="bold" />
@@ -46,7 +46,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
-                        android:text="פרטי האימון"
+                        android:text="@string/workout_details"
                         android:textColor="#2196F3"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -56,15 +56,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
+                        android:autofillHints="none"
                         android:backgroundTint="#2196F3"
-                        android:hint="שם האימון" />
+                        android:hint="@string/workout_name_hint"
+                        android:inputType="text" />
 
                     <EditText
                         android:id="@+id/et_workout_description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:autofillHints="none"
                         android:backgroundTint="#2196F3"
-                        android:hint="תיאור קצר" />
+                        android:hint="@string/short_description_hint"
+                        android:inputType="text" />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -88,7 +92,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="8dp"
-                        android:text="קהל יעד (לפי BMI)"
+                        android:text="@string/target_audience_bmi"
                         android:textColor="#2196F3"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -104,21 +108,21 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="תת משקל" />
+                            android:text="@string/underweight" />
 
                         <RadioButton
                             android:id="@+id/rb_normal_weight"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="משקל תקין" />
+                            android:text="@string/normal_weight" />
 
                         <RadioButton
                             android:id="@+id/rb_overweight"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="עודף משקל" />
+                            android:text="@string/overweight" />
                     </RadioGroup>
 
                 </LinearLayout>
@@ -144,7 +148,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
-                        android:text="מבנה האימון"
+                        android:text="@string/workout_structure"
                         android:textColor="#2196F3"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -160,8 +164,9 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="8dp"
                             android:layout_weight="1"
+                            android:autofillHints="none"
                             android:backgroundTint="#2196F3"
-                            android:hint="מספר סטים"
+                            android:hint="@string/sets_count_hint"
                             android:inputType="number" />
 
                         <EditText
@@ -170,8 +175,9 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:layout_weight="1"
+                            android:autofillHints="none"
                             android:backgroundTint="#2196F3"
-                            android:hint="חזרות לסט"
+                            android:hint="@string/reps_per_set_hint"
                             android:inputType="number" />
                     </LinearLayout>
 
@@ -180,8 +186,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
+                        android:autofillHints="none"
                         android:backgroundTint="#2196F3"
-                        android:hint="קלוריות שנשרפות בסט"
+                        android:hint="@string/burned_calories_per_set_hint"
                         android:inputType="number" />
 
                     <EditText
@@ -189,8 +196,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="12dp"
+                        android:autofillHints="none"
                         android:backgroundTint="#2196F3"
-                        android:hint="זמן מנוחה (דקות)"
+                        android:hint="@string/rest_time_minutes"
                         android:inputType="numberDecimal" />
 
                 </LinearLayout>
@@ -206,7 +214,7 @@
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp"
         android:backgroundTint="#2196F3"
-        android:text="צור אימון"
+        android:text="@string/create_workout_button"
         android:textColor="@android:color/white"
         android:textSize="18sp"
         android:textStyle="bold"
