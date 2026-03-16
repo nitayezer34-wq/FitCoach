@@ -20,6 +20,7 @@
                 android:id="@+id/ivRecipeImage_details"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
+                android:contentDescription="@null"
                 android:scaleType="centerCrop"
                 tools:src="@tools:sample/backgrounds/scenic" />
 

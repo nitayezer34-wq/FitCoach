@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
+            android:contentDescription="@null"
             app:backgroundTint="@color/fit_accent"
             app:fabSize="mini"
             app:srcCompat="@drawable/ic_check"
