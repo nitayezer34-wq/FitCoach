@@ -19,6 +19,7 @@ import com.example.fitcoach.utils.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 public class UserWorkoutsActivity extends AppCompatActivity implements UserWorkoutAdapter.OnWorkoutDoneListener {
@@ -56,7 +57,7 @@ public class UserWorkoutsActivity extends AppCompatActivity implements UserWorko
         }
 
         String userName = (user.getName() != null && !user.getName().isEmpty()) ? user.getName() : "";
-        workoutHeaderTitle.setText("האימון שלך, " + userName);
+        workoutHeaderTitle.setText(String.format(Locale.getDefault(), "האימון שלך, %s", userName));
 
         WeightCategory userWeightCategory = user.getWeightCategory();
         List<String> completedWorkoutIds = SharedPreferencesUtil.getCompletedWorkouts(this);
@@ -122,7 +123,7 @@ public class UserWorkoutsActivity extends AppCompatActivity implements UserWorko
         if (workoutList.isEmpty()) {
             User user = SharedPreferencesUtil.getUser(this);
             String userName = (user != null && user.getName() != null) ? user.getName() : "";
-            String finalMessage = String.format("כל הכבוד, %s! 💪 שרפת %d קלוריות באימון 🏅", userName, caloriesBurnedInSession);
+            String finalMessage = String.format(Locale.getDefault(), "כל הכבוד, %s! 💪 שרפת %d קלוריות באימון 🏅", userName, caloriesBurnedInSession);
             Toast.makeText(this, finalMessage, Toast.LENGTH_LONG).show();
         } else {
             Toast.makeText(this, "מעולה! נוספו " + workoutCalories + " קלוריות למד", Toast.LENGTH_SHORT).show();

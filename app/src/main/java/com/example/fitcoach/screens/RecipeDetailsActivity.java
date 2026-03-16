@@ -18,6 +18,8 @@ import com.example.fitcoach.R;
 import com.example.fitcoach.models.Recipe;
 import com.example.fitcoach.services.DatabaseService;
 
+import java.util.Locale;
+
 public class RecipeDetailsActivity extends AppCompatActivity {
 
     private ImageView ivRecipeImage;
@@ -85,7 +87,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
 
         if (currentRecipe.getAllergens() != null && !currentRecipe.getAllergens().isEmpty()) {
             tvAllergens.setVisibility(View.VISIBLE);
-            tvAllergens.setText(String.format("אלרגנים: %s", String.join(", ", currentRecipe.getAllergens())));
+            tvAllergens.setText(String.format(Locale.getDefault(), "אלרגנים: %s", String.join(", ", currentRecipe.getAllergens())));
         } else {
             tvAllergens.setVisibility(View.GONE);
         }
@@ -94,7 +96,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         if (currentRecipe.getIngredients() != null) {
             for (String ingredient : currentRecipe.getIngredients()) {
                 TextView tv = new TextView(this);
-                tv.setText(String.format("• %s", ingredient));
+                tv.setText(String.format(Locale.getDefault(), "• %s", ingredient));
                 tv.setTextSize(16);
                 llIngredientsContainer.addView(tv);
             }
@@ -104,7 +106,7 @@ public class RecipeDetailsActivity extends AppCompatActivity {
         if (currentRecipe.getInstructions() != null) {
             for (int i = 0; i < currentRecipe.getInstructions().size(); i++) {
                 TextView tv = new TextView(this);
-                tv.setText(String.format("%d. %s", i + 1, currentRecipe.getInstructions().get(i)));
+                tv.setText(String.format(Locale.getDefault(), "%d. %s", i + 1, currentRecipe.getInstructions().get(i)));
                 tv.setTextSize(16);
                 tv.setLineSpacing(0, 1.2f);
                 llInstructionsContainer.addView(tv);

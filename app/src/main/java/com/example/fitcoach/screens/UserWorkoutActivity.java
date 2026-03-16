@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class UserWorkoutActivity extends AppCompatActivity implements UserWorkoutAdapter.OnWorkoutDoneListener {
 
@@ -35,7 +36,6 @@ public class UserWorkoutActivity extends AppCompatActivity implements UserWorkou
         workoutList.add(new WorkoutTraining(null, "Push Ups", "Description for Push Ups", 50, 3, 12, 1.5, null));
         workoutList.add(new WorkoutTraining(null, "Squats", "Description for Squats", 50, 3, 15, 1.5, null));
         workoutList.add(new WorkoutTraining(null, "Plank", "Description for Plank", 50, 3, 60, 1.5, null));
-        int initialWorkoutCount = workoutList.size();
 
         adapter = new UserWorkoutAdapter(this, workoutList, this);
         rvUserWorkouts.setAdapter(adapter);
@@ -59,7 +59,7 @@ public class UserWorkoutActivity extends AppCompatActivity implements UserWorkou
             // Last workout finished
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             String userName = (user != null && user.getDisplayName() != null) ? user.getDisplayName() : "";
-            String finalMessage = String.format("כל הכבוד, %s! \uD83D\uDCAA שרפת %d קלוריות \uD83C\uDF96", userName, caloriesBurned);
+            String finalMessage = String.format(Locale.getDefault(), "כל הכבוד, %s! 💪 שרפת %d קלוריות 🏅", userName, caloriesBurned);
             Toast.makeText(this, finalMessage, Toast.LENGTH_LONG).show();
 
         }

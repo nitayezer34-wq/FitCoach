@@ -36,6 +36,7 @@ import com.example.fitcoach.services.DatabaseService;
 import com.example.fitcoach.utils.HealthConnectManager;
 import com.example.fitcoach.utils.SharedPreferencesUtil;
 
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
@@ -130,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                     stats.setCalories(stats.getCalories() + addedCalories);
                     
                     saveAndRefreshStats(stats);
-                    String msg = String.format("נוספו %d צעדים ו-%d קלוריות!", addedSteps, (int)addedCalories);
+                    String msg = String.format(Locale.getDefault(), "נוספו %d צעדים ו-%d קלוריות!", addedSteps, (int)addedCalories);
                     Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
                 } catch (NumberFormatException e) {
                     Toast.makeText(this, "ערך לא תקין", Toast.LENGTH_SHORT).show();
@@ -370,7 +371,7 @@ public class MainActivity extends AppCompatActivity {
                     updateBMIGauge(updatedUser);
 
                     if (updatedUser.getName() != null && !updatedUser.getName().isEmpty() && tvGreeting != null) {
-                        tvGreeting.setText(String.format("שלום, %s", updatedUser.getName()));
+                        tvGreeting.setText(String.format(Locale.getDefault(), "שלום, %s", updatedUser.getName()));
                     }
 
                     if (pbWaterJug != null)
@@ -427,7 +428,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (pbCalories != null && tvCaloriesValue != null) {
             int caloriesTarget = user.getDailyCaloriesTarget() > 0 ? user.getDailyCaloriesTarget() : 2000;
-            tvCaloriesValue.setText(String.format("%d/%d", (int) stats.getCalories(), caloriesTarget));
+            tvCaloriesValue.setText(String.format(Locale.getDefault(), "%d/%d", (int) stats.getCalories(), caloriesTarget));
             pbCalories.setMax(caloriesTarget);
             
             // Explicitly set progress for calories
@@ -438,7 +439,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (pbSteps != null && tvStepsValue != null) {
             int stepsTarget = user.getDailyStepsTarget() > 0 ? user.getDailyStepsTarget() : 5000;
-            tvStepsValue.setText(String.format("%d/%d", stats.getSteps(), stepsTarget));
+            tvStepsValue.setText(String.format(Locale.getDefault(), "%d/%d", stats.getSteps(), stepsTarget));
             pbSteps.setMax(stepsTarget);
             pbSteps.setProgress(Math.min(stepsTarget, stats.getSteps()));
         }

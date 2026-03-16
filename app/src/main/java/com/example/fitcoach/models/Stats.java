@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class Stats {
 
@@ -34,7 +35,7 @@ public class Stats {
 
     private String getCurrentDateString() {
         Calendar c = Calendar.getInstance();
-        return String.format("%d-%02d-%02d",
+        return String.format(Locale.getDefault(), "%d-%02d-%02d",
                 c.get(Calendar.YEAR),
                 c.get(Calendar.MONTH) + 1,
                 c.get(Calendar.DAY_OF_MONTH));

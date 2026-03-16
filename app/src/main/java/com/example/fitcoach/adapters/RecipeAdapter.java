@@ -17,6 +17,7 @@ import com.example.fitcoach.models.Recipe;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeViewHolder> {
 
@@ -88,13 +89,13 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             }
 
             tvPrepTime.setText(formatPrepTime(recipe.getPrepTimeInMinutes()));
-            tvCalories.setText(String.format("%d קלוריות", recipe.getCalories()));
+            tvCalories.setText(String.format(Locale.getDefault(), "%d קלוריות", recipe.getCalories()));
 
             updateRatingStars(recipe.getRating());
 
             if (recipe.getAllergens() != null && !recipe.getAllergens().isEmpty()) {
                 tvAllergens.setVisibility(View.VISIBLE);
-                tvAllergens.setText(String.format("אלרגנים: %s", String.join(", ", recipe.getAllergens())));
+                tvAllergens.setText(String.format(Locale.getDefault(), "אלרגנים: %s", String.join(", ", recipe.getAllergens())));
             } else {
                 tvAllergens.setVisibility(View.GONE);
             }
@@ -111,7 +112,7 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.RecipeView
             if (remainingMinutes == 0) {
                 return hours + " שעות";
             }
-            return String.format("%d hr %d min", hours, remainingMinutes);
+            return String.format(Locale.getDefault(), "%d hr %d min", hours, remainingMinutes);
         }
 
         private void updateRatingStars(double rating) {
