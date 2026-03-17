@@ -102,6 +102,14 @@ public class SharedPreferencesUtil {
         }
     }
 
+    public static void removeCompletedWorkout(Context context, String workoutId) {
+        List<String> completedWorkouts = getCompletedWorkouts(context);
+        if (completedWorkouts.contains(workoutId)) {
+            completedWorkouts.remove(workoutId);
+            saveCompletedWorkouts(context, completedWorkouts);
+        }
+    }
+
     public static List<String> getCompletedWorkouts(Context context) {
         String json = getString(context, COMPLETED_WORKOUTS_KEY);
         if (json == null) return new ArrayList<>();

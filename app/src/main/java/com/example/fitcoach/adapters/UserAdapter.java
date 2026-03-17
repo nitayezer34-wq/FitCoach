@@ -83,7 +83,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         void onMakeAdminClick(User user, int position);
     }
 
-    static class UserViewHolder extends RecyclerView.ViewHolder {
+    public static class UserViewHolder extends RecyclerView.ViewHolder {
         final TextView tvName;
         final TextView tvEmail;
         final ImageButton btnDelete;

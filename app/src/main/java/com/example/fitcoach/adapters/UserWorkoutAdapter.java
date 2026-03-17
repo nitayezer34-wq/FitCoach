@@ -47,7 +47,7 @@ public class UserWorkoutAdapter extends RecyclerView.Adapter<UserWorkoutAdapter.
         void onWorkoutDone(int position);
     }
 
-    class UserWorkoutViewHolder extends RecyclerView.ViewHolder {
+    public class UserWorkoutViewHolder extends RecyclerView.ViewHolder {
         final TextView workoutName;
         final TextView workoutSets;
         final TextView workoutReps;

@@ -86,7 +86,7 @@ public class AdminRecipeAdapter extends RecyclerView.Adapter<AdminRecipeAdapter.
         void onEditRecipe(Recipe recipe);
     }
 
-    static class RecipeViewHolder extends RecyclerView.ViewHolder {
+    public static class RecipeViewHolder extends RecyclerView.ViewHolder {
         final TextView tvName;
         final ImageButton btnDelete;
         final ImageButton btnEdit;

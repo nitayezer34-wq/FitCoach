@@ -87,7 +87,7 @@ public class WorkoutAdapter extends RecyclerView.Adapter<WorkoutAdapter.WorkoutV
         void onDelete(WorkoutTraining workout);
     }
 
-    static class WorkoutViewHolder extends RecyclerView.ViewHolder {
+    public static class WorkoutViewHolder extends RecyclerView.ViewHolder {
         private final TextView tvName, tvCategory;
         private final ImageView btnEdit, btnDelete;
 
