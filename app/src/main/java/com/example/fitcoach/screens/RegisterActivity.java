@@ -1,19 +1,18 @@
 package com.example.fitcoach.screens;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,20 +28,20 @@ import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private TextInputLayout tilName, tilEmail, tilPassword;
-    private TextInputEditText etName, etEmail, etPassword;
+    private TextInputLayout tilName, tilEmail, tilPassword, tilBirthDate;
+    private TextInputEditText etName, etEmail, etPassword, etBirthDate;
     private RadioGroup rgGender;
-    private Spinner spinnerBirthYear;
     private NumberPicker npHeight, npWeight;
     private ChipGroup cgActivityLevel;
     private SeekBar sbStepTarget, sbCaloriesTarget, sbWaterTarget;
     private TextView tvStepTargetValue, tvCaloriesTargetValue, tvWaterTargetValue;
+    private int selectedBirthYear = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,11 +56,12 @@ public class RegisterActivity extends AppCompatActivity {
         tilName = findViewById(R.id.tilName);
         tilEmail = findViewById(R.id.tilEmail);
         tilPassword = findViewById(R.id.tilPassword);
+        tilBirthDate = findViewById(R.id.tilBirthDate);
         etName = findViewById(R.id.etName);
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
+        etBirthDate = findViewById(R.id.etBirthDate);
         rgGender = findViewById(R.id.rgGender);
-        spinnerBirthYear = findViewById(R.id.spinnerBirthYear);
         npHeight = findViewById(R.id.npHeight);
         npWeight = findViewById(R.id.npWeight);
         cgActivityLevel = findViewById(R.id.cgActivityLevel);
@@ -76,35 +76,56 @@ public class RegisterActivity extends AppCompatActivity {
 
         btnRegister.setOnClickListener(v -> handleRegistration());
         btnGoLogin.setOnClickListener(view -> finish());
+
+        etBirthDate.setOnClickListener(v -> showDatePicker());
+    }
+
+    private void showDatePicker() {
+        final Calendar c = Calendar.getInstance();
+        int year = selectedBirthYear != -1 ? selectedBirthYear : c.get(Calendar.YEAR) - 20;
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.FitDatePickerTheme,
+                (view, year1, monthOfYear, dayOfMonth) -> {
+                    selectedBirthYear = year1;
+                    etBirthDate.setText(String.format(Locale.getDefault(), "%02d/%02d/%d", dayOfMonth, monthOfYear + 1, year1));
+                    tilBirthDate.setError(null);
+                }, year, month, day);
+
+        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+        
+        // הצגת הדיאלוג
+        datePickerDialog.show();
+
+        // הכרחת צבע וכיתוב לכפתורים כדי שלא ייעלמו
+        Button positiveButton = datePickerDialog.getButton(DatePickerDialog.BUTTON_POSITIVE);
+        Button negativeButton = datePickerDialog.getButton(DatePickerDialog.BUTTON_NEGATIVE);
+        
+        if (positiveButton != null) {
+            positiveButton.setText("אישור");
+            positiveButton.setTextColor(Color.parseColor("#1976D2")); // כחול כהה
+            positiveButton.setTypeface(null, android.graphics.Typeface.BOLD);
+        }
+        if (negativeButton != null) {
+            negativeButton.setText("ביטול");
+            negativeButton.setTextColor(Color.parseColor("#1976D2"));
+        }
     }
 
     private void setupUI() {
-        // Birth Year Spinner
-        ArrayList<String> years = new ArrayList<>();
-        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        for (int i = currentYear; i >= 1950; i--) {
-            years.add(Integer.toString(i));
-        }
-        ArrayAdapter<String> yearAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, years);
-        yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerBirthYear.setAdapter(yearAdapter);
-
-        // Height NumberPicker
         npHeight.setMinValue(120);
         npHeight.setMaxValue(220);
         npHeight.setValue(170);
 
-        // Weight NumberPicker
         npWeight.setMinValue(40);
         npWeight.setMaxValue(150);
         npWeight.setValue(70);
 
-        // Set NumberPicker text color
         int blueColor = Color.parseColor("#2196F3");
         setNumberPickerTextColor(npHeight, blueColor);
         setNumberPickerTextColor(npWeight, blueColor);
 
-        // SeekBars
         setupSeekBar(sbStepTarget, tvStepTargetValue, 500);
         setupSeekBar(sbCaloriesTarget, tvCaloriesTargetValue, 100);
         setupSeekBar(sbWaterTarget, tvWaterTargetValue, 100);
@@ -128,14 +149,11 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
+            public void onStartTrackingTouch(SeekBar seekBar) {}
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
+            public void onStopTrackingTouch(SeekBar seekBar) {}
         });
-        // Initial text update
         textView.setText(String.valueOf(seekBar.getProgress()));
     }
 
@@ -148,8 +166,7 @@ public class RegisterActivity extends AppCompatActivity {
     private void addTextWatcher(TextInputEditText editText, TextInputLayout layout) {
         editText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -159,8 +176,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-            }
+            public void afterTextChanged(Editable s) {}
         });
     }
 
@@ -180,7 +196,6 @@ public class RegisterActivity extends AppCompatActivity {
                     saveNewUser();
                 }
             }
-
             @Override
             public void onFailed(Exception e) {
                 Toast.makeText(RegisterActivity.this, "שגיאה בבדיקת אימייל: " + e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -190,7 +205,6 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void saveNewUser() {
         String userId = DatabaseService.getInstance().generateUserId();
-
         String name = Objects.requireNonNull(etName.getText()).toString().trim();
         String email = Objects.requireNonNull(etEmail.getText()).toString().trim();
         String password = Objects.requireNonNull(etPassword.getText()).toString().trim();
@@ -198,7 +212,7 @@ public class RegisterActivity extends AppCompatActivity {
         RadioButton selectedGender = findViewById(rgGender.getCheckedRadioButtonId());
         String gender = selectedGender.getText().toString();
 
-        int birthYear = Integer.parseInt(spinnerBirthYear.getSelectedItem().toString());
+        int birthYear = selectedBirthYear;
         int height = npHeight.getValue();
         float weight = npWeight.getValue();
 
@@ -221,7 +235,6 @@ public class RegisterActivity extends AppCompatActivity {
                 startActivity(intent);
                 finish();
             }
-
             @Override
             public void onFailed(Exception e) {
                 Toast.makeText(RegisterActivity.this, "שגיאה ברישום: " + e.getMessage(), Toast.LENGTH_LONG).show();
@@ -231,53 +244,35 @@ public class RegisterActivity extends AppCompatActivity {
 
     private boolean validateInput() {
         boolean isValid = true;
-
-        // Clear previous errors
         tilName.setError(null);
         tilEmail.setError(null);
         tilPassword.setError(null);
+        tilBirthDate.setError(null);
 
         String name = Objects.requireNonNull(etName.getText()).toString().trim();
         if (name.isEmpty()) {
             tilName.setError("שדה חובה");
             isValid = false;
-        } else if (!Validator.isNameValid(name)) {
-            tilName.setError("שם יכול להכיל אותיות בעברית ובאנגלית בלבד");
-            isValid = false;
         }
 
         String email = Objects.requireNonNull(etEmail.getText()).toString().trim();
-        if (email.isEmpty()) {
-            tilEmail.setError("שדה חובה");
-            isValid = false;
-        } else if (!Validator.isEmailValid(email)) {
+        if (email.isEmpty() || !Validator.isEmailValid(email)) {
             tilEmail.setError("אימייל לא תקין");
             isValid = false;
         }
 
         String password = Objects.requireNonNull(etPassword.getText()).toString().trim();
-        if (password.isEmpty()) {
-            tilPassword.setError("שדה חובה");
-            isValid = false;
-        } else if (!Validator.isPasswordValid(password)) {
-            tilPassword.setError("סיסמה חזקה צריכה להכיל לפחות 8 תווים, אות גדולה, אות קטנה, מספר ותו מיוחד");
+        if (password.isEmpty() || !Validator.isPasswordValid(password)) {
+            tilPassword.setError("סיסמה לא תקינה");
             isValid = false;
         }
 
-        if (rgGender.getCheckedRadioButtonId() == -1) {
-            // You can optionally highlight the RadioGroup or its title
+        if (selectedBirthYear == -1) {
+            tilBirthDate.setError("יש לבחור תאריך לידה");
             isValid = false;
         }
-
-        if (spinnerBirthYear.getSelectedItem() == null) {
-            // This case is unlikely with the current setup but good practice
-            isValid = false;
-        }
-
-        if (cgActivityLevel.getCheckedChipId() == -1) {
-            // You can optionally highlight the ChipGroup or its title
-            isValid = false;
-        }
+        if (rgGender.getCheckedRadioButtonId() == -1) isValid = false;
+        if (cgActivityLevel.getCheckedChipId() == -1) isValid = false;
 
         return isValid;
     }
