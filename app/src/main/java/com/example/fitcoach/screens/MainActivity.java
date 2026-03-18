@@ -11,7 +11,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -35,6 +35,7 @@ import com.example.fitcoach.models.User;
 import com.example.fitcoach.services.DatabaseService;
 import com.example.fitcoach.utils.HealthConnectManager;
 import com.example.fitcoach.utils.SharedPreferencesUtil;
+import com.example.fitcoach.views.BMIView;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -47,10 +48,10 @@ public class MainActivity extends AppCompatActivity {
     private static final float STEPS_PER_METER = 1.31f; // Generic steps per meter
     private static final float CALORIES_PER_STEP = 0.045f; // Generic calories burned per step
 
-    private TextView tvGreeting, tvStepsValue, tvCaloriesValue, tvBmiStatusText;
+    private TextView tvGreeting, tvStepsValue, tvCaloriesValue;
     private ProgressBar pbSteps, pbCalories, pbWaterJug;
     private ImageButton btnSettingsGear, btnAddWater, btnRemoveWater;
-    private ImageView ivBmiNeedle;
+    private BMIView bmiView;
     private Button btnMainForum, btnMainNavigation;
 
     private HealthConnectManager healthConnectManager;
@@ -146,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.d(TAG, "onResume: called");
+        SharedPreferencesUtil.checkAndClearCompletedWorkouts(this);
         updateUI(); // Immediate UI update from local storage
         loadUserData();
         checkAndRequestHealthConnectPermissions();
@@ -206,8 +208,7 @@ public class MainActivity extends AppCompatActivity {
         tvStepsValue = findViewById(R.id.tv_main_steps_val);
         pbCalories = findViewById(R.id.pb_main_calories);
         tvCaloriesValue = findViewById(R.id.tv_main_calories_val);
-        ivBmiNeedle = findViewById(R.id.iv_bmi_needle);
-        tvBmiStatusText = findViewById(R.id.tv_bmi_status_text);
+        bmiView = findViewById(R.id.bmi_view);
         pbWaterJug = findViewById(R.id.pb_water_jug);
         btnAddWater = findViewById(R.id.btn_add_water);
         btnRemoveWater = findViewById(R.id.btn_remove_water);
@@ -293,16 +294,39 @@ public class MainActivity extends AppCompatActivity {
     private void showDestinationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("לאן רצים?");
-        
-        final EditText input = new EditText(this);
-        input.setHint("הכנס יעד (למשל: פארק הירקון)");
-        builder.setView(input);
+
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setPadding(50, 40, 50, 10);
+
+        final EditText etOrigin = new EditText(this);
+        etOrigin.setHint("מאיפה מתחילים? (אופציונלי)");
+        layout.addView(etOrigin);
+
+        final EditText etDestination = new EditText(this);
+        etDestination.setHint("הכנס יעד (למשל: פארק הירקון)");
+        layout.addView(etDestination);
+
+        builder.setView(layout);
 
         builder.setPositiveButton("צא לדרך", (dialog, which) -> {
-            String destination = input.getText().toString();
+            String origin = etOrigin.getText().toString().trim();
+            String destination = etDestination.getText().toString().trim();
+
             if (!destination.isEmpty()) {
-                // Uri for navigation in Google Maps
-                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + Uri.encode(destination) + "&mode=w");
+                Uri gmmIntentUri;
+                if (origin.isEmpty()) {
+                    // אם אין מוצא, נשתמש בפורמט הישן והטוב שמתחיל ניווט מיד
+                    gmmIntentUri = Uri.parse("google.navigation:q=" + Uri.encode(destination) + "&mode=w");
+                } else {
+                    // אם יש מוצא, נשתמש בפורמט שתומך בשניהם עם דגש על מצב הליכה
+                    String uriString = "https://www.google.com/maps/dir/?api=1" +
+                            "&origin=" + Uri.encode(origin) +
+                            "&destination=" + Uri.encode(destination) +
+                            "&travelmode=walking";
+                    gmmIntentUri = Uri.parse(uriString);
+                }
+
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                 mapIntent.setPackage("com.google.android.apps.maps");
                 
@@ -311,6 +335,8 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     Toast.makeText(this, "אפליקציית Google Maps לא מותקנת", Toast.LENGTH_SHORT).show();
                 }
+            } else {
+                Toast.makeText(this, "יש להזין יעד", Toast.LENGTH_SHORT).show();
             }
         });
         builder.setNegativeButton("ביטול", null);
@@ -393,7 +419,7 @@ public class MainActivity extends AppCompatActivity {
         DatabaseService.getInstance().getStats(user.getId(), new DatabaseService.DatabaseCallback<>() {
             @Override
             public void onCompleted(Stats dbStats) {
-                if (dbStats != null) {
+                if (dbStats != null && dbStats.isThisToday()) {
                     SharedPreferencesUtil.saveStats(MainActivity.this, dbStats);
                 } else {
                     Stats newStats = new Stats();
@@ -428,9 +454,9 @@ public class MainActivity extends AppCompatActivity {
 
         if (pbCalories != null && tvCaloriesValue != null) {
             int caloriesTarget = user.getDailyCaloriesTarget() > 0 ? user.getDailyCaloriesTarget() : 2000;
-            tvCaloriesValue.setText(String.format(Locale.getDefault(), "%d/%d", (int) stats.getCalories(), caloriesTarget));
+            tvCaloriesValue.setText(String.format(Locale.getDefault(), "%d/%d\n%s", (int) stats.getCalories(), caloriesTarget, getString(R.string.calories_label)));
             pbCalories.setMax(caloriesTarget);
-            
+
             // Explicitly set progress for calories
             int calorieProgress = (int) Math.min(stats.getCalories(), caloriesTarget);
             pbCalories.setProgress(calorieProgress);
@@ -439,39 +465,15 @@ public class MainActivity extends AppCompatActivity {
 
         if (pbSteps != null && tvStepsValue != null) {
             int stepsTarget = user.getDailyStepsTarget() > 0 ? user.getDailyStepsTarget() : 5000;
-            tvStepsValue.setText(String.format(Locale.getDefault(), "%d/%d", stats.getSteps(), stepsTarget));
+            tvStepsValue.setText(String.format(Locale.getDefault(), "%d/%d\n%s", stats.getSteps(), stepsTarget, getString(R.string.steps_label)));
             pbSteps.setMax(stepsTarget);
             pbSteps.setProgress(Math.min(stepsTarget, stats.getSteps()));
         }
     }
 
-    private float map(float value, float fromLow, float fromHigh, float toLow, float toHigh) {
-        return toLow + (value - fromLow) * (toHigh - toLow) / (fromHigh - fromLow);
-    }
-
     private void updateBMIGauge(User user) {
-        if (user != null && user.getHeightCm() > 0 && user.getWeightKg() > 0 && ivBmiNeedle != null) {
-            ivBmiNeedle.post(() -> {
-                ivBmiNeedle.setPivotX(ivBmiNeedle.getWidth() / 2f);
-                ivBmiNeedle.setPivotY(ivBmiNeedle.getHeight() - (ivBmiNeedle.getPaddingBottom()));
-                float heightM = user.getHeightCm() / 100f;
-                float bmi = user.getWeightKg() / (heightM * heightM);
-
-                float rotation;
-                if (bmi < 18.5) {
-                    rotation = map(bmi, 15f, 18.5f, -65f, -30f);
-                } else if (bmi < 25) {
-                    rotation = map(bmi, 18.5f, 25f, -30f, 30f);
-                } else {
-                    rotation = map(bmi, 25f, 30f, 30f, 65f);
-                }
-
-                rotation = Math.max(-65f, Math.min(rotation, 65f));
-                ivBmiNeedle.setRotation(rotation);
-                if (tvBmiStatusText != null) {
-                    tvBmiStatusText.setText(bmi < 18.5 ? "תת משקל" : bmi < 25 ? "משקל תקין" : "משקל עודף");
-                }
-            });
+        if (user != null && user.getHeightCm() > 0 && user.getWeightKg() > 0 && bmiView != null) {
+            bmiView.setBMI((float) user.getWeightKg(), (float) user.getHeightCm());
         }
     }
 

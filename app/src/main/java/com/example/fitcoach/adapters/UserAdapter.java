@@ -20,6 +20,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
     private final OnUserClickListener listener;
     private List<User> userList = new ArrayList<>();
+    public static final String CREATOR_EMAIL = "nitay123@gmail.com"; // Your email as the creator
 
     public UserAdapter(OnUserClickListener listener) {
         this.listener = listener;
@@ -41,11 +42,14 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
     public void onBindViewHolder(@NonNull UserViewHolder holder, int position) {
         User user = userList.get(position);
 
+        // Check if this is the creator
+        boolean isCreator = user.getEmail() != null && user.getEmail().equalsIgnoreCase(CREATOR_EMAIL);
+
         // Set the listener for the whole item view
         holder.itemView.setOnClickListener(v -> listener.onUserClick(user));
 
         // עיצוב שם המשתמש
-        holder.tvName.setText(user.getName());
+        holder.tvName.setText(user.getName() + (isCreator ? " (יוצר האפליקציה)" : ""));
         holder.tvEmail.setText(user.getEmail());
 
         // לוגיקת המנהל - עיצוב כחול/לבן/אפור
@@ -61,13 +65,29 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
             holder.tvName.setTextColor(Color.parseColor("#212121")); // שם בצבע רגיל
         }
 
+        // הגנה על היוצר: הסרת כפתורי מחיקה וניהול עבור המשתמש שלך
+        if (isCreator) {
+            holder.btnDelete.setVisibility(View.GONE);
+            holder.btnMakeAdmin.setVisibility(View.GONE);
+        } else {
+            holder.btnDelete.setVisibility(View.VISIBLE);
+            holder.btnMakeAdmin.setVisibility(View.VISIBLE);
+        }
+
         // מאזינים
         holder.btnMakeAdmin.setOnClickListener(v -> {
-            // כאן אנחנו קוראים לפונקציה ב-Activity/Fragment
-            listener.onMakeAdminClick(user, position);
+            // אם במקרה הכפתור לחיץ, לא נעשה כלום עבור היוצר
+            if (!isCreator) {
+                listener.onMakeAdminClick(user, position);
+            }
         });
 
-        holder.btnDelete.setOnClickListener(v -> listener.onDeleteClick(user));
+        holder.btnDelete.setOnClickListener(v -> {
+            // אם במקרה הכפתור לחיץ, לא נעשה כלום עבור היוצר
+            if (!isCreator) {
+                listener.onDeleteClick(user);
+            }
+        });
     }
 
     @Override

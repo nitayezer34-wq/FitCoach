@@ -87,7 +87,7 @@ public class SharedPreferencesUtil {
 
     public static Stats getStats(Context context) {
         Stats stats = getObject(context, STATS_KEY, Stats.class);
-        if (stats == null) {
+        if (stats == null || !stats.isThisToday()) {
             stats = new Stats();
             saveStats(context, stats);
         }
