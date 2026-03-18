@@ -1,9 +1,30 @@
 <resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.FitCoach" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Main colors -->
+        <item name="colorPrimary">@color/fit_primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSecondary">@color/fit_accent</item>
+        <item name="colorOnSecondary">@color/fit_primary</item>
+
+        <!-- DatePicker colors -->
+        <item name="colorAccent">@color/fit_primary</item>
+        <item name="android:datePickerDialogTheme">@style/FitDatePickerTheme</item>
     </style>
 
     <style name="Theme.FitCoach" parent="Base.Theme.FitCoach" />
+
+    <!-- Custom DatePicker Theme -->
+    <style name="FitDatePickerTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/fit_primary</item>
+        <item name="android:headerBackground">@color/fit_primary</item>
+        <item name="android:dayOfWeekBackground">@color/fit_primary</item>
+        <item name="android:calendarTextColor">@color/fit_primary</item>
+        <item name="android:textColorPrimary">@color/fit_primary</item>
+        <item name="android:buttonStyle">@style/FitDatePickerButton</item>
+    </style>
+
+    <style name="FitDatePickerButton" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/fit_primary</item>
+    </style>
 </resources>

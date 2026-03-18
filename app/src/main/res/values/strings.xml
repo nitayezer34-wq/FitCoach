@@ -33,6 +33,8 @@
     <string name="gender_label">מגדר</string>
     <string name="male">זכר</string>
     <string name="female">נקבה</string>
+    <string name="birth_date_label">תאריך לידה</string>
+    <string name="select_birth_date">בחר תאריך לידה</string>
     <string name="birth_year_label">שנת לידה</string>
     <string name="physical_data_label">נתונים פיזיים</string>
     <string name="height_label">גובה (ס״מ)</string>
