@@ -144,15 +144,19 @@ public class RegisterActivity extends AppCompatActivity {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                progress = (progress / step) * step;
-                textView.setText(String.valueOf(progress));
+                int snapped = (progress / step) * step;
+                textView.setText(String.valueOf(snapped));
             }
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {}
 
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                // Force the SeekBar to snap to the step when the user stops dragging
+                int snapped = (seekBar.getProgress() / step) * step;
+                seekBar.setProgress(snapped);
+            }
         });
         textView.setText(String.valueOf(seekBar.getProgress()));
     }
@@ -219,9 +223,10 @@ public class RegisterActivity extends AppCompatActivity {
         Chip selectedChip = findViewById(cgActivityLevel.getCheckedChipId());
         String activityLevel = selectedChip.getText().toString();
 
-        int stepTarget = sbStepTarget.getProgress();
-        int caloriesTarget = sbCaloriesTarget.getProgress();
-        int waterTarget = sbWaterTarget.getProgress();
+        // Snap values to avoid "random" looking numbers from SeekBar progress
+        int stepTarget = (sbStepTarget.getProgress() / 500) * 500;
+        int caloriesTarget = (sbCaloriesTarget.getProgress() / 100) * 100;
+        int waterTarget = (sbWaterTarget.getProgress() / 100) * 100;
 
         User user = new User(userId, name, email, password, gender, birthYear, height, weight, activityLevel, stepTarget, caloriesTarget, waterTarget, false);
 

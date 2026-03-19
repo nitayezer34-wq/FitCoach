@@ -123,13 +123,16 @@ public class UserProfileActivity extends AppCompatActivity {
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                progress = (progress / step) * step;
-                textView.setText(String.valueOf(progress));
+                int snapped = (progress / step) * step;
+                textView.setText(String.valueOf(snapped));
             }
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {}
             @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                int snapped = (seekBar.getProgress() / step) * step;
+                seekBar.setProgress(snapped);
+            }
         });
     }
 
@@ -236,9 +239,11 @@ public class UserProfileActivity extends AppCompatActivity {
         final float weight = npWeight.getValue();
         Chip selectedChip = findViewById(cgActivityLevel.getCheckedChipId());
         final String activityLevel = selectedChip.getText().toString();
-        final int stepTarget = sbStepTarget.getProgress();
-        final int caloriesTarget = sbCaloriesTarget.getProgress();
-        final int waterTarget = sbWaterTarget.getProgress();
+        
+        // Use snapped values for saving to avoid "random" looking values
+        final int stepTarget = (sbStepTarget.getProgress() / 500) * 500;
+        final int caloriesTarget = (sbCaloriesTarget.getProgress() / 100) * 100;
+        final int waterTarget = (sbWaterTarget.getProgress() / 100) * 100;
 
         // Check if email changed and if it already exists
         if (!newEmail.equals(currentUser.getEmail())) {
