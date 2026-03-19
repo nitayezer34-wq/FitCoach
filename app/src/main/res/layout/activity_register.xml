@@ -264,8 +264,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_low"
-                android:textColor="#2196F3"
-                app:chipBackgroundColor="#E3F2FD"
+                android:textColor="@color/chip_text_color"
+                app:chipBackgroundColor="@color/chip_background_color"
                 app:chipStrokeColor="#2196F3"
                 app:chipStrokeWidth="1dp" />
 
@@ -274,8 +274,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_medium"
-                android:textColor="#2196F3"
-                app:chipBackgroundColor="#E3F2FD"
+                android:textColor="@color/chip_text_color"
+                app:chipBackgroundColor="@color/chip_background_color"
                 app:chipStrokeColor="#2196F3"
                 app:chipStrokeWidth="1dp" />
 
@@ -284,8 +284,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/activity_high"
-                android:textColor="#2196F3"
-                app:chipBackgroundColor="#E3F2FD"
+                android:textColor="@color/chip_text_color"
+                app:chipBackgroundColor="@color/chip_background_color"
                 app:chipStrokeColor="#2196F3"
                 app:chipStrokeWidth="1dp" />
         </com.google.android.material.chip.ChipGroup>
