@@ -6,4 +6,10 @@
     </style>
 
     <style name="Theme.FitCoach" parent="Base.Theme.FitCoach" />
+
+    <style name="FitDatePickerTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">#2196F3</item>
+        <item name="android:textColorPrimary">#2196F3</item>
+        <item name="android:windowBackground">@android:color/white</item>
+    </style>
 </resources>

@@ -1,8 +1,18 @@
 package com.example.fitcoach.screens;
 
+import android.app.DatePickerDialog;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.NumberPicker;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,14 +21,31 @@ import com.example.fitcoach.R;
 import com.example.fitcoach.models.User;
 import com.example.fitcoach.services.DatabaseService;
 import com.example.fitcoach.utils.SharedPreferencesUtil;
+import com.example.fitcoach.utils.Validator;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.Objects;
 
 public class UserProfileActivity extends AppCompatActivity {
 
-    private EditText etName, etEmail, etHeight, etWeight;
-    private EditText etDailyStepsTarget, etDailyCaloriesTarget, etDailyWaterTarget;
+    private TextInputLayout tilName, tilEmail, tilPassword, tilBirthDate;
+    private TextInputEditText etName, etEmail, etPassword, etBirthDate;
+    private RadioGroup rgGender;
+    private RadioButton rbMale, rbFemale;
+    private NumberPicker npHeight, npWeight;
+    private ChipGroup cgActivityLevel;
+    private Chip chipLow, chipMedium, chipHigh;
+    private SeekBar sbStepTarget, sbCaloriesTarget, sbWaterTarget;
+    private TextView tvStepTargetValue, tvCaloriesTargetValue, tvWaterTargetValue;
     private Button btnSave;
-
-    private User userToUpdate;
+    
+    private int selectedBirthYear = -1;
+    private User currentUser;
     private DatabaseService dbService;
 
     @Override
@@ -28,105 +55,191 @@ public class UserProfileActivity extends AppCompatActivity {
 
         dbService = DatabaseService.getInstance();
         initViews();
-
-        String userId = getIntent().getStringExtra("user_id");
-        if (userId != null) {
-            loadUserFromDb(userId);
-        } else {
-            // Fallback to logged-in user if no ID is provided
-            loadCurrentUserFromPrefs();
-        }
-
+        setupUI();
+        loadUserData();
+        
         btnSave.setOnClickListener(v -> saveUserChanges());
+        etBirthDate.setOnClickListener(v -> showDatePicker());
     }
 
     private void initViews() {
-        etName = findViewById(R.id.et_user_name);
-        etEmail = findViewById(R.id.et_user_email);
-        etHeight = findViewById(R.id.et_user_height);
-        etWeight = findViewById(R.id.et_user_weight);
-        etDailyStepsTarget = findViewById(R.id.et_daily_steps_target);
-        etDailyCaloriesTarget = findViewById(R.id.et_daily_calories_target);
-        etDailyWaterTarget = findViewById(R.id.et_daily_water_target);
+        tilName = findViewById(R.id.tilName);
+        tilEmail = findViewById(R.id.tilEmail);
+        tilPassword = findViewById(R.id.tilPassword);
+        tilBirthDate = findViewById(R.id.tilBirthDate);
+        etName = findViewById(R.id.etName);
+        etEmail = findViewById(R.id.etEmail);
+        etPassword = findViewById(R.id.etPassword);
+        etBirthDate = findViewById(R.id.etBirthDate);
+        rgGender = findViewById(R.id.rgGender);
+        rbMale = findViewById(R.id.rbMale);
+        rbFemale = findViewById(R.id.rbFemale);
+        npHeight = findViewById(R.id.npHeight);
+        npWeight = findViewById(R.id.npWeight);
+        cgActivityLevel = findViewById(R.id.cgActivityLevel);
+        chipLow = findViewById(R.id.chipLow);
+        chipMedium = findViewById(R.id.chipMedium);
+        chipHigh = findViewById(R.id.chipHigh);
+        sbStepTarget = findViewById(R.id.sbStepTarget);
+        tvStepTargetValue = findViewById(R.id.tvStepTargetValue);
+        sbCaloriesTarget = findViewById(R.id.sbCaloriesTarget);
+        tvCaloriesTargetValue = findViewById(R.id.tvCaloriesTargetValue);
+        sbWaterTarget = findViewById(R.id.sbWaterTarget);
+        tvWaterTargetValue = findViewById(R.id.tvWaterTargetValue);
         btnSave = findViewById(R.id.btn_save_profile);
-
-        etEmail.setEnabled(false); // Make sure email is not editable
+        
+        // Disable fields that shouldn't be edited
+        etName.setEnabled(false);
+        etEmail.setEnabled(false);
     }
 
-    private void loadUserFromDb(String userId) {
-        dbService.getUser(userId, new DatabaseService.DatabaseCallback<>() {
+    private void setupUI() {
+        npHeight.setMinValue(120);
+        npHeight.setMaxValue(220);
+        npWeight.setMinValue(40);
+        npWeight.setMaxValue(150);
+
+        int blueColor = Color.parseColor("#2196F3");
+        setNumberPickerTextColor(npHeight, blueColor);
+        setNumberPickerTextColor(npWeight, blueColor);
+
+        setupSeekBar(sbStepTarget, tvStepTargetValue, 500);
+        setupSeekBar(sbCaloriesTarget, tvCaloriesTargetValue, 100);
+        setupSeekBar(sbWaterTarget, tvWaterTargetValue, 100);
+    }
+
+    private void setNumberPickerTextColor(NumberPicker numberPicker, int color) {
+        for (int i = 0; i < numberPicker.getChildCount(); i++) {
+            View child = numberPicker.getChildAt(i);
+            if (child instanceof EditText) {
+                ((EditText) child).setTextColor(color);
+            }
+        }
+    }
+
+    private void setupSeekBar(SeekBar seekBar, TextView textView, int step) {
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onCompleted(User user) {
-                if (user != null) {
-                    userToUpdate = user;
-                    populateUserDetails();
-                }
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progress = (progress / step) * step;
+                textView.setText(String.valueOf(progress));
+            }
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+    }
+
+    private void loadUserData() {
+        currentUser = SharedPreferencesUtil.getUser(this);
+        if (currentUser == null) {
+            finish();
+            return;
+        }
+
+        etName.setText(currentUser.getName());
+        etEmail.setText(currentUser.getEmail());
+        etPassword.setText(currentUser.getPassword());
+        
+        selectedBirthYear = currentUser.getBirthYear();
+        etBirthDate.setText(String.valueOf(selectedBirthYear)); // Or format it properly if needed
+
+        if (getString(R.string.male).equals(currentUser.getGender())) {
+            rbMale.setChecked(true);
+        } else if (getString(R.string.female).equals(currentUser.getGender())) {
+            rbFemale.setChecked(true);
+        }
+
+        npHeight.setValue(currentUser.getHeightCm());
+        npWeight.setValue((int) currentUser.getWeightKg());
+
+        if (getString(R.string.activity_low).equals(currentUser.getActivityLevel())) {
+            chipLow.setChecked(true);
+        } else if (getString(R.string.activity_medium).equals(currentUser.getActivityLevel())) {
+            chipMedium.setChecked(true);
+        } else if (getString(R.string.activity_high).equals(currentUser.getActivityLevel())) {
+            chipHigh.setChecked(true);
+        }
+
+        sbStepTarget.setProgress(currentUser.getDailyStepsTarget());
+        tvStepTargetValue.setText(String.valueOf(currentUser.getDailyStepsTarget()));
+        
+        sbCaloriesTarget.setProgress(currentUser.getDailyCaloriesTarget());
+        tvCaloriesTargetValue.setText(String.valueOf(currentUser.getDailyCaloriesTarget()));
+        
+        sbWaterTarget.setProgress(currentUser.getDailyWaterTargetMl());
+        tvWaterTargetValue.setText(String.valueOf(currentUser.getDailyWaterTargetMl()));
+    }
+
+    private void showDatePicker() {
+        final Calendar c = Calendar.getInstance();
+        int year = selectedBirthYear != -1 ? selectedBirthYear : c.get(Calendar.YEAR) - 20;
+        int month = c.get(Calendar.MONTH);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.FitDatePickerTheme,
+                (view, year1, monthOfYear, dayOfMonth) -> {
+                    selectedBirthYear = year1;
+                    etBirthDate.setText(String.valueOf(year1));
+                    tilBirthDate.setError(null);
+                }, year, month, day);
+
+        datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+        datePickerDialog.show();
+    }
+
+    private void saveUserChanges() {
+        if (!validateInput()) return;
+
+        String password = Objects.requireNonNull(etPassword.getText()).toString().trim();
+        RadioButton selectedGender = findViewById(rgGender.getCheckedRadioButtonId());
+        String gender = selectedGender.getText().toString();
+        int height = npHeight.getValue();
+        float weight = npWeight.getValue();
+        Chip selectedChip = findViewById(cgActivityLevel.getCheckedChipId());
+        String activityLevel = selectedChip.getText().toString();
+        int stepTarget = sbStepTarget.getProgress();
+        int caloriesTarget = sbCaloriesTarget.getProgress();
+        int waterTarget = sbWaterTarget.getProgress();
+
+        dbService.updateUser(currentUser.getId(), user -> {
+            user.setPassword(password);
+            user.setGender(gender);
+            user.setBirthYear(selectedBirthYear);
+            user.setHeightCm(height);
+            user.setWeightKg(weight);
+            user.setActivityLevel(activityLevel);
+            user.setDailyStepsTarget(stepTarget);
+            user.setDailyCaloriesTarget(caloriesTarget);
+            user.setDailyWaterTargetMl(waterTarget);
+            return user;
+        }, new DatabaseService.DatabaseCallback<>() {
+            @Override
+            public void onCompleted(User updatedUser) {
+                SharedPreferencesUtil.saveUser(UserProfileActivity.this, updatedUser);
+                Toast.makeText(UserProfileActivity.this, "הפרופיל עודכן בהצלחה!", Toast.LENGTH_SHORT).show();
+                finish();
             }
 
             @Override
             public void onFailed(Exception e) {
-                Toast.makeText(UserProfileActivity.this, "Failed to load user data", Toast.LENGTH_SHORT).show();
+                Toast.makeText(UserProfileActivity.this, "שגיאה בעדכון: " + e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void loadCurrentUserFromPrefs() {
-        userToUpdate = SharedPreferencesUtil.getUser(this);
-        if (userToUpdate != null) {
-            populateUserDetails();
+    private boolean validateInput() {
+        boolean isValid = true;
+        tilPassword.setError(null);
+        String password = Objects.requireNonNull(etPassword.getText()).toString().trim();
+        if (password.isEmpty() || !Validator.isPasswordValid(password)) {
+            tilPassword.setError("סיסמה לא תקינה");
+            isValid = false;
         }
-    }
-
-    private void populateUserDetails() {
-        etName.setText(userToUpdate.getName());
-        etEmail.setText(userToUpdate.getEmail());
-        etHeight.setText(String.valueOf(userToUpdate.getHeightCm()));
-        etWeight.setText(String.valueOf(userToUpdate.getWeightKg()));
-        etDailyStepsTarget.setText(String.valueOf(userToUpdate.getDailyStepsTarget()));
-        etDailyCaloriesTarget.setText(String.valueOf(userToUpdate.getDailyCaloriesTarget()));
-        etDailyWaterTarget.setText(String.valueOf(userToUpdate.getDailyWaterTargetMl()));
-    }
-
-    private void saveUserChanges() {
-        if (userToUpdate == null) return;
-
-        try {
-            // Update user object from the fields
-            userToUpdate.setName(etName.getText().toString().trim());
-            userToUpdate.setHeightCm(Integer.parseInt(etHeight.getText().toString().trim()));
-            userToUpdate.setWeightKg(Float.parseFloat(etWeight.getText().toString().trim()));
-            userToUpdate.setDailyStepsTarget(Integer.parseInt(etDailyStepsTarget.getText().toString().trim()));
-            userToUpdate.setDailyCaloriesTarget(Integer.parseInt(etDailyCaloriesTarget.getText().toString().trim()));
-            userToUpdate.setDailyWaterTargetMl(Integer.parseInt(etDailyWaterTarget.getText().toString().trim()));
-
-            // Update user in Database
-            dbService.updateUser(userToUpdate.getId(), user -> {
-                user.setName(userToUpdate.getName());
-                user.setHeightCm(userToUpdate.getHeightCm());
-                user.setWeightKg(userToUpdate.getWeightKg());
-                user.setDailyStepsTarget(userToUpdate.getDailyStepsTarget());
-                user.setDailyCaloriesTarget(userToUpdate.getDailyCaloriesTarget());
-                user.setDailyWaterTargetMl(userToUpdate.getDailyWaterTargetMl());
-                return user;
-            }, new DatabaseService.DatabaseCallback<>() {
-                @Override
-                public void onCompleted(User updatedUser) {
-                    // Also update the user in SharedPreferences if it's the current user
-                    if (userToUpdate.getId().equals(SharedPreferencesUtil.getUserId(UserProfileActivity.this))) {
-                        SharedPreferencesUtil.saveUser(UserProfileActivity.this, userToUpdate);
-                    }
-                    Toast.makeText(UserProfileActivity.this, "הפרופיל עודכן בהצלחה!", Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-
-                @Override
-                public void onFailed(Exception e) {
-                    Toast.makeText(UserProfileActivity.this, "שגיאה בעדכון הפרופיל", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-        } catch (NumberFormatException e) {
-            Toast.makeText(this, "נא למלא ערכים מספריים תקינים ביעדים, גובה ומשקל.", Toast.LENGTH_LONG).show();
-        }
+        if (selectedBirthYear == -1) isValid = false;
+        if (rgGender.getCheckedRadioButtonId() == -1) isValid = false;
+        if (cgActivityLevel.getCheckedChipId() == -1) isValid = false;
+        return isValid;
     }
 }
