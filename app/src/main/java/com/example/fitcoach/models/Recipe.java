@@ -4,6 +4,7 @@ import java.util.List;
 
 public class Recipe {
     private String id;
+    private String userId; // The ID of the user who created the recipe
     private String title;
     private String imageUrl;
     private int calories;
@@ -22,8 +23,9 @@ public class Recipe {
     }
 
     // Full constructor for creating a new recipe
-    public Recipe(String id, String title, String imageUrl, int calories, int prepTimeInMinutes, List<String> allergens, List<String> ingredients, List<String> instructions) {
+    public Recipe(String id, String userId, String title, String imageUrl, int calories, int prepTimeInMinutes, List<String> allergens, List<String> ingredients, List<String> instructions) {
         this.id = id;
+        this.userId = userId;
         this.title = title;
         this.imageUrl = imageUrl;
         this.calories = calories;
@@ -44,6 +46,14 @@ public class Recipe {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getTitle() {

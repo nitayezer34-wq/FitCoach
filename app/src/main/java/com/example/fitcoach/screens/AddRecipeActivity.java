@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.fitcoach.R;
 import com.example.fitcoach.models.Recipe;
 import com.example.fitcoach.services.DatabaseService;
+import com.example.fitcoach.utils.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,6 +24,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     private TextView tvTitle;
     private DatabaseService dbService;
     private String recipeIdToEdit = null;
+    private String originalUserId = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,7 @@ public class AddRecipeActivity extends AppCompatActivity {
     }
 
     private void bindViews() {
-        tvTitle = findViewById(R.id.tvAddRecipeTitle); // Ensure this ID exists in XML or add it
+        tvTitle = findViewById(R.id.tvAddRecipeTitle);
         etTitle = findViewById(R.id.etRecipeTitle);
         etImageUrl = findViewById(R.id.etImageUrl);
         etPrepTime = findViewById(R.id.etPrepTime);
@@ -59,6 +61,7 @@ public class AddRecipeActivity extends AppCompatActivity {
             @Override
             public void onCompleted(Recipe recipe) {
                 if (recipe != null) {
+                    originalUserId = recipe.getUserId();
                     etTitle.setText(recipe.getTitle());
                     etImageUrl.setText(recipe.getImageUrl());
                     etPrepTime.setText(String.valueOf(recipe.getPrepTimeInMinutes()));
@@ -98,8 +101,9 @@ public class AddRecipeActivity extends AppCompatActivity {
         List<String> instructions = textToList(instructionsStr, "\n");
 
         String id = (recipeIdToEdit != null) ? recipeIdToEdit : dbService.generateRecipeId();
+        String userId = (recipeIdToEdit != null) ? originalUserId : SharedPreferencesUtil.getUserId(this);
 
-        Recipe recipe = new Recipe(id, title, imageUrl, calories, prepTime, allergens, ingredients, instructions);
+        Recipe recipe = new Recipe(id, userId, title, imageUrl, calories, prepTime, allergens, ingredients, instructions);
 
         dbService.createNewRecipe(recipe, new DatabaseService.DatabaseCallback<>() {
             @Override

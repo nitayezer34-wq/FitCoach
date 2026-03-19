@@ -14,13 +14,13 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:padding="16dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/healthy_recipes_forum_title"
-            android:textColor="#2196F3"
+            android:textColor="@color/fit_primary"
             android:textSize="26sp"
             android:textStyle="bold" />
 
@@ -28,16 +28,94 @@
             android:layout_width="80dp"
             android:layout_height="3dp"
             android:layout_marginTop="8dp"
-            android:background="#2196F3" />
+            android:background="@color/fit_primary" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llSearchFilter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header_recipes"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingBottom="12dp">
+
+        <EditText
+            android:id="@+id/etSearchRecipe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="חפש מתכון לפי שם..."
+            android:padding="12dp"
+            android:background="@drawable/bg_search_filter"
+            android:drawableStart="@android:drawable/ic_menu_search"
+            android:drawablePadding="8dp"
+            android:drawableTint="@color/fit_primary"
+            android:textColor="@color/fit_primary"
+            android:textColorHint="#90CAF9"
+            android:textSize="14sp"
+            android:autofillHints="none"
+            android:inputType="text" />
+
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <EditText
+                    android:id="@+id/etMaxCalories"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:hint="מקס' קלוריות"
+                    android:inputType="number"
+                    android:padding="10dp"
+                    android:background="@drawable/bg_search_filter"
+                    android:textColor="@color/fit_primary"
+                    android:textColorHint="#90CAF9"
+                    android:textSize="12sp"
+                    android:autofillHints="none" />
+
+                <EditText
+                    android:id="@+id/etMaxTime"
+                    android:layout_width="110dp"
+                    android:layout_height="wrap_content"
+                    android:hint="זמן הכנה (דק')"
+                    android:inputType="number"
+                    android:layout_marginStart="8dp"
+                    android:padding="10dp"
+                    android:background="@drawable/bg_search_filter"
+                    android:textColor="@color/fit_primary"
+                    android:textColorHint="#90CAF9"
+                    android:textSize="12sp"
+                    android:autofillHints="none" />
+
+                <CheckBox
+                    android:id="@+id/cbMyRecipes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="המתכונים שלי"
+                    android:layout_marginStart="12dp"
+                    android:textColor="@color/fit_primary"
+                    android:buttonTint="@color/fit_primary"
+                    android:textSize="13sp" />
+
+            </LinearLayout>
+        </HorizontalScrollView>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvRecipes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/header_recipes"
+        android:layout_below="@id/llSearchFilter"
         android:clipToPadding="false"
-        android:paddingBottom="16dp" />
+        android:paddingBottom="80dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fabAddRecipe"
@@ -48,7 +126,7 @@
         android:layout_margin="24dp"
         android:contentDescription="@null"
         android:src="@android:drawable/ic_input_add"
-        app:backgroundTint="#2196F3"
+        app:backgroundTint="@color/fit_primary"
         app:tint="@android:color/white" />
 
 </RelativeLayout>
