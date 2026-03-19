@@ -57,6 +57,7 @@ public class UserProfileActivity extends AppCompatActivity {
         initViews();
         setupUI();
         loadUserData();
+        setupValidation();
         
         btnSave.setOnClickListener(v -> saveUserChanges());
         etBirthDate.setOnClickListener(v -> showDatePicker());
@@ -88,9 +89,10 @@ public class UserProfileActivity extends AppCompatActivity {
         tvWaterTargetValue = findViewById(R.id.tvWaterTargetValue);
         btnSave = findViewById(R.id.btn_save_profile);
         
-        // Disable fields that shouldn't be edited
+        // Only Full Name remains disabled
         etName.setEnabled(false);
-        etEmail.setEnabled(false);
+        // Email is now editable
+        etEmail.setEnabled(true);
     }
 
     private void setupUI() {
@@ -131,6 +133,26 @@ public class UserProfileActivity extends AppCompatActivity {
         });
     }
 
+    private void setupValidation() {
+        addTextWatcher(etEmail, tilEmail);
+        addTextWatcher(etPassword, tilPassword);
+    }
+
+    private void addTextWatcher(TextInputEditText editText, TextInputLayout layout) {
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (layout.isErrorEnabled()) {
+                    layout.setErrorEnabled(false);
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+    }
+
     private void loadUserData() {
         currentUser = SharedPreferencesUtil.getUser(this);
         if (currentUser == null) {
@@ -143,7 +165,7 @@ public class UserProfileActivity extends AppCompatActivity {
         etPassword.setText(currentUser.getPassword());
         
         selectedBirthYear = currentUser.getBirthYear();
-        etBirthDate.setText(String.valueOf(selectedBirthYear)); // Or format it properly if needed
+        etBirthDate.setText(String.format(Locale.getDefault(), "01/01/%d", selectedBirthYear));
 
         if (getString(R.string.male).equals(currentUser.getGender())) {
             rbMale.setChecked(true);
@@ -181,29 +203,67 @@ public class UserProfileActivity extends AppCompatActivity {
         DatePickerDialog datePickerDialog = new DatePickerDialog(this, R.style.FitDatePickerTheme,
                 (view, year1, monthOfYear, dayOfMonth) -> {
                     selectedBirthYear = year1;
-                    etBirthDate.setText(String.valueOf(year1));
+                    etBirthDate.setText(String.format(Locale.getDefault(), "%02d/%02d/%d", dayOfMonth, monthOfYear + 1, year1));
                     tilBirthDate.setError(null);
                 }, year, month, day);
 
         datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+        
         datePickerDialog.show();
+
+        Button positiveButton = datePickerDialog.getButton(DatePickerDialog.BUTTON_POSITIVE);
+        Button negativeButton = datePickerDialog.getButton(DatePickerDialog.BUTTON_NEGATIVE);
+        
+        if (positiveButton != null) {
+            positiveButton.setText("אישור");
+            positiveButton.setTextColor(Color.parseColor("#1976D2"));
+            positiveButton.setTypeface(null, android.graphics.Typeface.BOLD);
+        }
+        if (negativeButton != null) {
+            negativeButton.setText("ביטול");
+            negativeButton.setTextColor(Color.parseColor("#1976D2"));
+        }
     }
 
     private void saveUserChanges() {
         if (!validateInput()) return;
 
-        String password = Objects.requireNonNull(etPassword.getText()).toString().trim();
+        final String newEmail = Objects.requireNonNull(etEmail.getText()).toString().trim();
+        final String password = Objects.requireNonNull(etPassword.getText()).toString().trim();
         RadioButton selectedGender = findViewById(rgGender.getCheckedRadioButtonId());
-        String gender = selectedGender.getText().toString();
-        int height = npHeight.getValue();
-        float weight = npWeight.getValue();
+        final String gender = selectedGender.getText().toString();
+        final int height = npHeight.getValue();
+        final float weight = npWeight.getValue();
         Chip selectedChip = findViewById(cgActivityLevel.getCheckedChipId());
-        String activityLevel = selectedChip.getText().toString();
-        int stepTarget = sbStepTarget.getProgress();
-        int caloriesTarget = sbCaloriesTarget.getProgress();
-        int waterTarget = sbWaterTarget.getProgress();
+        final String activityLevel = selectedChip.getText().toString();
+        final int stepTarget = sbStepTarget.getProgress();
+        final int caloriesTarget = sbCaloriesTarget.getProgress();
+        final int waterTarget = sbWaterTarget.getProgress();
 
+        // Check if email changed and if it already exists
+        if (!newEmail.equals(currentUser.getEmail())) {
+            dbService.checkIfEmailExists(newEmail, new DatabaseService.DatabaseCallback<>() {
+                @Override
+                public void onCompleted(Boolean exists) {
+                    if (exists) {
+                        tilEmail.setError("האימייל כבר רשום במערכת");
+                    } else {
+                        performUpdate(newEmail, password, gender, height, weight, activityLevel, stepTarget, caloriesTarget, waterTarget);
+                    }
+                }
+                @Override
+                public void onFailed(Exception e) {
+                    Toast.makeText(UserProfileActivity.this, "שגיאה בבדיקת אימייל", Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            performUpdate(newEmail, password, gender, height, weight, activityLevel, stepTarget, caloriesTarget, waterTarget);
+        }
+    }
+
+    private void performUpdate(String email, String password, String gender, int height, float weight, String activityLevel, int stepTarget, int caloriesTarget, int waterTarget) {
         dbService.updateUser(currentUser.getId(), user -> {
+            user.setEmail(email);
             user.setPassword(password);
             user.setGender(gender);
             user.setBirthYear(selectedBirthYear);
@@ -231,12 +291,21 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private boolean validateInput() {
         boolean isValid = true;
+        tilEmail.setError(null);
         tilPassword.setError(null);
+
+        String email = Objects.requireNonNull(etEmail.getText()).toString().trim();
+        if (email.isEmpty() || !Validator.isEmailValid(email)) {
+            tilEmail.setError("אימייל לא תקין");
+            isValid = false;
+        }
+
         String password = Objects.requireNonNull(etPassword.getText()).toString().trim();
         if (password.isEmpty() || !Validator.isPasswordValid(password)) {
             tilPassword.setError("סיסמה לא תקינה");
             isValid = false;
         }
+
         if (selectedBirthYear == -1) isValid = false;
         if (rgGender.getCheckedRadioButtonId() == -1) isValid = false;
         if (cgActivityLevel.getCheckedChipId() == -1) isValid = false;
