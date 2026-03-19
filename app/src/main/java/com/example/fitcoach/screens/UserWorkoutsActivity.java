@@ -126,7 +126,7 @@ public class UserWorkoutsActivity extends AppCompatActivity implements UserWorko
             String finalMessage = String.format(Locale.getDefault(), "כל הכבוד, %s! 💪 שרפת %d קלוריות באימון 🏅", userName, caloriesBurnedInSession);
             Toast.makeText(this, finalMessage, Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(this, "מעולה! נוספו " + workoutCalories + " קלוריות למד", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "מעולה! שרפת " + workoutCalories + " 💪", Toast.LENGTH_SHORT).show();
         }
     }
 }
