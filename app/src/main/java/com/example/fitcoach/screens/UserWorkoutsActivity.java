@@ -1,6 +1,8 @@
 package com.example.fitcoach.screens;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +31,8 @@ public class UserWorkoutsActivity extends AppCompatActivity implements UserWorko
     private UserWorkoutAdapter adapter;
     private List<WorkoutTraining> workoutList;
     private TextView workoutHeaderTitle;
+    private LinearLayout llCompletionContainer;
+    private RecyclerView recyclerView;
     private int caloriesBurnedInSession = 0;
 
     @Override
@@ -38,8 +42,9 @@ public class UserWorkoutsActivity extends AppCompatActivity implements UserWorko
 
         SharedPreferencesUtil.checkAndClearCompletedWorkouts(this);
 
-        RecyclerView recyclerView = findViewById(R.id.workouts_recycler_view);
+        recyclerView = findViewById(R.id.workouts_recycler_view);
         workoutHeaderTitle = findViewById(R.id.workout_header_title);
+        llCompletionContainer = findViewById(R.id.ll_completion_container);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         workoutList = new ArrayList<>();
@@ -62,9 +67,11 @@ public class UserWorkoutsActivity extends AppCompatActivity implements UserWorko
         WeightCategory userWeightCategory = user.getWeightCategory();
         List<String> completedWorkoutIds = SharedPreferencesUtil.getCompletedWorkouts(this);
 
-        DatabaseService.getInstance().getWorkoutTrainingList(new DatabaseService.DatabaseCallback<>() {
+        DatabaseService.getInstance().getWorkoutTrainingList(new DatabaseService.DatabaseCallback<List<WorkoutTraining>>() {
             @Override
             public void onCompleted(List<WorkoutTraining> workoutTrainings) {
+                if (workoutTrainings == null) return;
+                
                 if (userWeightCategory != null) {
                     workoutTrainings.removeIf(workoutTraining ->
                             !Objects.equals(workoutTraining.getTargetAudience(), userWeightCategory));
@@ -75,6 +82,8 @@ public class UserWorkoutsActivity extends AppCompatActivity implements UserWorko
                 workoutList.clear();
                 workoutList.addAll(workoutTrainings);
                 adapter.notifyDataSetChanged();
+                
+                updateUIState();
             }
 
             @Override
@@ -82,6 +91,16 @@ public class UserWorkoutsActivity extends AppCompatActivity implements UserWorko
                 Toast.makeText(UserWorkoutsActivity.this, "Failed to load workouts", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void updateUIState() {
+        if (workoutList.isEmpty()) {
+            recyclerView.setVisibility(View.GONE);
+            llCompletionContainer.setVisibility(View.VISIBLE);
+        } else {
+            recyclerView.setVisibility(View.VISIBLE);
+            llCompletionContainer.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -92,33 +111,28 @@ public class UserWorkoutsActivity extends AppCompatActivity implements UserWorko
 
         WorkoutTraining workout = workoutList.get(position);
         
-        // החישוב: קלוריות לסט * מספר סטים
         int workoutCalories = workout.getCaloriesPerSet() * workout.getSets();
         caloriesBurnedInSession += workoutCalories;
 
-        // עדכון הסטטיסטיקה הכללית של המשתמש
         Stats stats = SharedPreferencesUtil.getStats(this);
         if (stats == null) stats = new Stats();
         
-        // הוספת הקלוריות לערך הקיים
         stats.setCalories(stats.getCalories() + workoutCalories);
         
-        // שמירה מקומית
         SharedPreferencesUtil.saveStats(this, stats);
         
-        // סנכרון עם Firebase כדי ש-MainActivity יראה את זה
         String userId = SharedPreferencesUtil.getUserId(this);
         if (userId != null) {
             DatabaseService.getInstance().saveStats(userId, stats, null);
         }
 
-        // סימון האימון כבוצע כדי שלא יופיע שוב היום
         SharedPreferencesUtil.addCompletedWorkout(this, workout.getId());
 
-        // עדכון הרשימה במסך
         workoutList.remove(position);
         adapter.notifyItemRemoved(position);
         adapter.notifyItemRangeChanged(position, workoutList.size());
+
+        updateUIState();
 
         if (workoutList.isEmpty()) {
             User user = SharedPreferencesUtil.getUser(this);

@@ -6,6 +6,18 @@
     android:orientation="vertical"
     tools:context=".screens.WorkoutChecklistActivity">
 
+    <TextView
+        android:id="@+id/tv_completion_message"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="סיימת את האימון להיום, כל הכבוד!"
+        android:textColor="#2196F3"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        android:padding="20dp"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_workout_checklist"
         android:layout_width="match_parent"

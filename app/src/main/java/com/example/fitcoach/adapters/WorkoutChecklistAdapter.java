@@ -24,11 +24,20 @@ public class WorkoutChecklistAdapter extends RecyclerView.Adapter<WorkoutCheckli
     private final Context context;
     private final String userId;
     private List<WorkoutTraining> workoutList;
+    private OnWorkoutStatusChangeListener listener;
+
+    public interface OnWorkoutStatusChangeListener {
+        void onStatusChanged();
+    }
 
     public WorkoutChecklistAdapter(Context context, List<WorkoutTraining> workoutList) {
         this.context = context;
         this.workoutList = workoutList;
         this.userId = SharedPreferencesUtil.getUserId(context);
+    }
+
+    public void setOnWorkoutStatusChangeListener(OnWorkoutStatusChangeListener listener) {
+        this.listener = listener;
     }
 
     @NonNull
@@ -41,7 +50,7 @@ public class WorkoutChecklistAdapter extends RecyclerView.Adapter<WorkoutCheckli
     @Override
     public void onBindViewHolder(@NonNull WorkoutViewHolder holder, int position) {
         WorkoutTraining workout = workoutList.get(position);
-        holder.bind(workout, context, userId);
+        holder.bind(workout, context, userId, listener);
     }
 
     @Override
@@ -64,7 +73,7 @@ public class WorkoutChecklistAdapter extends RecyclerView.Adapter<WorkoutCheckli
             cbDone = itemView.findViewById(R.id.cb_done);
         }
 
-        public void bind(final WorkoutTraining workout, Context context, String userId) {
+        public void bind(final WorkoutTraining workout, Context context, String userId, OnWorkoutStatusChangeListener listener) {
             tvExerciseName.setText(workout.getName());
 
             List<String> completedIds = SharedPreferencesUtil.getCompletedWorkouts(context);
@@ -102,6 +111,10 @@ public class WorkoutChecklistAdapter extends RecyclerView.Adapter<WorkoutCheckli
                 }
 
                 Toast.makeText(context, isChecked ? "נוספו " + caloriesPerExercise + " קלוריות" : "בוטל", Toast.LENGTH_SHORT).show();
+                
+                if (listener != null) {
+                    listener.onStatusChanged();
+                }
             });
         }
     }

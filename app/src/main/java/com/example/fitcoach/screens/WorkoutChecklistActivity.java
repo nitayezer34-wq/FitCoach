@@ -1,6 +1,8 @@
 package com.example.fitcoach.screens;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,6 +25,9 @@ public class WorkoutChecklistActivity extends AppCompatActivity {
     private WorkoutChecklistAdapter adapter;
     private DatabaseService dbService;
     private User currentUser;
+    private TextView tvCompletionMessage;
+    private RecyclerView rvWorkouts;
+    private List<WorkoutTraining> currentWorkouts = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,10 +37,12 @@ public class WorkoutChecklistActivity extends AppCompatActivity {
         dbService = DatabaseService.getInstance();
         currentUser = SharedPreferencesUtil.getUser(this);
 
-        RecyclerView rvWorkouts = findViewById(R.id.rv_workout_checklist);
+        tvCompletionMessage = findViewById(R.id.tv_completion_message);
+        rvWorkouts = findViewById(R.id.rv_workout_checklist);
         rvWorkouts.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new WorkoutChecklistAdapter(this, new ArrayList<>());
+        adapter.setOnWorkoutStatusChangeListener(this::checkCompletionStatus);
         rvWorkouts.setAdapter(adapter);
 
         loadWorkoutsForUser();
@@ -49,17 +56,18 @@ public class WorkoutChecklistActivity extends AppCompatActivity {
 
         WeightCategory userWeightCategory = currentUser.getWeightCategory();
 
-        dbService.getWorkoutTrainingList(new DatabaseService.DatabaseCallback<>() {
+        dbService.getWorkoutTrainingList(new DatabaseService.DatabaseCallback<List<WorkoutTraining>>() {
             @Override
             public void onCompleted(List<WorkoutTraining> allWorkouts) {
                 if (allWorkouts != null && userWeightCategory != null) {
-                    List<WorkoutTraining> filteredWorkouts = new ArrayList<>();
+                    currentWorkouts = new ArrayList<>();
                     for (WorkoutTraining workout : allWorkouts) {
                         if (workout.getTargetAudience() != null && workout.getTargetAudience().equals(userWeightCategory)) {
-                            filteredWorkouts.add(workout);
+                            currentWorkouts.add(workout);
                         }
                     }
-                    adapter.setWorkoutList(filteredWorkouts);
+                    adapter.setWorkoutList(currentWorkouts);
+                    checkCompletionStatus();
                 }
             }
 
@@ -68,5 +76,31 @@ public class WorkoutChecklistActivity extends AppCompatActivity {
                 Toast.makeText(WorkoutChecklistActivity.this, "Failed to load workouts", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void checkCompletionStatus() {
+        if (currentWorkouts == null || currentWorkouts.isEmpty()) {
+            rvWorkouts.setVisibility(View.VISIBLE);
+            tvCompletionMessage.setVisibility(View.GONE);
+            return;
+        }
+
+        List<String> completedIds = SharedPreferencesUtil.getCompletedWorkouts(this);
+        boolean allFinished = true;
+
+        for (WorkoutTraining workout : currentWorkouts) {
+            if (!completedIds.contains(workout.getId())) {
+                allFinished = false;
+                break;
+            }
+        }
+
+        if (allFinished) {
+            rvWorkouts.setVisibility(View.GONE);
+            tvCompletionMessage.setVisibility(View.VISIBLE);
+        } else {
+            rvWorkouts.setVisibility(View.VISIBLE);
+            tvCompletionMessage.setVisibility(View.GONE);
+        }
     }
 }
