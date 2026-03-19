@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
@@ -300,12 +301,18 @@ public class MainActivity extends AppCompatActivity {
         layout.setPadding(50, 40, 50, 10);
 
         final EditText etOrigin = new EditText(this);
-        etOrigin.setHint("מאיפה מתחילים? (אופציונלי)");
+        etOrigin.setHint("מאיפה מתחילים? למשל: התזמורת 17 ראשון לציון");
         layout.addView(etOrigin);
 
         final EditText etDestination = new EditText(this);
-        etDestination.setHint("הכנס יעד (למשל: פארק הירקון)");
+        etDestination.setHint("הכנס יעד (למשל: פארק הירקון תל אביב)");
         layout.addView(etDestination);
+
+        TextView tvReminder = new TextView(this);
+        tvReminder.setText("\nשימו לב: זכרו את מרחק המסלול (ק\"מ) בסיום כדי שנוכל לחשב את הקלוריות והצעדים שלכם! 💪");
+        tvReminder.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
+        tvReminder.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        layout.addView(tvReminder);
 
         builder.setView(layout);
 
@@ -464,7 +471,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (pbSteps != null && tvStepsValue != null) {
-            int stepsTarget = user.getDailyStepsTarget() > 0 ? user.getDailyStepsTarget() : 5000;
+            int stepsTarget = user.getDailyStepsTarget() > 5000 ? user.getDailyStepsTarget() : 5000;
             tvStepsValue.setText(String.format(Locale.getDefault(), "%d/%d\n%s", stats.getSteps(), stepsTarget, getString(R.string.steps_label)));
             pbSteps.setMax(stepsTarget);
             pbSteps.setProgress(Math.min(stepsTarget, stats.getSteps()));
