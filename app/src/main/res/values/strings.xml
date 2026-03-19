@@ -13,7 +13,8 @@
     <string name="email_label">אימייל</string>
     <string name="username_label">שם משתמש</string>
 
-    <!-- Landing Activity -->
+    <!-- Splash/Landing Activity -->
+    <string name="app_slogan">השותף שלך לכושר ולאורח חיים בריא</string>
     <string name="welcome_to_fitcoach">ברוכים הבאים ל-FitCoach</string>
     <string name="landing_subtitle">התחבר או צור חשבון כדי להתחיל</string>
     <string name="create_new_account">צור חשבון חדש</string>

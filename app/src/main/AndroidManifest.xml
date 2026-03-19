@@ -18,6 +18,16 @@
         android:theme="@style/Theme.FitCoach">
 
         <activity
+            android:name=".screens.SplashActivity"
+            android:exported="true"
+            android:theme="@style/Theme.FitCoach.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".screens.RecipeForumActivity"
             android:exported="false" />
         <activity
@@ -69,12 +79,7 @@
 
         <activity
             android:name=".screens.LandingActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="false" />
 
     </application>
 
