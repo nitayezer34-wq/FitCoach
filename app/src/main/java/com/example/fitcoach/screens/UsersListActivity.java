@@ -23,7 +23,6 @@ public class UsersListActivity extends AppCompatActivity {
 
     private UserAdapter adapter;
     private DatabaseService dbService;
-    private final String CREATOR_EMAIL = "nitay123@gmail.com"; // Your email as the creator
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +49,7 @@ public class UsersListActivity extends AppCompatActivity {
 
             @Override
             public void onDeleteClick(User user) {
-                if (user.getEmail() != null && user.getEmail().equals(CREATOR_EMAIL)) {
+                if (user.getEmail() != null && user.getEmail().equalsIgnoreCase(DatabaseService.CREATOR_EMAIL)) {
                     Toast.makeText(UsersListActivity.this, "לא ניתן למחוק את יוצר האפליקציה!", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -63,14 +62,14 @@ public class UsersListActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailed(Exception e) {
-                        Toast.makeText(UsersListActivity.this, "המחיקה נכשלה", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(UsersListActivity.this, "המחיקה נכשלה: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
 
             @Override
             public void onMakeAdminClick(User user, int position) {
-                if (user.getEmail() != null && user.getEmail().equals(CREATOR_EMAIL)) {
+                if (user.getEmail() != null && user.getEmail().equalsIgnoreCase(DatabaseService.CREATOR_EMAIL)) {
                     Toast.makeText(UsersListActivity.this, "לא ניתן לשנות הרשאות ליוצר האפליקציה!", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -112,8 +111,8 @@ public class UsersListActivity extends AppCompatActivity {
                     String currentUserId = SharedPreferencesUtil.getUserId(UsersListActivity.this);
                     users.sort((u1, u2) -> {
                         // Creator always on top
-                        if (u1.getEmail() != null && u1.getEmail().equals(CREATOR_EMAIL)) return -1;
-                        if (u2.getEmail() != null && u2.getEmail().equals(CREATOR_EMAIL)) return 1;
+                        if (u1.getEmail() != null && u1.getEmail().equalsIgnoreCase(DatabaseService.CREATOR_EMAIL)) return -1;
+                        if (u2.getEmail() != null && u2.getEmail().equalsIgnoreCase(DatabaseService.CREATOR_EMAIL)) return 1;
 
                         // Main admin (current user) next
                         if (u1.getId().equals(currentUserId)) return -1;

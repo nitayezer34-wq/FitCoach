@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitcoach.R;
 import com.example.fitcoach.models.User;
+import com.example.fitcoach.services.DatabaseService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,6 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
 
     private final OnUserClickListener listener;
     private List<User> userList = new ArrayList<>();
-    public static final String CREATOR_EMAIL = "nitay123@gmail.com"; // Your email as the creator
 
     public UserAdapter(OnUserClickListener listener) {
         this.listener = listener;
@@ -43,7 +43,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.UserViewHolder
         User user = userList.get(position);
 
         // Check if this is the creator
-        boolean isCreator = user.getEmail() != null && user.getEmail().equalsIgnoreCase(CREATOR_EMAIL);
+        boolean isCreator = user.getEmail() != null && user.getEmail().equalsIgnoreCase(DatabaseService.CREATOR_EMAIL);
 
         // Set the listener for the whole item view
         holder.itemView.setOnClickListener(v -> listener.onUserClick(user));

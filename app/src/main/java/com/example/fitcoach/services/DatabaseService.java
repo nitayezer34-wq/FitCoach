@@ -33,6 +33,8 @@ public class DatabaseService {
             RECIPES_PATH = "recipes",
             STATS_PATH = "stats";
 
+    public static final String CREATOR_EMAIL = "nitayezer34@gmail.com"; // Your email as the creator
+
     private static final String DB_URL = "https://fitcoach-55d45-default-rtdb.europe-west1.firebasedatabase.app/";
     private static DatabaseService instance;
     private final DatabaseReference databaseReference;
@@ -178,7 +180,23 @@ public class DatabaseService {
     }
 
     public void deleteUser(@NotNull final String uid, @Nullable final DatabaseCallback<Void> callback) {
-        deleteData(USERS_PATH + "/" + uid, callback);
+        getUser(uid, new DatabaseCallback<User>() {
+            @Override
+            public void onCompleted(User user) {
+                if (user != null && user.getEmail() != null && user.getEmail().equalsIgnoreCase(CREATOR_EMAIL)) {
+                    if (callback != null) {
+                        callback.onFailed(new Exception("Cannot delete the application creator!"));
+                    }
+                    return;
+                }
+                deleteData(USERS_PATH + "/" + uid, callback);
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                if (callback != null) callback.onFailed(e);
+            }
+        });
     }
 
     public void getUserByEmailAndPassword(@NotNull final String email, @NotNull final String password, @NotNull final DatabaseCallback<User> callback) {
