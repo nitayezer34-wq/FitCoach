@@ -294,7 +294,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void showDestinationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("לאן רצים?");
+        builder.setTitle("לאן רצים?                                                ");
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
