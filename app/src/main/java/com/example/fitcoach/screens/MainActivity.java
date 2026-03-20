@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
@@ -294,24 +295,36 @@ public class MainActivity extends AppCompatActivity {
 
     private void showDestinationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("לאן רצים?                                                ");
+
+        // יצירת כותרת מותאמת אישית מיושרת לימין (RTL)
+        TextView titleView = new TextView(this);
+        titleView.setText("לאן רצים?");
+        titleView.setGravity(Gravity.RIGHT);
+        titleView.setPadding(0, 50, 60, 0); // ריווח יפה לכותרת
+        titleView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+        titleView.setTextColor(getResources().getColor(android.R.color.black));
+        builder.setCustomTitle(titleView);
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
+        layout.setLayoutDirection(View.LAYOUT_DIRECTION_RTL); // הגדרת RTL לכל הדיאלוג
         layout.setPadding(50, 40, 50, 10);
 
         final EditText etOrigin = new EditText(this);
         etOrigin.setHint("מאיפה מתחילים? למשל: התזמורת 17 ראשון לציון");
+        etOrigin.setGravity(Gravity.RIGHT);
         layout.addView(etOrigin);
 
         final EditText etDestination = new EditText(this);
         etDestination.setHint("הכנס יעד (למשל: פארק הירקון תל אביב)");
+        etDestination.setGravity(Gravity.RIGHT);
         layout.addView(etDestination);
 
         TextView tvReminder = new TextView(this);
         tvReminder.setText("\nשימו לב: זכרו את מרחק המסלול (ק\"מ) בסיום כדי שנוכל לחשב את הקלוריות והצעדים שלכם! 💪");
         tvReminder.setTextColor(getResources().getColor(android.R.color.holo_red_dark));
         tvReminder.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        tvReminder.setGravity(Gravity.RIGHT);
         layout.addView(tvReminder);
 
         builder.setView(layout);
