@@ -1,5 +1,6 @@
 package com.example.fitcoach.services;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -33,15 +36,17 @@ public class DatabaseService {
             RECIPES_PATH = "recipes",
             STATS_PATH = "stats";
 
-    public static final String CREATOR_EMAIL = "nitayezer34@gmail.com"; // Your email as the creator
+    public static final String CREATOR_EMAIL = "nitayezer34@gmail.com"; 
 
     private static final String DB_URL = "https://fitcoach-55d45-default-rtdb.europe-west1.firebasedatabase.app/";
     private static DatabaseService instance;
     private final DatabaseReference databaseReference;
+    private final FirebaseStorage storage;
 
     private DatabaseService() {
         FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance(DB_URL);
         databaseReference = firebaseDatabase.getReference();
+        storage = FirebaseStorage.getInstance();
     }
 
     public static DatabaseService getInstance() {
@@ -161,6 +166,19 @@ public class DatabaseService {
             }
         });
     }
+
+    // region Image Upload Section
+    public void uploadImage(@NotNull Uri imageUri, @NotNull String folderName, @NotNull DatabaseCallback<String> callback) {
+        String fileName = System.currentTimeMillis() + ".jpg";
+        StorageReference imageRef = storage.getReference().child(folderName + "/" + fileName);
+
+        imageRef.putFile(imageUri)
+                .addOnSuccessListener(taskSnapshot -> imageRef.getDownloadUrl()
+                        .addOnSuccessListener(uri -> callback.onCompleted(uri.toString()))
+                        .addOnFailureListener(callback::onFailed))
+                .addOnFailureListener(callback::onFailed);
+    }
+    // endregion
 
     // region User Section
     public String generateUserId() {
