@@ -83,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
                 SharedPreferencesUtil.saveUser(LoginActivity.this, user);
+                Toast.makeText(LoginActivity.this, "התחברות מוצלחת!", Toast.LENGTH_SHORT).show();
                 navigateToMain();
             }
 

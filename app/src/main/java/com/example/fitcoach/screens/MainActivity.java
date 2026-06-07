@@ -2,7 +2,6 @@ package com.example.fitcoach.screens;
 
 import android.animation.ObjectAnimator;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -21,27 +20,22 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContract;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-import androidx.health.connect.client.HealthConnectClient;
-import androidx.health.connect.client.PermissionController;
 
 import com.example.fitcoach.R;
 import com.example.fitcoach.models.Stats;
 import com.example.fitcoach.models.User;
 import com.example.fitcoach.services.DatabaseService;
-import com.example.fitcoach.utils.HealthConnectManager;
 import com.example.fitcoach.utils.SharedPreferencesUtil;
 import com.example.fitcoach.views.BMIView;
 
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,10 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private BMIView bmiView;
     private Button btnMainForum, btnMainNavigation;
 
-    private HealthConnectManager healthConnectManager;
-    private ActivityResultLauncher<Set<String>> requestPermissionLauncher;
     private ActivityResultLauncher<Intent> mapActivityResultLauncher;
-    private boolean permissionRequestedInSession = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,31 +68,10 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        healthConnectManager = new HealthConnectManager(this);
-        
-        // Register launcher ALWAYS in onCreate
-        ActivityResultContract<Set<String>, Set<String>> contract = 
-                PermissionController.createRequestPermissionResultContract();
-        
-        requestPermissionLauncher = registerForActivityResult(
-                contract,
-                granted -> {
-                    Log.d(TAG, "Permissions callback result: " + granted);
-                    if (granted != null && granted.containsAll(healthConnectManager.getPermissions())) {
-                        fetchStepsFromHealthConnect();
-                    } else {
-                        Toast.makeText(this, "יש לאשר הרשאות בריאות כדי לצפות בצעדים", Toast.LENGTH_SHORT).show();
-                    }
-                }
-        );
-
         // Launcher for tracking when the user returns from Maps
         mapActivityResultLauncher = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 result -> {
-                    // This is a simplified simulation since we can't get data back from Google Maps app easily
-                    // In a real scenario with Google Maps SDK we would have the exact distance.
-                    // Here we show a dialog to "complete" the simulated walk.
                     showSimulatedWalkDialog();
                 }
         );
@@ -150,57 +120,8 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         Log.d(TAG, "onResume: called");
         SharedPreferencesUtil.checkAndClearCompletedWorkouts(this);
-        updateUI(); // Immediate UI update from local storage
+        updateUI(); 
         loadUserData();
-        checkAndRequestHealthConnectPermissions();
-    }
-
-    private void checkAndRequestHealthConnectPermissions() {
-        int status = HealthConnectClient.getSdkStatus(this);
-        Log.d(TAG, "checkAndRequestHealthConnectPermissions: Status=" + status);
-
-        if (status == HealthConnectClient.SDK_AVAILABLE) {
-            healthConnectManager.checkPermissions(granted -> {
-                Log.d(TAG, "Permissions granted status: " + granted);
-                if (granted) {
-                    fetchStepsFromHealthConnect();
-                } else if (requestPermissionLauncher != null && !permissionRequestedInSession) {
-                    Log.d(TAG, "Launching permission request launcher");
-                    permissionRequestedInSession = true;
-                    runOnUiThread(() -> requestPermissionLauncher.launch(healthConnectManager.getPermissions()));
-                }
-            });
-        } else if (status == HealthConnectClient.SDK_UNAVAILABLE_PROVIDER_UPDATE_REQUIRED) {
-            Log.w(TAG, "Health Connect update required (Status 3)");
-            if (!permissionRequestedInSession) {
-                permissionRequestedInSession = true;
-                Toast.makeText(this, "יש לעדכן את Health Connect ב-Play Store", Toast.LENGTH_LONG).show();
-                try {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.google.android.apps.healthdata"));
-                    intent.setPackage("com.android.vending");
-                    startActivity(intent);
-                } catch (Exception e) {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.google.android.apps.healthdata")));
-                }
-            }
-        }
-    }
-
-    private void fetchStepsFromHealthConnect() {
-        Log.d(TAG, "fetchStepsFromHealthConnect: Fetching...");
-        new Thread(() -> {
-            Long steps = healthConnectManager.getTodaySteps();
-            Log.d(TAG, "fetchStepsFromHealthConnect: Retrieved steps=" + steps);
-            if (steps != null) {
-                runOnUiThread(() -> {
-                    Stats stats = SharedPreferencesUtil.getStats(this);
-                    if (stats != null) {
-                        stats.setSteps(steps.intValue());
-                        saveAndRefreshStats(stats);
-                    }
-                });
-            }
-        }).start();
     }
 
     private void bindViews() {
@@ -224,24 +145,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (pbSteps != null) {
-            // לחיצה רגילה: סנכרון עם Health Connect
-            pbSteps.setOnClickListener(v -> {
-                Log.d(TAG, "Manual steps click detected");
-                int status = HealthConnectClient.getSdkStatus(this);
-                if (status == HealthConnectClient.SDK_AVAILABLE) {
-                    healthConnectManager.checkPermissions(granted -> {
-                        if (!granted && requestPermissionLauncher != null) {
-                            runOnUiThread(() -> requestPermissionLauncher.launch(healthConnectManager.getPermissions()));
-                        } else if (granted) {
-                            fetchStepsFromHealthConnect();
-                        }
-                    });
-                } else {
-                    checkAndRequestHealthConnectPermissions();
-                }
-            });
-
-            // לחיצה ארוכה: עדכון ידני
+            // Long click: manual update
             pbSteps.setOnLongClickListener(v -> {
                 showManualStepsDialog();
                 return true;
@@ -296,18 +200,17 @@ public class MainActivity extends AppCompatActivity {
     private void showDestinationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        // יצירת כותרת מותאמת אישית מיושרת לימין (RTL)
         TextView titleView = new TextView(this);
         titleView.setText("לאן רצים?");
         titleView.setGravity(Gravity.RIGHT);
-        titleView.setPadding(0, 50, 60, 0); // ריווח יפה לכותרת
+        titleView.setPadding(0, 50, 60, 0); 
         titleView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
         titleView.setTextColor(getResources().getColor(android.R.color.black));
         builder.setCustomTitle(titleView);
 
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setLayoutDirection(View.LAYOUT_DIRECTION_RTL); // הגדרת RTL לכל הדיאלוג
+        layout.setLayoutDirection(View.LAYOUT_DIRECTION_RTL); 
         layout.setPadding(50, 40, 50, 10);
 
         final EditText etOrigin = new EditText(this);
@@ -334,17 +237,15 @@ public class MainActivity extends AppCompatActivity {
             String destination = etDestination.getText().toString().trim();
 
             if (!destination.isEmpty()) {
-                Uri gmmIntentUri;
+                android.net.Uri gmmIntentUri;
                 if (origin.isEmpty()) {
-                    // אם אין מוצא, נשתמש בפורמט הישן והטוב שמתחיל ניווט מיד
-                    gmmIntentUri = Uri.parse("google.navigation:q=" + Uri.encode(destination) + "&mode=w");
+                    gmmIntentUri = android.net.Uri.parse("google.navigation:q=" + android.net.Uri.encode(destination) + "&mode=w");
                 } else {
-                    // אם יש מוצא, נשתמש בפורמט שתומך בשניהם עם דגש על מצב הליכה
                     String uriString = "https://www.google.com/maps/dir/?api=1" +
-                            "&origin=" + Uri.encode(origin) +
-                            "&destination=" + Uri.encode(destination) +
+                            "&origin=" + android.net.Uri.encode(origin) +
+                            "&destination=" + android.net.Uri.encode(destination) +
                             "&travelmode=walking";
-                    gmmIntentUri = Uri.parse(uriString);
+                    gmmIntentUri = android.net.Uri.parse(uriString);
                 }
 
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
@@ -477,10 +378,8 @@ public class MainActivity extends AppCompatActivity {
             tvCaloriesValue.setText(String.format(Locale.getDefault(), "%d/%d\n%s", (int) stats.getCalories(), caloriesTarget, getString(R.string.calories_label)));
             pbCalories.setMax(caloriesTarget);
 
-            // Explicitly set progress for calories
             int calorieProgress = (int) Math.min(stats.getCalories(), caloriesTarget);
             pbCalories.setProgress(calorieProgress);
-            Log.d(TAG, "updateUI: Setting calorie progress to " + calorieProgress + "/" + caloriesTarget);
         }
 
         if (pbSteps != null && tvStepsValue != null) {

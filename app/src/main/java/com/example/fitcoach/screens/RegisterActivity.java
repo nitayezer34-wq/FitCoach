@@ -186,7 +186,12 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void handleRegistration() {
         if (!validateInput()) {
-            Toast.makeText(this, "נא לתקן את השגיאות ולמלא את כל השדות", Toast.LENGTH_SHORT).show();
+            String email = Objects.requireNonNull(etEmail.getText()).toString().trim();
+            if (email.isEmpty() || !Validator.isEmailValid(email)) {
+                Toast.makeText(this, "אימייל לא תקין", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "נא לתקן את השגיאות ולמלא את כל השדות", Toast.LENGTH_SHORT).show();
+            }
             return;
         }
 
@@ -196,6 +201,7 @@ public class RegisterActivity extends AppCompatActivity {
             public void onCompleted(Boolean exists) {
                 if (exists) {
                     tilEmail.setError("האימייל כבר רשום במערכת");
+                    Toast.makeText(RegisterActivity.this, "האימייל כבר רשום במערכת", Toast.LENGTH_SHORT).show();
                 } else {
                     saveNewUser();
                 }

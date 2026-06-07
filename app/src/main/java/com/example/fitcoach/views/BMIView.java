@@ -40,12 +40,7 @@ public class BMIView extends View {
     private void init() {
         gaugeDrawable = ContextCompat.getDrawable(getContext(), R.drawable.bmi_gauge_arc_bold);
         needleDrawable = ContextCompat.getDrawable(getContext(), R.drawable.bmi_needle_bold);
-        
-        accentColor = ContextCompat.getColor(getContext(), android.R.color.holo_blue_dark); // Default to blue
-        // In your project it seems to be #2196F3
-        try {
-            accentColor = 0xFF2196F3;
-        } catch (Exception ignored) {}
+        accentColor = 0xFF2196F3;
 
         textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         textPaint.setColor(accentColor);
