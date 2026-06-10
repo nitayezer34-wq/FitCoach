@@ -1,0 +1,314 @@
+@startuml
+class RecipeDetailsActivity {
+- ImageView ivRecipeImage
+- TextView tvTitle
+- LinearLayout llRatingContainer
+- Button btnRateRecipe
+- DatabaseService dbService
+- String recipeId
+- Recipe currentRecipe
+# void onCreate(Bundle)
+- void bindViews()
+- void loadRecipeDetails()
+- void displayRecipe()
+- void updateRatingDisplay(double)
+- void showRatingDialog()
+- void updateRecipeRating(float)
+}
+
+
+class AddRecipeActivity {
+- EditText etTitle
+- Button btnSave
+- TextView tvTitle
+- DatabaseService dbService
+- String recipeIdToEdit
+- String originalUserId
+# void onCreate(Bundle)
+- void bindViews()
+- void loadRecipeData(String)
+- void saveRecipe()
+- List<String> textToList(String,String)
+}
+
+
+class BaseActivity {
+# DatabaseService databaseService
+}
+
+class WorkoutCreationActivity {
+- EditText etName
+- RadioGroup rgTargetAudience
+- Button btnCreateOrUpdate
+- DatabaseService dbService
+- String existingWorkoutId
+# void onCreate(Bundle)
+- void initViews()
+- void loadWorkoutData()
+- void saveWorkout()
+- WeightCategory getSelectedAudience()
+}
+
+
+class UsersListActivity {
+- UserAdapter adapter
+- DatabaseService dbService
+# void onCreate(Bundle)
+- void loadUsers()
+}
+
+
+class UserProfileActivity {
+- TextInputLayout tilName
+- TextInputEditText etName
+- RadioGroup rgGender
+- RadioButton rbMale
+- NumberPicker npHeight
+- ChipGroup cgActivityLevel
+- Chip chipLow
+- SeekBar sbStepTarget
+- TextView tvStepTargetValue
+- Button btnSave
+- int selectedBirthYear
+- User currentUser
+- DatabaseService dbService
+# void onCreate(Bundle)
+- void initViews()
+- void setupUI()
+- void setNumberPickerTextColor(NumberPicker,int)
+- void setupSeekBar(SeekBar,TextView,int)
+- void setupValidation()
+- void addTextWatcher(TextInputEditText,TextInputLayout)
+- void loadUserData()
+- void showDatePicker()
+- void saveUserChanges()
+- void performUpdate(String,String,String,int,float,String,int,int,int)
+- boolean validateInput()
+}
+
+
+class item_recipe {
+# void onCreate(Bundle)
+}
+
+class UserWorkoutsActivity {
+- {static} String TAG
+- UserWorkoutAdapter adapter
+- List<WorkoutTraining> workoutList
+- TextView workoutHeaderTitle
+- LinearLayout llCompletionContainer
+- RecyclerView recyclerView
+- int caloriesBurnedInSession
+# void onCreate(Bundle)
+- void loadWorkouts()
+- void updateUIState()
++ void onWorkoutDone(int)
+}
+
+
+class AdminActivity {
+# void onCreate(Bundle)
+}
+
+class UserWorkoutActivity {
+- UserWorkoutAdapter adapter
+- List<WorkoutTraining> workoutList
+- int caloriesBurned
+# void onCreate(Bundle)
++ void onWorkoutDone(int)
+}
+
+
+class LandingActivity {
+# void onCreate(Bundle)
+- void setupWindowInsets()
+- void setupClickListeners()
+- void navigateToMain()
+}
+
+class RecipeForumActivity {
+- RecipeAdapter adapter
+- DatabaseService dbService
+- List<Recipe> allRecipes
+- EditText etSearchRecipe
+- CheckBox cbMyRecipes
+# void onCreate(Bundle)
+- void initViews()
+- void setupFilters()
+- void applyFilters()
+# void onResume()
+- void loadRecipes()
+}
+
+
+class MainActivity {
+- {static} String TAG
+- int GLASS_SIZE
+- {static} float STEPS_PER_METER
+- {static} float CALORIES_PER_STEP
+- TextView tvGreeting
+- ProgressBar pbSteps
+- ImageButton btnSettingsGear
+- BMIView bmiView
+- Button btnMainForum
+- ActivityResultLauncher<Intent> mapActivityResultLauncher
+# void onCreate(Bundle)
+- void showSimulatedWalkDialog()
+# void onResume()
+- void bindViews()
+- void setupButtons()
+- void showDestinationDialog()
+- void showManualStepsDialog()
+- void saveAndRefreshStats(Stats)
+- void loadUserData()
+- void updateUI()
+- void updateBMIGauge(User)
+- void showSettingsMenu(View)
+- void handleSignOut()
+}
+
+
+class WorkoutChecklistActivity {
+- WorkoutChecklistAdapter adapter
+- DatabaseService dbService
+- User currentUser
+- TextView tvCompletionMessage
+- RecyclerView rvWorkouts
+- List<WorkoutTraining> currentWorkouts
+# void onCreate(Bundle)
+- void loadWorkoutsForUser()
+- void checkCompletionStatus()
+}
+
+
+class AdminWorkoutManagementActivity {
+- List<WorkoutTraining> allWorkouts
+- List<WorkoutTraining> filteredWorkouts
+- RecyclerView workoutsRecyclerView
+- WorkoutAdapter workoutAdapter
+- Spinner filterSpinner
+# void onCreate(Bundle)
+# void onResume()
+- void initViews()
+- void setupSpinner()
+- void setupRecyclerView()
+- void loadWorkouts()
+- void filterWorkouts(String)
++ void onEdit(WorkoutTraining)
++ void onDelete(WorkoutTraining)
+}
+
+
+class RegisterActivity {
+- TextInputLayout tilName
+- TextInputEditText etName
+- RadioGroup rgGender
+- NumberPicker npHeight
+- ChipGroup cgActivityLevel
+- SeekBar sbStepTarget
+- TextView tvStepTargetValue
+- int selectedBirthYear
+# void onCreate(Bundle)
+- void initViews()
+- void showDatePicker()
+- void setupUI()
+- void setNumberPickerTextColor(NumberPicker,int)
+- void setupSeekBar(SeekBar,TextView,int)
+- void setupValidation()
+- void addTextWatcher(TextInputEditText,TextInputLayout)
+- void handleRegistration()
+- void saveNewUser()
+- boolean validateInput()
+}
+
+
+class WorkoutEditActivity {
+- EditText etName
+- RadioGroup rgTargetAudience
+- Button btnUpdate
+- DatabaseService dbService
+- String workoutId
+# void onCreate(Bundle)
+- void initViews()
+- void loadWorkoutData()
+- void updateWorkout()
+- WeightCategory getSelectedAudience()
+}
+
+
+class WorkoutActivity {
+- WorkoutAdapter adapter
+- DatabaseService dbService
+- User currentUser
+# void onCreate(Bundle)
+- void loadWorkoutsForUser()
+- String getUserBmiCategory(double)
++ void onEdit(WorkoutTraining)
++ void onDelete(WorkoutTraining)
+}
+
+
+class AdminRecipeManagementActivity {
+- RecyclerView rvRecipes
+- AdminRecipeAdapter adapter
+- List<Recipe> recipeList
+- DatabaseService dbService
+# void onCreate(Bundle)
+# void onResume()
+- void initViews()
+- void setupRecyclerView()
+- void loadRecipes()
++ void onDeleteRecipe(Recipe)
++ void onEditRecipe(Recipe)
+}
+
+
+class LoginActivity {
+- EditText etEmail
+- Button btnDoLogin
+# void onCreate(Bundle)
+- void initViews()
+- void setupWindowInsets()
+- void setupClickListeners()
+- void handleLogin()
+- void loginUser(String,String)
+- void navigateToMain()
+}
+
+
+class SplashActivity {
+- {static} String TAG
+- {static} int SPLASH_DISPLAY_TIME
+# void onCreate(Bundle)
+}
+
+
+
+
+AppCompatActivity <|-- RecipeDetailsActivity
+AppCompatActivity <|-- AddRecipeActivity
+AppCompatActivity <|-- BaseActivity
+AppCompatActivity <|-- WorkoutCreationActivity
+AppCompatActivity <|-- UsersListActivity
+AppCompatActivity <|-- UserProfileActivity
+AppCompatActivity <|-- item_recipe
+OnWorkoutDoneListener <|.. UserWorkoutsActivity
+AppCompatActivity <|-- UserWorkoutsActivity
+AppCompatActivity <|-- AdminActivity
+OnWorkoutDoneListener <|.. UserWorkoutActivity
+AppCompatActivity <|-- UserWorkoutActivity
+AppCompatActivity <|-- LandingActivity
+AppCompatActivity <|-- RecipeForumActivity
+AppCompatActivity <|-- MainActivity
+AppCompatActivity <|-- WorkoutChecklistActivity
+OnWorkoutListener <|.. AdminWorkoutManagementActivity
+AppCompatActivity <|-- AdminWorkoutManagementActivity
+AppCompatActivity <|-- RegisterActivity
+AppCompatActivity <|-- WorkoutEditActivity
+OnWorkoutListener <|.. WorkoutActivity
+AppCompatActivity <|-- WorkoutActivity
+OnRecipeActionListener <|.. AdminRecipeManagementActivity
+AppCompatActivity <|-- AdminRecipeManagementActivity
+AppCompatActivity <|-- LoginActivity
+AppCompatActivity <|-- SplashActivity
+@enduml

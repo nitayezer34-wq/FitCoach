@@ -1,0 +1,199 @@
+@startuml
+class AdminRecipeAdapter {
+- OnRecipeActionListener listener
+- List<Recipe> recipes
++ void setRecipes(List<Recipe>)
++ RecipeViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(RecipeViewHolder,int)
++ int getItemCount()
+}
+
+
+interface AdminRecipeAdapter$OnRecipeActionListener {
+~ void onDeleteRecipe(Recipe)
+~ void onEditRecipe(Recipe)
+}
+
+class AdminRecipeAdapter$RecipeViewHolder {
+~ TextView tvName
+~ ImageButton btnDelete
+~ ImageButton btnEdit
++ void bind(Recipe,OnRecipeActionListener)
+}
+
+
+class UserAdapter {
+- OnUserClickListener listener
+- List<User> userList
++ void setUserList(List<User>)
++ UserViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(UserViewHolder,int)
++ int getItemCount()
+}
+
+
+interface UserAdapter$OnUserClickListener {
+~ void onUserClick(User)
+~ void onDeleteClick(User)
+~ void onMakeAdminClick(User,int)
+}
+
+class UserAdapter$UserViewHolder {
+~ TextView tvName
+~ TextView tvEmail
+~ ImageButton btnDelete
+~ ImageButton btnMakeAdmin
+}
+
+class UserWorkoutAdapter {
+- List<WorkoutTraining> workoutList
+- OnWorkoutDoneListener onWorkoutDoneListener
++ UserWorkoutViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(UserWorkoutViewHolder,int)
++ int getItemCount()
+}
+
+
+interface UserWorkoutAdapter$OnWorkoutDoneListener {
+~ void onWorkoutDone(int)
+}
+
+class UserWorkoutAdapter$UserWorkoutViewHolder {
+~ TextView workoutName
+~ TextView workoutSets
+~ TextView workoutReps
+~ TextView workoutDescription
+~ FloatingActionButton fabDone
++ void bind(WorkoutTraining)
+}
+
+
+class WorkoutChecklistAdapter {
+- Context context
+- String userId
+- List<WorkoutTraining> workoutList
+- OnWorkoutStatusChangeListener listener
++ void setOnWorkoutStatusChangeListener(OnWorkoutStatusChangeListener)
++ WorkoutViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(WorkoutViewHolder,int)
++ int getItemCount()
++ void setWorkoutList(List<WorkoutTraining>)
+}
+
+
+interface WorkoutChecklistAdapter$OnWorkoutStatusChangeListener {
+~ void onStatusChanged()
+}
+
+class WorkoutChecklistAdapter$WorkoutViewHolder {
+~ TextView tvExerciseName
+~ CheckBox cbDone
++ void bind(WorkoutTraining,Context,String,OnWorkoutStatusChangeListener)
+}
+
+
+class AdminWorkoutAdapter {
+- OnWorkoutActionListener listener
+- List<WorkoutTraining> workouts
++ void setWorkouts(List<WorkoutTraining>)
++ WorkoutViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(WorkoutViewHolder,int)
++ int getItemCount()
+}
+
+
+interface AdminWorkoutAdapter$OnWorkoutActionListener {
+~ void onEditWorkout(WorkoutTraining)
+~ void onDeleteWorkout(WorkoutTraining)
+}
+
+class AdminWorkoutAdapter$WorkoutViewHolder {
+~ TextView tvName
+~ ImageButton btnEdit
+~ ImageButton btnDelete
++ void bind(WorkoutTraining,OnWorkoutActionListener)
+}
+
+
+class WorkoutAdapter {
+- OnWorkoutListener onWorkoutListener
+- List<WorkoutTraining> workoutList
++ WorkoutViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(WorkoutViewHolder,int)
++ int getItemCount()
++ void setWorkoutList(List<WorkoutTraining>)
+}
+
+
+interface WorkoutAdapter$OnWorkoutListener {
+~ void onEdit(WorkoutTraining)
+~ void onDelete(WorkoutTraining)
+}
+
+class WorkoutAdapter$WorkoutViewHolder {
+- TextView tvName
+- ImageView btnEdit
++ void bind(WorkoutTraining,OnWorkoutListener)
+- String getTranslatedAudience(WeightCategory)
+}
+
+
+class RecipeAdapter {
+- OnRecipeClickListener listener
+- Context context
+- List<Recipe> recipeList
++ void setRecipeList(List<Recipe>)
++ RecipeViewHolder onCreateViewHolder(ViewGroup,int)
++ void onBindViewHolder(RecipeViewHolder,int)
++ int getItemCount()
+}
+
+
+interface RecipeAdapter$OnRecipeClickListener {
+~ void onRecipeClick(Recipe)
+}
+
+class RecipeAdapter$RecipeViewHolder {
+~ ImageView ivRecipeImage
+~ TextView tvRecipeTitle
+~ TextView tvPrepTime
+~ TextView tvCalories
+~ TextView tvAllergens
+~ LinearLayout llRecipeRating
++ void bind(Recipe,OnRecipeClickListener,Context)
+- String formatPrepTime(int)
+- void updateRatingStars(double)
+}
+
+
+
+
+Adapter <|-- AdminRecipeAdapter
+AdminRecipeAdapter +.. AdminRecipeAdapter$OnRecipeActionListener
+AdminRecipeAdapter +.. AdminRecipeAdapter$RecipeViewHolder
+ViewHolder <|-- AdminRecipeAdapter$RecipeViewHolder
+Adapter <|-- UserAdapter
+UserAdapter +.. UserAdapter$OnUserClickListener
+UserAdapter +.. UserAdapter$UserViewHolder
+ViewHolder <|-- UserAdapter$UserViewHolder
+Adapter <|-- UserWorkoutAdapter
+UserWorkoutAdapter +.. UserWorkoutAdapter$OnWorkoutDoneListener
+UserWorkoutAdapter +.. UserWorkoutAdapter$UserWorkoutViewHolder
+ViewHolder <|-- UserWorkoutAdapter$UserWorkoutViewHolder
+Adapter <|-- WorkoutChecklistAdapter
+WorkoutChecklistAdapter +.. WorkoutChecklistAdapter$OnWorkoutStatusChangeListener
+WorkoutChecklistAdapter +.. WorkoutChecklistAdapter$WorkoutViewHolder
+ViewHolder <|-- WorkoutChecklistAdapter$WorkoutViewHolder
+Adapter <|-- AdminWorkoutAdapter
+AdminWorkoutAdapter +.. AdminWorkoutAdapter$OnWorkoutActionListener
+AdminWorkoutAdapter +.. AdminWorkoutAdapter$WorkoutViewHolder
+ViewHolder <|-- AdminWorkoutAdapter$WorkoutViewHolder
+Adapter <|-- WorkoutAdapter
+WorkoutAdapter +.. WorkoutAdapter$OnWorkoutListener
+WorkoutAdapter +.. WorkoutAdapter$WorkoutViewHolder
+ViewHolder <|-- WorkoutAdapter$WorkoutViewHolder
+Adapter <|-- RecipeAdapter
+RecipeAdapter +.. RecipeAdapter$OnRecipeClickListener
+RecipeAdapter +.. RecipeAdapter$RecipeViewHolder
+ViewHolder <|-- RecipeAdapter$RecipeViewHolder
+@enduml

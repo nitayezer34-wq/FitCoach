@@ -1,0 +1,70 @@
+@startuml
+class SharedPreferencesUtil {
+- {static} String PREF_NAME
+- {static} String COMPLETED_WORKOUTS_KEY
+- {static} String LAST_CLEARED_DATE_KEY
+- {static} String USER_KEY
+- {static} String STATS_KEY
+- {static} SharedPreferences getPrefs(Context)
+- {static} void saveString(Context,String,String)
+- {static} String getString(Context,String)
+- {static} void saveInt(Context,String,int)
+- {static} int getInt(Context,String,int)
+- {static} void remove(Context,String)
+- {static} boolean contains(Context,String)
+- {static} void saveObject(Context,String,T)
+- {static} T getObject(Context,String,Class<T>)
++ {static} void saveUser(Context,User)
++ {static} User getUser(Context)
++ {static} void signOutUser(Context)
++ {static} boolean isUserLoggedIn(Context)
++ {static} String getUserId(Context)
++ {static} void saveStats(Context,Stats)
++ {static} Stats getStats(Context)
++ {static} void addCompletedWorkout(Context,String)
++ {static} void removeCompletedWorkout(Context,String)
++ {static} List<String> getCompletedWorkouts(Context)
++ {static} void clearCompletedWorkouts(Context)
+- {static} void saveCompletedWorkouts(Context,List<String>)
+- {static} void saveLastClearedDate(Context)
++ {static} void checkAndClearCompletedWorkouts(Context)
+}
+
+
+class HealthConnectManager {
+- {static} String TAG
+- HealthConnectClient healthConnectClient
+- Set<String> permissions
++ {static} boolean isHealthConnectAvailable(Context)
++ HealthConnectClient getHealthConnectClient()
++ Set<String> getPermissions()
++ void checkPermissions(PermissionCallback)
++ Long getTodaySteps()
+}
+
+
+interface HealthConnectManager$PermissionCallback {
+~ void onResult(boolean)
+}
+
+class Validator {
+- {static} Pattern NAME_PATTERN
+- {static} Pattern PASSWORD_PATTERN
++ {static} boolean isNameValid(String)
++ {static} boolean isEmailValid(String)
++ {static} boolean isEmailInvalid(String)
++ {static} boolean isPasswordValid(String)
++ {static} boolean isGenderValid(String)
++ {static} Integer parseBirthYear(String)
++ {static} Integer parseHeightCm(String)
++ {static} Float parseWeightKg(String)
++ {static} Integer parseDailySteps(String)
++ {static} Integer parseDailyWaterMl(String)
++ {static} boolean isActivityLevelValid(String)
+}
+
+
+
+
+HealthConnectManager +.. HealthConnectManager$PermissionCallback
+@enduml

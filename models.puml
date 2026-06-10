@@ -1,0 +1,159 @@
+@startuml
+class Stats {
+- String date
+- int steps
+- double calories
+- double water
+- List<WorkoutTraining> workoutTrainings
+- String getCurrentDateString()
++ String getDate()
++ void setDate(String)
++ int getSteps()
++ void setSteps(int)
++ double getCalories()
++ void setCalories(double)
++ double getWater()
++ void setWater(double)
++ List<WorkoutTraining> getWorkoutTrainings()
++ void setWorkoutTrainings(List<WorkoutTraining>)
++ String toString()
++ void incrementWater()
++ void decrementWater()
++ void addCalories(double)
++ boolean isThisToday()
+}
+
+
+class WorkoutTraining {
+- String id
+- String name
+- String description
+- int caloriesPerSet
+- int sets
+- int reps
+- double restTimeMinutes
+- WeightCategory targetAudience
+- boolean isChecked
++ boolean isChecked()
++ void setChecked(boolean)
++ String getId()
++ void setId(String)
++ String getName()
++ void setName(String)
++ String getDescription()
++ void setDescription(String)
++ int getCaloriesPerSet()
++ void setCaloriesPerSet(int)
++ int getSets()
++ void setSets(int)
++ int getReps()
++ void setReps(int)
++ double getRestTimeMinutes()
++ void setRestTimeMinutes(double)
++ WeightCategory getTargetAudience()
++ void setTargetAudience(WeightCategory)
++ int getTotalExerciseCalories()
++ boolean equals(Object)
++ int hashCode()
++ String toString()
+}
+
+
+class Recipe {
+- String id
+- String userId
+- String title
+- String imageUrl
+- int calories
+- int prepTimeInMinutes
+- List<String> allergens
+- List<String> ingredients
+- List<String> instructions
+- double rating
+- int ratingCount
+- double totalRatingSum
++ String getId()
++ void setId(String)
++ String getUserId()
++ void setUserId(String)
++ String getTitle()
++ String getImageUrl()
++ int getCalories()
++ void setCalories(int)
++ int getPrepTimeInMinutes()
++ void setPrepTimeInMinutes(int)
++ List<String> getAllergens()
++ void setAllergens(List<String>)
++ List<String> getIngredients()
++ void setIngredients(List<String>)
++ List<String> getInstructions()
++ void setInstructions(List<String>)
++ double getRating()
++ void setRating(double)
++ int getRatingCount()
++ void setRatingCount(int)
++ double getTotalRatingSum()
++ void setTotalRatingSum(double)
+}
+
+
+class User {
+- String id
+- String name
+- String email
+- String password
+- String gender
+- int birthYear
+- int heightCm
+- float weightKg
+- String activityLevel
+- int dailyStepsTarget
+- int dailyCaloriesTarget
+- int dailyWaterTargetMl
+- boolean admin
++ String getId()
++ void setId(String)
++ String getName()
++ void setName(String)
++ String getEmail()
++ void setEmail(String)
++ String getPassword()
++ void setPassword(String)
++ String getGender()
++ void setGender(String)
++ int getBirthYear()
++ void setBirthYear(int)
++ int getHeightCm()
++ void setHeightCm(int)
++ float getWeightKg()
++ void setWeightKg(float)
++ String getActivityLevel()
++ void setActivityLevel(String)
++ int getDailyStepsTarget()
++ void setDailyStepsTarget(int)
++ int getDailyCaloriesTarget()
++ void setDailyCaloriesTarget(int)
++ int getDailyWaterTargetMl()
++ void setDailyWaterTargetMl(int)
++ boolean isAdmin()
++ void setAdmin(boolean)
++ String toString()
++ boolean equals(Object)
++ int hashCode()
++ double calcBMI()
+- WeightCategory determineWeightCategory(double)
++ WeightCategory getWeightCategory()
+}
+
+
+enum WeightCategory {
++  UNDERWEIGHT
++  NORMAL
++  OVERWEIGHT
+}
+
+
+
+Serializable <|.. WorkoutTraining
+Serializable <|.. User
+@enduml

@@ -1,0 +1,50 @@
+@startuml
+class DatabaseService {
+- {static} String TAG
+- {static} String USERS_PATH
++ {static} String CREATOR_EMAIL
+- {static} String DB_URL
+- {static} DatabaseService instance
+- DatabaseReference databaseReference
++ {static} DatabaseService getInstance()
+- void writeData(String,Object,DatabaseCallback<Void>)
+- void deleteData(String,DatabaseCallback<Void>)
+- DatabaseReference readData(String)
+- void getData(String,Class<T>,DatabaseCallback<T>)
+- void getDataList(String,Class<T>,DatabaseCallback<List<T>>)
+- String generateNewId(String)
+- void runTransaction(String,Class<T>,UnaryOperator<T>,DatabaseCallback<T>)
++ String generateUserId()
++ void createNewUser(User,DatabaseCallback<Void>)
++ void getUser(String,DatabaseCallback<User>)
++ void getUserList(DatabaseCallback<List<User>>)
++ void deleteUser(String,DatabaseCallback<Void>)
++ void getUserByEmailAndPassword(String,String,DatabaseCallback<User>)
++ void checkIfEmailExists(String,DatabaseCallback<Boolean>)
++ void updateUser(String,UnaryOperator<User>,DatabaseCallback<User>)
++ String generateWorkoutId()
++ void createNewWorkoutTraining(WorkoutTraining,DatabaseCallback<Void>)
++ void getWorkoutTraining(String,DatabaseCallback<WorkoutTraining>)
++ void getWorkoutTrainingList(DatabaseCallback<List<WorkoutTraining>>)
++ void deleteWorkoutTraining(String,DatabaseCallback<Void>)
++ String generateRecipeId()
++ void createNewRecipe(Recipe,DatabaseCallback<Void>)
++ void getRecipeList(DatabaseCallback<List<Recipe>>)
++ void getRecipe(String,DatabaseCallback<Recipe>)
++ void deleteRecipe(String,DatabaseCallback<Void>)
++ void updateRecipeRating(String,double,int,double,DatabaseCallback<Void>)
++ void getStats(String,DatabaseCallback<Stats>)
++ void updateStats(String,UnaryOperator<Stats>,DatabaseCallback<Stats>)
++ void saveStats(String,Stats,DatabaseCallback<Void>)
+}
+
+
+interface DatabaseService$DatabaseCallback {
+~ void onCompleted(T)
+~ void onFailed(Exception)
+}
+
+
+
+DatabaseService +.. DatabaseService$DatabaseCallback
+@enduml

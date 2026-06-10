@@ -1,0 +1,26 @@
+@startuml
+class BMIView {
+- Drawable gaugeDrawable
+- Drawable needleDrawable
+- Paint textPaint
+- float bmi
+- float rotation
+- String statusText
+- int accentColor
+- void init()
+- float spToPx(float)
++ void setBMI(float)
++ void setBMI(float,float)
++ float getBMI()
+- void updateRotation()
+- void updateStatusText()
+- float map(float,float,float,float,float)
+# void onMeasure(int,int)
+# void onDraw(Canvas)
+}
+
+
+
+
+View <|-- BMIView
+@enduml

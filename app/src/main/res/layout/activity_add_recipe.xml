@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -31,80 +30,11 @@
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
-            <!-- Enhanced Image Drop/Paste/Select Zone -->
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cvSelectImage"
-                android:layout_width="match_parent"
-                android:layout_height="240dp"
-                android:layout_margin="4dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="4dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/ivRecipePreview"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/ic_recipe_placeholder" />
-
-                    <!-- Overlay for empty state -->
-                    <LinearLayout
-                        android:id="@+id/llUploadPrompt"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:background="#66000000"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:padding="20dp">
-
-                        <ImageView
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
-                            android:src="@android:drawable/ic_menu_camera"
-                            app:tint="@android:color/white" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="12dp"
-                            android:gravity="center"
-                            android:text="לחץ לבחירה, גרור או הדבק תמונה כאן"
-                            android:textColor="@android:color/white"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-                    </LinearLayout>
-
-                    <!-- Quick Paste Button -->
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnQuickPaste"
-                        style="@style/Widget.MaterialComponents.Button.TextButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginBottom="12dp"
-                        android:backgroundTint="#CCFFFFFF"
-                        android:text="הדבק תמונה מהלוח"
-                        android:textColor="#2196F3"
-                        android:textSize="12sp"
-                        app:icon="@android:drawable/ic_menu_set_as"
-                        app:iconTint="#2196F3" />
-
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- Card for Basic Details -->
+            <!-- Recipe Details Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
-                android:layout_marginTop="16dp"
                 app:cardCornerRadius="15dp"
                 app:cardElevation="2dp">
 
@@ -128,10 +58,18 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="12dp"
-                        android:autofillHints="none"
                         android:backgroundTint="#2196F3"
                         android:hint="@string/recipe_name_hint"
                         android:inputType="textPersonName" />
+
+                    <EditText
+                        android:id="@+id/etRecipeImageUrl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:backgroundTint="#2196F3"
+                        android:hint="קישור לתמונה (URL)"
+                        android:inputType="textUri" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -144,7 +82,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="8dp"
                             android:layout_weight="1"
-                            android:autofillHints="none"
                             android:backgroundTint="#2196F3"
                             android:hint="@string/prep_time_minutes_hint"
                             android:inputType="number" />
@@ -155,7 +92,6 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="8dp"
                             android:layout_weight="1"
-                            android:autofillHints="none"
                             android:backgroundTint="#2196F3"
                             android:hint="@string/total_calories_hint"
                             android:inputType="number" />
@@ -163,7 +99,7 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Card for Ingredients -->
+            <!-- Ingredients Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -191,7 +127,6 @@
                         android:id="@+id/etIngredients"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:autofillHints="none"
                         android:backgroundTint="#2196F3"
                         android:gravity="top"
                         android:hint="@string/ingredients_hint"
@@ -200,7 +135,7 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Card for Instructions -->
+            <!-- Instructions Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -228,7 +163,6 @@
                         android:id="@+id/etInstructions"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:autofillHints="none"
                         android:backgroundTint="#2196F3"
                         android:gravity="top"
                         android:hint="@string/instructions_hint"
@@ -237,7 +171,7 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Card for Allergens -->
+            <!-- Allergens Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -265,7 +199,6 @@
                         android:id="@+id/etAllergens"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:autofillHints="none"
                         android:backgroundTint="#2196F3"
                         android:hint="@string/allergens_hint"
                         android:inputType="text" />
